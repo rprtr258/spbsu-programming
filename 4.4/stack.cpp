@@ -7,11 +7,11 @@ Stack* createStack() {
     return temp;
 }
 
-void stackPush(Stack *stack, const char val) {
+void stackPush(Stack *stack, const int val) {
     listPushBack(stack->list, val);
 }
 
-char stackTop(Stack *stack) {
+int stackTop(Stack *stack) {
     return listGetLast(stack->list);
 }
 
@@ -55,9 +55,9 @@ bool stackTestCreateErase() {
 bool stackTestPushPop() {
     Stack *temp = createStack();
     for (int i = 0; i < 10; i++)
-        stackPush(temp, 'a' + i);
+        stackPush(temp, i);
     for (int i = 9; i >= 0; i--) {
-        if (stackTop(temp) != i + 'a') {
+        if (stackTop(temp) != i) {
             return false;
         }
         stackPop(temp);
@@ -70,7 +70,7 @@ bool stackTestCheckEmpty() {
     Stack *temp = createStack();
     if (!stackIsEmpty(temp))
         return false;
-    stackPush(temp, '?');
+    stackPush(temp, 300);
     if (stackIsEmpty(temp))
         return false;
     stackPop(temp);

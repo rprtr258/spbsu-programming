@@ -2,13 +2,13 @@
 #include "list.h"
 
 struct Stack {
-    LinkedList *list = createList();
+    LinkedList *list = nullptr;
 };
 
 Stack* createStack();
 
-void stackPush(Stack *stack, const char val);
-char stackTop(Stack *stack);
+void stackPush(Stack *stack, const int val);
+int stackTop(Stack *stack);
 void stackPop(Stack *stack);
 
 bool stackIsEmpty(Stack *stack);

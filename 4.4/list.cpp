@@ -2,7 +2,7 @@
 #include "list.h"
 
 struct Node {
-    char val = '\0';
+    int val = 0;
     Node *next = nullptr;
 };
 
@@ -24,7 +24,7 @@ Node* lastNode(LinkedList *list) {
     return temp;
 }
 
-void listPushBack(LinkedList *list, const char value) {
+void listPushBack(LinkedList *list, const int value) {
     Node *newNode = new Node;
     newNode->val = value;
     if (list->head == nullptr) {
@@ -46,7 +46,7 @@ void listPopBack(LinkedList *list) {
     }
 }
 
-char listGetLast(LinkedList *list) {
+int listGetLast(LinkedList *list) {
     if (list->head->next == nullptr) {
         return list->head->val;
     } else {
@@ -90,9 +90,9 @@ bool listTestCreateErase() {
 bool listTestPushPop() {
     LinkedList *temp = createList();
     for (int i = 0; i < 10; i++)
-        listPushBack(temp, 'a' + i);
+        listPushBack(temp, i);
     for (int i = 9; i >= 0; i--) {
-        if (listGetLast(temp) != i + 'a') {
+        if (listGetLast(temp) != i) {
             return false;
         }
         listPopBack(temp);
@@ -105,7 +105,7 @@ bool listTestCheckEmpty() {
     LinkedList *temp = createList();
     if (!listIsEmpty(temp))
         return false;
-    listPushBack(temp, '?');
+    listPushBack(temp, 300);
     if (listIsEmpty(temp))
         return false;
     listPopBack(temp);

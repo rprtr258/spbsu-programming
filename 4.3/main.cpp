@@ -49,7 +49,13 @@ void parse(char *expr, const int exprLength, char *out) {
     delete stack;
 }
 
+bool testModules() {
+    return stackTestModule() && listTestModule();
+}
+
 int main() {
+    if (!testModules())
+        return 0;
     printf("Program to transform infix notation into postfix\n");
     char expr[1000];
     gets(expr);

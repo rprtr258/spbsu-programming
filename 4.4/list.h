@@ -8,9 +8,9 @@ struct LinkedList {
 
 LinkedList* createList();
 
-void listPushBack(LinkedList *list, const char value);
+void listPushBack(LinkedList *list, const int value);
 void listPopBack(LinkedList *list);
-char listGetLast(LinkedList *list);
+int listGetLast(LinkedList *list);
 
 bool listIsEmpty(LinkedList *list);
 
