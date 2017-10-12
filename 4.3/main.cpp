@@ -49,13 +49,32 @@ void parse(char *expr, const int exprLength, char *out) {
     delete stack;
 }
 
-bool testModules() {
-    return stackTestModule() && listTestModule();
+bool testParse() {
+    char res[100];
+    char temp1[] = "2+2*2";
+    parse(temp1, strlen(temp1), res);
+    if (strcmp(res, "222*+"))
+        return false;
+    char temp2[] = "(2+2)*2";
+    parse(temp2, strlen(temp2), res);
+    if (strcmp(res, "22+2*"))
+        return false;
+    return true;
+}
+
+bool test() {
+    if (!stackTestModule() || !listTestModule())
+        return false;
+    if (!testParse()) {
+        printf("Parse test failed\n");
+        return false;
+    }
+    return true;
 }
 
 int main() {
-    if (!testModules())
-        return 0;
+//    if (!test())
+//        return 0;
     printf("Program to transform infix notation into postfix\n");
     char expr[1000];
     gets(expr);
