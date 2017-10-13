@@ -94,8 +94,7 @@ void travelMatrix(int *result, int **matrix, const int size) {
 bool testAllocate() {
     const int anySize = 100;
     int **temp = allocateMemorySmart(anySize, 3 * anySize);
-    for (int i = 0; i < anySize; i++)
-        delete[] temp[i];
+    delete[] temp[0];
     delete[] temp;
     
     return true;
@@ -133,8 +132,7 @@ bool testSize3() {
         if (result[i] != correct[i])
             return false;
             
-    for (int i = 0; i < 3; i++)
-        delete[] temp[i];
+    delete[] temp[0];
     delete[] temp;
         
     return true;
@@ -181,8 +179,7 @@ int main() {
         printf("%d ", travel[i]);
     
     delete[] travel;
-    for (int i = 0; i < sizeN; i++)
-        delete[] matrix[i];
+    delete[] matrix[0];
     delete[] matrix;
     return 0;
 }
