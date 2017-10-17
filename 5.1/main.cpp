@@ -77,16 +77,17 @@ int main() {
     double x = 0.0;
     printf("Input double: ");
     scanf("%lf", &x);
-//    x = 12312.323;
 
     bool sign = false;
     long long exponent = 0;
     string mantissa = "0";
     int zeroes = 0;
     parse(x, sign, exponent, mantissa, zeroes);
+    
     zeroes = std::max(0, zeroes - (int) mantissa.length());
     reverse(mantissa.begin(), mantissa.end());
     mantissa = string(zeroes, '0') + mantissa;
+    
     printf("Result: %c1.%s * 2 ^ %-I64d", sign ? '-' : '+', mantissa.c_str(), exponent);
     return 0;
 }
