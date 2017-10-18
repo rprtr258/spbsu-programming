@@ -27,7 +27,7 @@ Node* lastNode(LinkedList *list) {
 void listPushBack(LinkedList *list, const int value) {
     Node *newNode = new Node;
     newNode->val = value;
-    if (list->head == nullptr) {
+    if (listIsEmpty(list)) {
         list->head = newNode;
     } else {
         Node *last = lastNode(list);
