@@ -9,7 +9,6 @@ long long unsigned const expoMask = 0x7FF0000000000000;
 long long unsigned const mantMask = 0x000FFFFFFFFFFFFF;
 int const expoSize = 11;
 int const mantSize = 52;
-char const nullChar = char(0);
 
 string add(string a, string b) {
     if (a.length() < b.length())
