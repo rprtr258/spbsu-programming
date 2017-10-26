@@ -12,7 +12,7 @@ void printBinary(const int unsigned x) {
 int main() {
     printf("Complement code test\n");
     
-    printf("Write two numbers from -2\'147\'483\'647 to 2147483648 inclusive\n");
+    printf("Write two numbers from -2\'147\'483\'647 to 2\'147\'483\'648 inclusive\n");
     int first = 0;
     int second = 0;
     scanf("%d %d", &first, &second);
