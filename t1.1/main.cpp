@@ -63,8 +63,12 @@ int main() {
     scanf("%s", s);
     if (strcmp(s, "rand") == 0) {
         srand(time(nullptr));
-        for (int i = 0; i < arraySize; i++)
+        printf("Generated array:\n");
+        for (int i = 0; i < arraySize; i++) {
            array[i] = randRange(11, 42);
+           printf("%d ", array[i]);
+        }
+        printf("\n");
     } else if (strcmp(s, "hand") == 0) {
         printf("Write your array of size %d:\n", arraySize);
         for (int i = 0; i < arraySize; i++)
