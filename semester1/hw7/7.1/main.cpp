@@ -22,5 +22,4 @@ int main() {
 
     listClear(clist);
     delete clist;
-    return 0;
 }
