@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include "parse.h"
 #include "tests.h"
 #include "eval.h"
