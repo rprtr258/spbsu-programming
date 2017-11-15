@@ -160,8 +160,8 @@ int main() {
 //        return 0;
     
     printf("Printing square array in spiral order\n");
-    int sizeN = 0;
     printf("Enter array dimension size: ");
+    int sizeN = 0;
     scanf("%d", &sizeN);
     
     int **matrix = allocateMemorySmart(sizeN, sizeN);
