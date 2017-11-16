@@ -9,7 +9,7 @@ bool isCorrectNumberBegin(char *str, int i);
 bool isEndOfToken(char *str, int i);
 void skipToNextToken(char *str, int &i, int &degree);
 void writeXDegree(char *ansRow1, int &j1, char *ansRow2, int &j2, int degree);
-void writeCoefficient(char *ansRow1, int &j1, char *ansRow2, int &j2, char *str, int i, int degree);
+void writeCoefficient(char *ansRow1, int &j1, char *ansRow2, int &j2, char *str, int i, int degree, bool isFirstToken);
 
 int countSpaces(char const *str, const size_t len) {
     int result = 0;
@@ -51,12 +51,9 @@ void writeXDegree(char *ansRow1, int &j1, char *ansRow2, int &j2, int degree) {
     strConcate(ansRow1, j1, " ");
     strConcate(ansRow2, j2, "x");
     
-    char num[100], spaces[100];
-    int p = 0;
-    if (degree == 1) {
-        num[0] = ' ';
-        num[1] = '\0';
-    } else {
+    if (degree > 1) {
+        char num[100], spaces[100];
+        int p = 0;
         while (degree) {
             num[p] = '0' + degree % 10;
             spaces[p] = ' ';
@@ -66,15 +63,28 @@ void writeXDegree(char *ansRow1, int &j1, char *ansRow2, int &j2, int degree) {
         std::reverse(num, num + p);
         num[p] = '\0';
         spaces[p] = '\0';
+        strConcate(ansRow1, j1, num);
+        strConcate(ansRow2, j2, spaces);
     }
-    strConcate(ansRow1, j1, num);
-    strConcate(ansRow2, j2, spaces);
 }
 
-void writeCoefficient(char *ansRow1, int &j1, char *ansRow2, int &j2, char *str, int i, int degree) {
-    char tmp[2] = "$";
+void writeCoefficient(char *ansRow1, int &j1, char *ansRow2, int &j2, char *str, int i, int degree, bool isFirstToken) {
+    if (!isFirstToken) {
+        char op[4] = " + ";
+        if (str[i] == '-') {
+            i++;
+            op[1] = '-';
+        }
+        strConcate(ansRow1, j1, "   ");
+        strConcate(ansRow2, j2, op);
+    } else if (str[i] == '-') {
+        strConcate(ansRow1, j1, " ");
+        strConcate(ansRow2, j2, "-");
+        i++;
+    }
     if (degree > 0 && str[i] == '1' && isEndOfToken(str, i + 1)) // coeff. is 1
         return;
+    char tmp[2] = "$";
     while (!isEndOfToken(str, i)) {
         tmp[0] = str[i];
         strConcate(ansRow1, j1, " ");
@@ -89,8 +99,8 @@ void writeCoefficient(char *ansRow1, int &j1, char *ansRow2, int &j2, char *str,
 int main() {
     printf("Beautiful polynom\n");
     
-    printf("Write coefficients of polynom in order an, ..., a1, a0 in one line,\n");
-    printf("where pol(x) = an*x^n + ... + a1 * x + a0\n");
+    printf("Write coefficients of polynom as array \"an ... a1 a0\" in one line,\n");
+    printf("where pol(x) = an * x ^ n + ... + a1 * x + a0\n");
     char str[1000];
     gets(str);
     size_t len = strlen(str);
@@ -101,20 +111,20 @@ int main() {
     int j2 = 0;
     int degree = countSpaces(str, len);
     int i = 0;
+    bool isFirstToken = true;
     while (str[i] != '\0') {
         // printf("%c %d\n", str[i], degree);
         // checking for first char of token
         if (str[i] == '-' && isCorrectNumberBegin(str, i)) {
-            // -C * x ^ deg
-            strConcate(ansRow1, j1, " ");
-            strConcate(ansRow2, j2, "-");
-            i++;
-            writeCoefficient(ansRow1, j1, ansRow2, j2, str, i, degree);
+            // -C * x ^ deg 
+            writeCoefficient(ansRow1, j1, ansRow2, j2, str, i, degree, isFirstToken);
             writeXDegree(ansRow1, j1, ansRow2, j2, degree);
+            isFirstToken = false;
         } else if (isdigit(str[i]) && str[i] != '0') { // nor "0" neither "1"
             // copy coefficient and x with degree
-            writeCoefficient(ansRow1, j1, ansRow2, j2, str, i, degree);
+            writeCoefficient(ansRow1, j1, ansRow2, j2, str, i, degree, isFirstToken);
             writeXDegree(ansRow1, j1, ansRow2, j2, degree);
+            isFirstToken = false;
         }
         skipToNextToken(str, i, degree);
     }
