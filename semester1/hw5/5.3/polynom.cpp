@@ -30,11 +30,7 @@ void beautify(char *str, char *ansRow1, char *ansRow2) {
     tmp->row2 = ansRow2;
     
     while (str[tmp->i] != '\0') {
-        if (str[tmp->i] == '-' && isCorrectNumberBegin(str, tmp->i)) {
-            writeCoefficient(str, tmp);
-            writeXDegree(tmp);
-            tmp->isFirstToken = false;
-        } else if (isdigit(str[tmp->i]) && str[tmp->i] != '0') {
+        if (isCorrectNumberBegin(str, tmp->i)) {
             writeCoefficient(str, tmp);
             writeXDegree(tmp);
             tmp->isFirstToken = false;
