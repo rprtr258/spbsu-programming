@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int const ALPHABET = 256;
+int const alphabet = 256;
 
 int main() {
     printf("First occurrences of each letter in each word in \"file.txt\"\n");
@@ -10,8 +10,8 @@ int main() {
     
     while (!feof(myfile)) {
         fscanf(myfile, "%s", s);
-        bool were[ALPHABET];
-        for (int i = 0; i < ALPHABET; i++)
+        bool were[alphabet];
+        for (int i = 0; i < alphabet; i++)
             were[i] = false;
         for (int i = 0; s[i] != '\0'; i++)
             if (!were[s[i]]) {
