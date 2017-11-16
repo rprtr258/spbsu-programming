@@ -3,8 +3,6 @@
 #include <ctype.h>
 #include "polynom.h"
 
-// TODO: move all shit to module
-
 int main() {
     printf("Beautiful polynom\n");
     
