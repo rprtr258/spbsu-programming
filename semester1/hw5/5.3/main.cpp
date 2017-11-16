@@ -27,6 +27,8 @@ inline bool isEndOfToken(chaar *str, int i) {
     return (str[i] == ' ' || str[i] == '\0');
 }
 
+// TODO: move all shit to module
+
 int main() {
     printf("Beautiful polynom\n");
     
