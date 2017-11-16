@@ -3,6 +3,14 @@
 #include <string.h>
 #include <algorithm>
 
+int countSpaces(char const *str, const size_t len);
+void strConcate(char *str, int &j, const char *token);
+bool isCorrectNumberBegin(char *str, int i);
+bool isEndOfToken(char *str, int i);
+void skipToNextToken(char *str, int &i, int &degree);
+void writeXDegree(char *ansRow1, int &j1, char *ansRow2, int &j2, int degree);
+void writeCoefficient(char *ansRow1, int &j1, char *ansRow2, int &j2, char *str, int i, int degree);
+
 int countSpaces(char const *str, const size_t len) {
     int result = 0;
     for (size_t i = 0; i < len; i++)
@@ -19,15 +27,64 @@ void strConcate(char *str, int &j, const char *token) {
     }
 }
 
-inline bool isCorrectNumberBegin(char *str, int i) {
-    return ((str[i] == '-' && isdigit(str[i]) && str[i + 1] != '0') || (isdigit(str[i]) && str[i] != '0'));
+bool isCorrectNumberBegin(char *str, int i) {
+    return ((str[i] == '-' && isdigit(str[i + 1]) && str[i + 1] != '0') || (isdigit(str[i]) && str[i] != '0'));
 }
 
-inline bool isEndOfToken(chaar *str, int i) {
+bool isEndOfToken(char *str, int i) {
     return (str[i] == ' ' || str[i] == '\0');
 }
 
+void skipToNextToken(char *str, int &i, int &degree) {
+    while (!isEndOfToken(str, i))
+        i++;
+    if (str[i] != '\0') {
+        i++;
+        degree--;
+    }
+}
+
+void writeXDegree(char *ansRow1, int &j1, char *ansRow2, int &j2, int degree) {
+    if (degree == 0)
+        return;
+    
+    strConcate(ansRow1, j1, " ");
+    strConcate(ansRow2, j2, "x");
+    
+    char num[100], spaces[100];
+    int p = 0;
+    if (degree == 1) {
+        num[0] = ' ';
+        num[1] = '\0';
+    } else {
+        while (degree) {
+            num[p] = '0' + degree % 10;
+            spaces[p] = ' ';
+            degree /= 10;
+            p++;
+        }
+        std::reverse(num, num + p);
+        num[p] = '\0';
+        spaces[p] = '\0';
+    }
+    strConcate(ansRow1, j1, num);
+    strConcate(ansRow2, j2, spaces);
+}
+
+void writeCoefficient(char *ansRow1, int &j1, char *ansRow2, int &j2, char *str, int i, int degree) {
+    char tmp[2] = "$";
+    if (degree > 0 && str[i] == '1' && isEndOfToken(str, i + 1)) // coeff. is 1
+        return;
+    while (!isEndOfToken(str, i)) {
+        tmp[0] = str[i];
+        strConcate(ansRow1, j1, " ");
+        strConcate(ansRow2, j2, tmp);
+        i++;
+    }
+}
+
 // TODO: move all shit to module
+// TODO: signs between tokens
 
 int main() {
     printf("Beautiful polynom\n");
@@ -43,74 +100,29 @@ int main() {
     char ansRow2[1000];
     int j2 = 0;
     int degree = countSpaces(str, len);
-    size_t i = 0;
-    while (i < len && degree > 0) {
+    int i = 0;
+    while (str[i] != '\0') {
+        // printf("%c %d\n", str[i], degree);
         // checking for first char of token
-        if (str[i] == '-') {
-            if (isCorrectNumberBegin(str, i)) {
-                // -1 * x ^ deg
-                // or
-                // -C * x ^ deg
-                strConcate(ansRow1, j1, " ");
-                strConcate(ansRow2, j2, "-");
-                if (i > 0) {
-                    strConcate(ansRow1, j1, " ");
-                    strConcate(ansRow2, j2, " ");
-                }
-            } else {
-                // skip till next token
-                while (str[i + 1] != ' ' && str[i + 1] != '\0')
-                    i++;
-            }
-        } else if (str[i] == '0') {
-            // skip till next token
-            if (i > 0) {
-                i++; // skip
-                degree--;
-            } else {
-                strConcate(ansRow1, j1, " ");
-                strConcate(ansRow2, j2, "0");
-            }
-        } else if (str[i] == '1' && isEndOfToken(str, i + 1)) {
-            // 1 * x ^ deg
-            if ((str[i + 1] != ' ' && str[i + 1] != '\0') || (i > 0 && isdigit(str[i - 1]))) {
-                strConcate(ansRow1, j1, " ");
-                strConcate(ansRow2, j2, "1");
-            }
-        } else if (isdigit(str[i])) { // nor "0" neither "1"
+        if (str[i] == '-' && isCorrectNumberBegin(str, i)) {
+            // -C * x ^ deg
+            strConcate(ansRow1, j1, " ");
+            strConcate(ansRow2, j2, "-");
+            i++;
+            writeCoefficient(ansRow1, j1, ansRow2, j2, str, i, degree);
+            writeXDegree(ansRow1, j1, ansRow2, j2, degree);
+        } else if (isdigit(str[i]) && str[i] != '0') { // nor "0" neither "1"
             // copy coefficient and x with degree
-            strConcate(ansRow1, j1, " ");
-            ansRow2[j2] = str[i];
-            j2++;
-        } else if (str[i] == ' ') {
-            // impossible
-            strConcate(ansRow1, j1, " ");
-            strConcate(ansRow2, j2, "x");
-            char num[100], spaces[100];
-            int p = 0;
-            int deg = degree;
-            while (deg) {
-                num[p] = '0' + deg % 10;
-                spaces[p] = ' ';
-                deg /= 10;
-                p++;
-            }
-            if (degree == 1)
-                num[0] = ' ';
-            std::reverse(num, num + p);
-            num[p] = '\0';
-            spaces[p] = '\0';
-            strConcate(ansRow1, j1, num);
-            strConcate(ansRow2, j2, spaces);
-            degree--;
-            if (str[i + 1] != '-' && str[i + 1] != '0') {
-                strConcate(ansRow1, j1, "  ");
-                strConcate(ansRow2, j2, "+ ");
-            }
+            writeCoefficient(ansRow1, j1, ansRow2, j2, str, i, degree);
+            writeXDegree(ansRow1, j1, ansRow2, j2, degree);
         }
-        i++;
+        skipToNextToken(str, i, degree);
     }
     // case if all zeroes
+    if (j1 == 0 && j2 == 0) {
+        strConcate(ansRow1, j1, " ");
+        strConcate(ansRow2, j2, "0");
+    }
     ansRow1[j1] = '\0';
     ansRow2[j2] = '\0';
     printf("Beautiful polynome:\n");
