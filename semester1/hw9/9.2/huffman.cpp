@@ -97,7 +97,7 @@ int writeCodes(Node *node, char **codes, char *buffer, FILE* file = stdin, int c
 char* encode(HuffmanTree *tree, const char *str) {
     int strLength = strlen(str);
     
-    char **codes = new char*[alphabet];
+    char *codes[alphabet];
     for (int i = 0; i < alphabet; i++)
         codes[i] = nullptr;
     
@@ -116,7 +116,6 @@ char* encode(HuffmanTree *tree, const char *str) {
     
     for (int i = 0; i < alphabet; i++)
         delete[] codes[i];
-    delete[] codes;
     return result;
 }
 
