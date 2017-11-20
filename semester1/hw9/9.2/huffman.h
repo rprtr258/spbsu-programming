@@ -1,5 +1,4 @@
 #pragma once
-#include <stdio.h>
 #include <utility>
 
 typedef std::pair<char, int> CharOccur;
