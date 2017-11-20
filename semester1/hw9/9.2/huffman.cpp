@@ -114,6 +114,9 @@ char* encode(HuffmanTree *tree, const char *str) {
     }
     result[resultLength] = '\0';
     
+    for (int i = 0; i < alphabet; i++)
+        delete[] codes[i];
+    delete[] codes;
     return result;
 }
 
