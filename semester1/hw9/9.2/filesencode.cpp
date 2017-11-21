@@ -10,6 +10,8 @@ char* readFile(const char *filename) {
     int i = 0;
     while (!feof(file)) {
         fscanf(file, "%c", &symbol);
+        if (feof(file))
+            continue;
         buffer[i] = symbol;
         i++;
     }
