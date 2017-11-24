@@ -27,11 +27,10 @@ int main() {
         minTime = std::min(minTime, time);
     }
     
-    if (minTime == INT_MAX) {
+    if (minTime == INT_MAX)
         printf("Time not found in \"file.txt\"\n");
-    } else {
+    else
         printf("Min time in \"file.txt\": %s\n", dateToString(minTime).c_str());
-    }
         
     fclose(file);
     return 0;
