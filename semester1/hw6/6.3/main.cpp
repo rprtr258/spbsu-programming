@@ -6,11 +6,10 @@ int main() {
     PhoneBook *book = new PhoneBook();
     readEntries(book);
     printf("Program to work with phone book. Type \"help\" for help, \"exit\" to exit.\n");
-    char cmd[10] = "";
     while (true) {
+        char cmd[10] = "";
         printf("> ");
         scanf("%s", cmd);
-        // printf("%s\n", cmd);
         if (strcmp(cmd, "exit") == 0) {
             saveEntries(book);
             break;
@@ -31,7 +30,6 @@ int main() {
             char phone[20];
             printf("Write phone of person: ");
             scanf("%s", phone);
-            // printf("(%s, %s)\n", name, phone);
             addEntry(book, name, phone);
         } else if (strcmp(cmd, "findphone") == 0) {
             char phone[20];
@@ -49,8 +47,7 @@ int main() {
             printf("Wrong command, please retry\n");
         }
     }
-    if (book->data != nullptr)
-        delete[] book->data;
+    erase(book);
     delete book;
     return 0;
 }

@@ -20,7 +20,6 @@ void readEntries(PhoneBook *book) {
     
     int entriesNumber = 0;
     fscanf(fileInput, "%d", &entriesNumber);
-    // printf("entries in db: %d\n", entriesNumber);
     
     if (entriesNumber > 0)
         book->data = new Entry[entriesNumber];
@@ -29,8 +28,6 @@ void readEntries(PhoneBook *book) {
     for (int i = 0; i < entriesNumber; i++) {
         Entry &entry = book->data[i];
         fscanf(fileInput, "%s %s", entry.name, entry.telephone);
-        // read:
-        // printf("%s %s\n", entry.name, entry.telephone);
     }
     
     fclose(fileInput);
@@ -101,3 +98,10 @@ void addEntry(PhoneBook *book, char name[20], char phone[20]) {
     book->size++;
 }
 
+void erase(PhoneBook *book) {
+    if (book->data != nullptr)
+        delete[] book->data;
+    book->data = nullptr;
+    book->size = 0;
+    book->capacity = 0;
+}

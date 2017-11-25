@@ -21,3 +21,4 @@ void findByName(PhoneBook *book, char *name);
 
 void addEntry(PhoneBook *book, char name[20], char phone[20]);
 
+void erase(PhoneBook *book);
