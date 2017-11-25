@@ -48,8 +48,8 @@ void removeNode(Node *&node, int const value) {
             Node *tmp = node->l;
             while (tmp->r != nullptr)
                 tmp = tmp->r;
-            node->value = tmp->value;
             removeNode(node, tmp->value);
+            node->value = tmp->value;
         } else if (node->l != nullptr) {
             Node *child = node->l;
             delete node;
@@ -92,6 +92,10 @@ void treeErase(BinarySearchTree *tree) {
 void printDebugNode(Node *node) {
     if (node == nullptr) {
         printf("null");
+        return;
+    }
+    if (node->l == nullptr && node->r == nullptr) {
+        printf("{%d}", node->value);
         return;
     }
     printf("(%d ", node->value);
