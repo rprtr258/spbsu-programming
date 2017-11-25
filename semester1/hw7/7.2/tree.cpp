@@ -7,6 +7,7 @@ struct Node {
     Node *r = nullptr;
     int value = 0;
     int height = 1;
+    int quantity = 1;
 };
 
 int getHeight(Node *node) {
@@ -62,6 +63,10 @@ void addNode(Node *&node, int const value) {
         node->value = value;
         return;
     }
+    if (node->value == value) {
+        node->quantity++;
+        return;
+    }
     if (value < node->value)
         addNode(node->l, value);
     else
@@ -91,6 +96,10 @@ bool treeContains(BinarySearchTree *tree, int const value) {
 
 void removeNode(Node *&node, int const value) {
     if (node->value == value) {
+        if (node->quantity > 1) {
+            node->quantity--;
+            return;
+        }
         if (node->l == nullptr && node->r == nullptr) {
             delete node;
             node = nullptr;
@@ -148,7 +157,11 @@ void printDebugNode(Node *node) {
         printf("null");
         return;
     }
-    printf("(%d[%d] ", node->value, node->height);
+    if (node->l == nullptr && node->r == nullptr) {
+        printf("{%d[%d]}", node->value, node->quantity);
+        return;
+    }
+    printf("(%d[%d, %d] ", node->value, node->height, node->quantity);
     printDebugNode(node->l);
     printf(" ");
     printDebugNode(node->r);
@@ -159,7 +172,7 @@ void printIncNode(Node *node) {
     if (node == nullptr)
         return;
     printIncNode(node->l);
-    printf("%d ", node->value);
+    printf("%d[%d] ", node->value, node->quantity);
     printIncNode(node->r);
 }
 
@@ -172,7 +185,7 @@ void printDecrNode(Node *node) {
     if (node == nullptr)
         return;
     printDecrNode(node->r);
-    printf("%d ", node->value);
+    printf("%d[%d] ", node->value, node->quantity);
     printDecrNode(node->l);
 }
 

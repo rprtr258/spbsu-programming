@@ -4,47 +4,68 @@
 
 int main() {
     printf("Binary search tree emulation\n");
-    printf("Type \"help\" for help\n");
+    printf("Type \"0\" for help\n");
     BinarySearchTree *tree = new BinarySearchTree();
-    
-    while (true) {
+    bool isRunning = true;
+    while (isRunning) {
         printf("> ");
-        char cmd[10];
-        scanf("%s", cmd);
-        if (strcmp(cmd, "help") == 0) {
-            printf("List of commands:\n");
-            printf("\"exit\" - quit programm\n");
-            printf("\"add\" - add element in set\n");
-            printf("\"remove\" - remove element from set\n");
-            printf("\"contains\" - check for element existance in set\n");
-            printf("\"debug\" - print tree in debug view\n");
-            printf("\"printi\" - print elements in increasing order\n");
-            printf("\"printd\" - print elements in decreasing order\n");
-        } else if (strcmp(cmd, "exit") == 0) {
-            break;
-        } else if (strcmp(cmd, "add") == 0) {
-            int value = 0;
-            printf("Write value to add: ");
-            scanf("%d", &value);
-            treeAdd(tree, value);
-            printf("Value %d added!\n", value);
-        } else if (strcmp(cmd, "remove") == 0) {
-            int value = 0;
-            printf("Write value to remove: ");
-            scanf("%d", &value);
-            treeRemove(tree, value);
-        } else if (strcmp(cmd, "contains") == 0) {
-            int value = 0;
-            printf("Write value to search: ");
-            scanf("%d", &value);
-            bool isInside = treeContains(tree, value);
-            printf(isInside ? "%d is in set\n" : "%d isn\'t in set\n", value);
-        } else if (strcmp(cmd, "debug") == 0) {
-            treePrintDebug(tree);
-        } else if (strcmp(cmd, "printi") == 0) {
-            treePrintIncreasing(tree);
-        } else if (strcmp(cmd, "printd") == 0) {
-            treePrintDecreasing(tree);
+        int cmd = -1;
+        scanf("%d", &cmd);
+        switch (cmd) {
+            case 0: {
+                printf("List of commands:\n");
+                printf("\"1\" - quit programm\n");
+                printf("\"2\" - add element in set\n");
+                printf("\"3\" - remove element from set\n");
+                printf("\"4\" - check for element existance in set\n");
+                printf("\"5\" - print tree in debug view\n");
+                printf("\"6\" - print elements in increasing order\n");
+                printf("\"7\" - print elements in decreasing order\n");
+                break;
+            }
+            case 1: {
+                isRunning = false;
+                break;
+            }
+            case 2: {
+                int value = 0;
+                printf("Write value to add: ");
+                scanf("%d", &value);
+                treeAdd(tree, value);
+                printf("Value %d added!\n", value);
+                break;
+            }
+            case 3: {
+                int value = 0;
+                printf("Write value to remove: ");
+                scanf("%d", &value);
+                treeRemove(tree, value);
+                break;
+            }
+            case 4: {
+                int value = 0;
+                printf("Write value to search: ");
+                scanf("%d", &value);
+                bool isInside = treeContains(tree, value);
+                printf("%d %s in set\n", value, isInside ? "is" : "isn\'t");
+                break;
+            }
+            case 5: {
+                treePrintDebug(tree);
+                break;
+            }
+            case 6: {
+                treePrintIncreasing(tree);
+                break;
+            }
+            case 7: {
+                treePrintDecreasing(tree);
+                break;
+            }
+            default: {
+                printf("Incorrect command\n");
+                break;
+            }
         }
     }
     
