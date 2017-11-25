@@ -2,7 +2,7 @@
 #include "list.h"
 
 struct Stack {
-    LinkedList *list = createList();
+    LinkedList *list = nullptr;
 };
 
 Stack* createStack();
