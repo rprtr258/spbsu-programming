@@ -22,6 +22,5 @@ int main() {
     }
     
     fclose(myfile);
-    delete myfile;
     return 0;
 }
