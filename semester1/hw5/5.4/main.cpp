@@ -23,6 +23,5 @@ int main() {
     printf("There\'s %d non-blank lines", result);
     
     fclose(myFile);
-    delete myFile;
     return 0;
 }
