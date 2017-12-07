@@ -8,6 +8,9 @@ struct Node {
 };
 
 Node* getListNode(LinkedList *list, int const index) {
+    if (index < 0 || index >= list->size)
+        return nullptr;
+    
     Node *result = list->head;
     for (int i = 0; i < index; i++)
         result = result->next;
