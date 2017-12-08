@@ -1,43 +1,30 @@
 #include <stdio.h>
-#include <queue>
-
-void writeQueue(FILE *file, std::queue<int> &row) {
-    while (!row.empty()) {
-        fprintf(file, "%d", row.front());
-        row.pop();
-        if (!row.empty())
-            fprintf(file, " ");
-    }
-    fprintf(file, "\n");
-}
+#include "list/list.h"
 
 int main() {
-    int a = 0, b = 0;
-    printf("Write a, b: ");
-    scanf("%d %d", &a, &b);
+    printf("Brand new sort program!\n");
     
-    FILE *fileF = fopen("f", "r");
-    std::queue<int> q1, q2, q3;
-    
-    while (!feof(fileF)) {
-        int x;
-        fscanf(fileF, "%d", &x);
-        if (x < a) {
-            q1.push(x);
-        } else if (b < x) {
-            q3.push(x);
-        } else {
-            q2.push(x);
-        }
+    int arraySize = 0;
+    printf("Write size of array: ");
+    scanf("%d", &arraySize);
+    if (arraySize < 0) {
+        printf("Wrong array size\n");
+        return 0;
     }
-    fclose(fileF);
     
-    FILE *fileG = fopen("g", "w");
+    LinkedList *list = createList();
+    printf("Write array:\n");
+    for (int i = 0; i < arraySize; i++) {
+        int value = -1;
+        scanf("%d", &value);
+        int pos = lowerBound(list, value);
+        insertAtIndex(list, value, pos);
+        
+        //printList(list);
+    }
     
-    writeQueue(fileG, q1);
-    writeQueue(fileG, q2);
-    writeQueue(fileG, q3);
+    printList(list);
     
-    fclose(fileG);
+    deleteList(list);
     return 0;
 }
