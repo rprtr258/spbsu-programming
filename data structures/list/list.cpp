@@ -229,12 +229,10 @@ void printList(LinkedList *list) {
 }
 
 void printNode(Node *node) {
-    if (node == nullptr) {
+    if (node == nullptr)
         printf("(null)");
-        return;
-    }
-    
-    printf("%d", node->value);
+    else
+        printf("%d", node->value);
 }
 
 void printSiblings(LinkedList *list, int const index) {
