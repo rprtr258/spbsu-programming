@@ -25,16 +25,18 @@ LinkedList* createList() {
 void deleteNode(Node *node) {
     if (node == nullptr)
         return;
+    
     if (node->next != nullptr)
         deleteNode(node->next);
     delete node;
 }
 
 void deleteList(LinkedList *&list) {
-    if (list != nullptr) {
-        deleteNode(list->head);
-        list = nullptr;
-    }
+    if (list == nullptr)
+        return;
+    
+    deleteNode(list->head);
+    list = nullptr;
 }
 
 void eraseList(LinkedList *list) {
@@ -92,6 +94,7 @@ void insertAtIndex(LinkedList *list, int const value, int const index) {
         insertAtEnd(list, value);
         return;
     }
+    
     if (index == 0) {
         insertAtBegin(list, value);
         return;
@@ -105,7 +108,6 @@ void insertAtIndex(LinkedList *list, int const value, int const index) {
     temp->prev->next = node;
     node->prev = temp->prev;
     node->next = temp;
-
     temp->prev = node;
     
     list->size++;
@@ -138,7 +140,7 @@ int peekIndex(LinkedList *list, int const index) {
 }
 
 void deleteBegin(LinkedList *list) {
-    if (list == nullptr)
+    if (list == nullptr || list->size == 0)
         return;
     
     if (list->size == 1) {
@@ -155,7 +157,7 @@ void deleteBegin(LinkedList *list) {
 }
 
 void deleteEnd(LinkedList *list) {
-    if (list == nullptr)
+    if (list == nullptr || list->size == 0)
         return;
     
     if (list->size == 1) {
@@ -172,7 +174,7 @@ void deleteEnd(LinkedList *list) {
 }
 
 void deleteIndex(LinkedList *list, int const index) {
-    if (list == nullptr)
+    if (list == nullptr || list->size == 0)
         return;
     
     if (index < 0 || index >= list->size)
@@ -182,6 +184,7 @@ void deleteIndex(LinkedList *list, int const index) {
         deleteBegin(list);
         return;
     }
+    
     if (index == list->size - 1) {
         deleteEnd(list);
         return;
@@ -198,14 +201,16 @@ void deleteIndex(LinkedList *list, int const index) {
 int findElement(LinkedList *list, int const value) {
     if (list == nullptr)
         return -1;
+    
     int result = -1;
     
     int i = 0;
     Node *temp = list->head;
     while (temp != nullptr) {
-        if (temp->value == value)
+        if (temp->value == value) {
             result = i;
-        
+            break;
+        }
         temp = temp->next;
         i++;
     }
