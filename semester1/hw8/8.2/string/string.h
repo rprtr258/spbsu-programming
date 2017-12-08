@@ -5,6 +5,7 @@ struct String {
     int size = 0;
 };
 
+String* createString();
 String* createString(const char *string);
 
 bool areEqual(String *str1, String *str2);
