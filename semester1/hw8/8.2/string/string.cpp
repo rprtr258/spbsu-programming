@@ -1,6 +1,11 @@
 #include <string.h>
 #include "string.h"
 
+String* createString() {
+    String *newString = new String();
+    return newString;
+}
+
 String* createString(const char *string) {
     if (string == nullptr)
         return nullptr;
