@@ -3,6 +3,7 @@
 
 struct Node {
     int value = 0;
+    Node *prev = nullptr;
     Node *next = nullptr;
 };
 
@@ -44,7 +45,25 @@ void eraseList(LinkedList *list) {
     
     deleteNode(list->head);
     list->head = nullptr;
+    list->tail = nullptr;
     list->size = 0;
+}
+
+void insertAtEnd(LinkedList *list, int const value) {
+    if (list == nullptr)
+        return;
+    
+    Node *node = new Node();
+    node->value = value;
+    if (list->head == nullptr) {
+        list->head = node;
+        list->tail = node;
+    } else {
+        list->tail->next = node;
+        node->prev = list->tail;
+        list->tail = node;
+    }
+    list->size++;
 }
 
 void insertAtBegin(LinkedList *list, int const value) {
@@ -55,7 +74,9 @@ void insertAtBegin(LinkedList *list, int const value) {
     node->value = value;
     if (list->head == nullptr) {
         list->head = node;
+        list->tail = node;
     } else {
+        list->head->prev = node;
         node->next = list->head;
         list->head = node;
     }
@@ -69,6 +90,11 @@ void insertAtIndex(LinkedList *list, int const value, int const index) {
     if (index < 0 || index > list->size)
         return;
     
+    if (index == list->size) {
+        insertAtEnd(list, value);
+        return;
+    }
+    
     if (index == 0) {
         insertAtBegin(list, value);
         return;
@@ -77,16 +103,12 @@ void insertAtIndex(LinkedList *list, int const value, int const index) {
     Node *node = new Node();
     node->value = value;
     
-    if (index == list->size) {
-        Node *temp = getListNode(list, list->size - 1);
-        temp->next = node;
-        list->size++;
-        return;
-    }
-    
     Node *temp = getListNode(list, index);
 
+    temp->prev->next = node;
+    node->prev = temp->prev;
     node->next = temp;
+    temp->prev = node;
     
     list->size++;
 }
@@ -96,6 +118,13 @@ int peekBegin(LinkedList *list) {
         return -1;
     
     return list->head->value;
+}
+
+int peekEnd(LinkedList *list) {
+    if (list == nullptr || list->size == 0)
+        return -1;
+    
+    return list->tail->value;
 }
 
 int peekIndex(LinkedList *list, int const index) {
@@ -117,10 +146,29 @@ void deleteBegin(LinkedList *list) {
     if (list->size == 1) {
         delete list->head;
         list->head = nullptr;
+        list->tail = nullptr;
     } else {
         Node *temp = list->head->next;
         delete list->head;
         list->head = temp;
+        temp->prev = nullptr;
+    }
+    list->size--;
+}
+
+void deleteEnd(LinkedList *list) {
+    if (list == nullptr || list->size == 0)
+        return;
+    
+    if (list->size == 1) {
+        delete list->tail;
+        list->head = nullptr;
+        list->tail = nullptr;
+    } else {
+        Node *temp = list->tail->prev;
+        delete list->tail;
+        list->tail = temp;
+        temp->next = nullptr;
     }
     list->size--;
 }
@@ -137,7 +185,14 @@ void deleteIndex(LinkedList *list, int const index) {
         return;
     }
     
+    if (index == list->size - 1) {
+        deleteEnd(list);
+        return;
+    }
+    
     Node *temp = getListNode(list, index);
+    temp->prev->next = temp->next;
+    temp->next->prev = temp->prev;
     delete temp;
     
     list->size--;
@@ -163,23 +218,17 @@ int findElement(LinkedList *list, int const value) {
     return result;
 }
 
-int lowerBound(LinkedList *list, int const value) {
+void printList(LinkedList *list) {
     if (list == nullptr)
-        return -1;
+        return;
     
-    int result = -1;
-    
-    int i = 0;
     Node *temp = list->head;
     while (temp != nullptr) {
-        if (temp->value <= value)
-            result = i;
-
+        printf("%d", temp->value);
+        if (temp->next != nullptr)
+            printf(" ");
         temp = temp->next;
-        i++;
     }
-    
-    return result + 1;
 }
 
 void printNode(Node *node) {
@@ -187,19 +236,6 @@ void printNode(Node *node) {
         printf("(null)");
     else
         printf("%d", node->value);
-}
-
-void printList(LinkedList *list) {
-    if (list == nullptr)
-        return;
-    
-    Node *temp = list->head;
-    while (temp != nullptr) {
-        printNode(temp);
-        if (temp->next != nullptr)
-            printf(" ");
-        temp = temp->next;
-    }
 }
 
 void printSiblings(LinkedList *list, int const index) {
@@ -210,6 +246,8 @@ void printSiblings(LinkedList *list, int const index) {
     
     Node *temp = getListNode(list, index);
     
+    printf("prev: ");
+    printNode(temp->prev);
     printf("\nnext: ");
     printNode(temp->next);
     printf("\n");

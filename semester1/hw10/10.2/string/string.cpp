@@ -89,20 +89,32 @@ LinkedList* findOccurences(String* text, String* pattern) {
         return nullptr;
     
     int const q = 73;
-    int const p = 1000003;
+    int const p = 10007;
+    int qDegree = 1;
     int patternHash = 0;
-    for (int i = 0; i < pattern->size; i++)
+    for (int i = 0; i < pattern->size; i++) {
         patternHash = (q * patternHash + pattern->data[i]) % p;
+        qDegree = (qDegree * q) % p;
+    }
     
     int tempHash = 0;
     LinkedList *result = createList();
     for (int i = 0; i < text->size - pattern->size + 1; i++) {
-        tempHash = 0;
-        for (int j = 0; j < pattern->size; j++)
-            tempHash = (q * tempHash + text->data[i + j]) % p;
-        
-        if (tempHash == patternHash)
-            insertAtBegin(result, i);
+        if (i == 0) {
+            for (int j = 0; j < pattern->size; j++)
+                tempHash = (q * tempHash + text->data[i + j]) % p;
+        } else {
+            tempHash = (tempHash * q + text->data[i + pattern->size - 1]) % p;
+            tempHash = ((tempHash - qDegree * text->data[i - 1]) % p + p) % p;
+        }
+
+        if (tempHash == patternHash) {
+            bool found = true;
+            for (int j = 0; j < pattern->size; j++)
+                found &= (text->data[i + j] == pattern->data[j]);
+            if (found)
+                insertAtEnd(result, i);
+        }
     }
     
     return result;

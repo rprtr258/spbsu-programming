@@ -41,12 +41,14 @@ int main() {
     //printf("PATTERN:\n%s\n", pattern->data);
     
     LinkedList *list = findOccurences(text, pattern);
-    if (list->size > 0) {
+    if (list->size == 0) {
+        printf("Found no occurences\n");
+    } else if (list->size == 1) {
+        printf("Found 1 occurence at position %d\n", peekBegin(list));
+    } else {
         printf("Found %d occurences at positions:\n", list->size);
         printList(list);
         printf("\n");
-    } else {
-        printf("Found no occurences\n");
     }
     
     deleteList(list);
