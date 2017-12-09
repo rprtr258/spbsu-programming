@@ -9,3 +9,4 @@
 *.cpp~
 *.gch
 *.swp
+/data structures/nbproject/

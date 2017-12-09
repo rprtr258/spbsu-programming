@@ -1,0 +1,48 @@
+Frequency table:
+'.' (ASCII code: 2E): frequency:  19, code: 00000, P(.) = 0.020430108
+'y' (ASCII code: 79): frequency:  21, code: 00001, P(y) = 0.022580645
+'f' (ASCII code: 66): frequency:  11, code: 000100, P(f) = 0.011827957
+'v' (ASCII code: 76): frequency:  11, code: 000101, P(v) = 0.011827957
+'T' (ASCII code: 54): frequency:   5, code: 0001100, P(T) = 0.005376344
+'B' (ASCII code: 42): frequency:   3, code: 00011010, P(B) = 0.003225806
+'\n'(ASCII code: 0A): frequency:   3, code: 00011011, P(\n) = 0.003225806
+'S' (ASCII code: 53): frequency:   3, code: 00011100, P(S) = 0.003225806
+'b' (ASCII code: 62): frequency:   3, code: 00011101, P(b) = 0.003225806
+'I' (ASCII code: 49): frequency:   7, code: 0001111, P(I) = 0.007526882
+'e' (ASCII code: 65): frequency:  91, code: 001, P(e) = 0.097849462
+'r' (ASCII code: 72): frequency:  47, code: 0100, P(r) = 0.050537634
+'i' (ASCII code: 69): frequency:  51, code: 0101, P(i) = 0.054838710
+'n' (ASCII code: 6E): frequency:  52, code: 0110, P(n) = 0.055913978
+'u' (ASCII code: 75): frequency:  25, code: 01110, P(u) = 0.026881720
+'d' (ASCII code: 64): frequency:  27, code: 01111, P(d) = 0.029032258
+'a' (ASCII code: 61): frequency:  53, code: 1000, P(a) = 0.056989247
+'g' (ASCII code: 67): frequency:  14, code: 100100, P(g) = 0.015053763
+'c' (ASCII code: 63): frequency:  14, code: 100101, P(c) = 0.015053763
+'l' (ASCII code: 6C): frequency:  29, code: 10011, P(l) = 0.031182796
+'o' (ASCII code: 6F): frequency:  59, code: 1010, P(o) = 0.063440860
+'p' (ASCII code: 70): frequency:  15, code: 101100, P(p) = 0.016129032
+',' (ASCII code: 2C): frequency:   8, code: 1011010, P(,) = 0.008602151
+'Y' (ASCII code: 59): frequency:   4, code: 10110110, P(Y) = 0.004301075
+'k' (ASCII code: 6B): frequency:   4, code: 10110111, P(k) = 0.004301075
+'L' (ASCII code: 4C): frequency:   2, code: 101110000, P(L) = 0.002150538
+''' (ASCII code: 27): frequency:   2, code: 101110001, P(') = 0.002150538
+'"' (ASCII code: 22): frequency:   2, code: 101110010, P(") = 0.002150538
+'m' (ASCII code: 6D): frequency:   2, code: 101110011, P(m) = 0.002150538
+'E' (ASCII code: 45): frequency:   1, code: 1011101000, P(E) = 0.001075269
+'j' (ASCII code: 6A): frequency:   1, code: 1011101001, P(j) = 0.001075269
+'?' (ASCII code: 3F): frequency:   1, code: 1011101010, P(?) = 0.001075269
+'F' (ASCII code: 46): frequency:   1, code: 1011101011, P(F) = 0.001075269
+'M' (ASCII code: 4D): frequency:   1, code: 1011101100, P(M) = 0.001075269
+'C' (ASCII code: 43): frequency:   1, code: 1011101101, P(C) = 0.001075269
+'-' (ASCII code: 2D): frequency:   1, code: 1011101110, P(-) = 0.001075269
+'D' (ASCII code: 44): frequency:   1, code: 1011101111, P(D) = 0.001075269
+'w' (ASCII code: 77): frequency:  17, code: 101111, P(w) = 0.018279570
+'t' (ASCII code: 74): frequency:  74, code: 1100, P(t) = 0.079569892
+'s' (ASCII code: 73): frequency:  38, code: 11010, P(s) = 0.040860215
+'h' (ASCII code: 68): frequency:  40, code: 11011, P(h) = 0.043010753
+' ' (ASCII code: 20): frequency: 166, code: 111, P( ) = 0.178494624
+Entropy: 4.32012435283704387956
+Expected code length: 4.35913978494623677307
+Length of text: 7440
+Length of encoded text: 4054
+Compression coeff.: 1.83522446965959540321

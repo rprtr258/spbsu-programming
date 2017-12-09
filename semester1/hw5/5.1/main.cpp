@@ -87,6 +87,12 @@ int main() {
     reverse(mantissa.begin(), mantissa.end());
     mantissa = string(zeroes, '0') + mantissa;
     
-    printf("Result: %c1.%s * 2 ^ %-I64d", sign ? '-' : '+', mantissa.c_str(), exponent);
+    if ((exponent == -(1LL << (expoSize - 1)) + 1) && (mantissa == "0")) {
+        if (!sign)
+            printf("Result: +0.0 * 2 ^ +100500");
+        else 
+            printf("Result: -0.0 * 2 ^ +100500");
+    } else
+        printf("Result: %c1.%s * 2 ^ %+I64d", sign ? '-' : '+', mantissa.c_str(), exponent);
     return 0;
 }
