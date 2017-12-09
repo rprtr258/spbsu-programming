@@ -1,4 +1,5 @@
 #pragma once
+#include "../list/list.h"
 
 struct String {
     char *data = nullptr;
@@ -18,7 +19,9 @@ String* subString(String *string, const int i, const int len);
 
 int lengthString(String *string);
 bool isEmptyString(String *string);
+LinkedList* findOccurences(String *text, String *pattern);
 
 char* rawString(String *string);
 
-void deleteString(String *string);
+void eraseString(String *string);
+void deleteString(String *&string);

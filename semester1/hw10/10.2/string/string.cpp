@@ -74,16 +74,6 @@ void addChar(String *&str, char const symbol) {
     str->size++;
 }
 
-void deleteString(String *string) {
-    if (string == nullptr)
-        return;
-    if (string->data != nullptr) {
-        delete[] string->data;
-        string->data = nullptr;
-    }
-    string->size = 0;
-}
-
 int lengthString(String *string) {
     if (string != nullptr)
         return string->size;
@@ -92,6 +82,30 @@ int lengthString(String *string) {
 
 bool isEmptyString(String *string) {
     return (lengthString(string) == 0);
+}
+
+LinkedList* findOccurences(String* text, String* pattern) {
+    if (isEmptyString(text) || isEmptyString(pattern))
+        return nullptr;
+    
+    int const q = 73;
+    int const p = 1000003;
+    int patternHash = 0;
+    for (int i = 0; i < pattern->size; i++)
+        patternHash = (q * patternHash + pattern->data[i]) % p;
+    
+    int tempHash = 0;
+    LinkedList *result = createList();
+    for (int i = 0; i < text->size - pattern->size + 1; i++) {
+        tempHash = 0;
+        for (int j = 0; j < pattern->size; j++)
+            tempHash = (q * tempHash + text->data[i + j]) % p;
+        
+        if (tempHash == patternHash)
+            insertAtBegin(result, i);
+    }
+    
+    return result;
 }
 
 bool areEqual(String *str1, String *str2) {
@@ -114,4 +128,22 @@ String* cloneString(String *string) {
         return nullptr;
     String *newString = createString(string->data);
     return newString;
+}
+
+void eraseString(String *string) {
+    if (string == nullptr)
+        return;
+    if (string->data != nullptr) {
+        delete[] string->data;
+        string->data = nullptr;
+    }
+    string->size = 0;
+}
+
+void deleteString(String *&string) {
+    if (string == nullptr)
+        return;
+    eraseString(string);
+    delete string;
+    string = nullptr;
 }
