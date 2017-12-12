@@ -1,80 +1,49 @@
 #include <string.h>
-#include <stdio.h>
 #include <algorithm>
 #include "freqtable.h"
 
 int const alphabet = 256;
 
-FrequencyTable::FrequencyTable(const unsigned char *str) {
+CharOccur* createSimpleTable(const char *str) {
     int charCount[alphabet];
     for (int i = 0; i < alphabet; i++)
         charCount[i] = 0;
-    int strLength = strlen((char*)str);
+    
+    int strLength = strlen(str);
     for (int i = 0; i < strLength; i++)
-        charCount[str[i]]++;
+        charCount[(int)str[i]]++;
     
-    CharOccur table[alphabet];
+    CharOccur *table = new CharOccur[alphabet];
     for (int i = 0; i < alphabet; i++)
         table[i] = CharOccur((char)i, charCount[i]);
     std::sort(table, table + alphabet, [](const CharOccur &occur1, const CharOccur &occur2) {
         return occur1.second < occur2.second;
     });
     
-    int ptr = 0;
-    while (table[ptr].second == 0)
-        ptr++;
-    
-    data = new CharOccur[alphabet - ptr];
-    for (int i = ptr; i < alphabet; i++)
-        data[i - ptr] = table[i];
-    
-    size = alphabet - ptr;
+    return table;
 }
 
-FrequencyTable::FrequencyTable(const char *filename) {
-    FILE *file = fopen(filename, "rb");
+FrequencyTable* createFreqTable(const char *str) {
+    FrequencyTable *ftable = new FrequencyTable();
     
-    int charCount[alphabet];
-    for (int i = 0; i < alphabet; i++)
-        charCount[i] = 0;
-    
-    CharOccur table[alphabet];
-    
-    int symbol = '$';
-    while (symbol != EOF) {
-        symbol = fgetc(file);
-        if (symbol == EOF)
-            continue;
-        charCount[symbol]++;
-    }
-    
-    for (int i = 0; i < alphabet; i++)
-        table[i] = CharOccur((char)i, charCount[i]);
-    std::sort(table, table + alphabet, [](const CharOccur &occur1, const CharOccur &occur2) {
-        return occur1.second < occur2.second;
-    });
+    CharOccur *stable = createSimpleTable(str);
     
     int ptr = 0;
-    while (table[ptr].second == 0)
+    while (stable[ptr].second == 0)
         ptr++;
     
-    data = new CharOccur[alphabet - ptr];
+    ftable->data = new CharOccur[alphabet - ptr];
     for (int i = ptr; i < alphabet; i++)
-        data[i - ptr] = table[i];
+        ftable->data[i - ptr] = stable[i];
     
-    size = alphabet - ptr;
+    ftable->size = alphabet - ptr;
     
-    fclose(file);
+    delete[] stable;
+    return ftable;
 }
 
-FrequencyTable::~FrequencyTable() {
-    delete[] data;
-}
-
-CharOccur& FrequencyTable::operator[](int const &index) {
-    return data[index];
-}
-
-const CharOccur& FrequencyTable::operator[](int const &index) const {
-    return data[index];
+void erase(FrequencyTable *ftable) {
+    delete[] ftable->data;
+    ftable->data = nullptr;
+    ftable->size = 0;
 }
