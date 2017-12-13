@@ -9,4 +9,11 @@
 *.cpp~
 *.gch
 *.swp
-/data structures/nbproject/
+*/nbproject/
+*/.dep.inc
+*/configurations.xml
+/*/launcher.properties
+*.d
+*.mk
+*.bash
+*.xml
