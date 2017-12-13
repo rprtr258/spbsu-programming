@@ -9,11 +9,7 @@
 *.cpp~
 *.gch
 *.swp
-*/nbproject/
-*/.dep.inc
-*/configurations.xml
-/*/launcher.properties
-*.d
-*.mk
-*.bash
-*.xml
+**/nbproject/*
+**/build/*
+**/dist/*
+*.inc
