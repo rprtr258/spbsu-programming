@@ -6,6 +6,8 @@ struct BitMap {
     int height = 0;
 };
 
+BitMap* bitMapRead(const char *filename);
+
 void bitMapDelete(BitMap *&map);
 
 void bitMapPrint(BitMap *map);

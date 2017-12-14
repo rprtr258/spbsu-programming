@@ -83,7 +83,7 @@ bool searchAStar(BitMap *map, int const startI, int const startJ, int const dest
     }
     
     // reconstruct path
-    if (result) {
+    if (result || startI == destI && startJ == destJ) {
         map->data[startI][startJ] = 'O';
         int posI = destI;
         int posJ = destJ;
