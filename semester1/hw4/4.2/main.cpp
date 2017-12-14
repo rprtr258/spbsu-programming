@@ -2,9 +2,20 @@
 
 int const alphabet = 256;
 
+bool doesFileExist(const char *filename) {
+     FILE *temp = fopen(filename, "r");
+     if (temp == NULL)
+         return false;
+     fclose(temp);
+     return true;
+ }
+
 int main() {
     printf("First occurrences of each letter in each word in \"file.txt\"\n");
-    
+    if (!doesFileExist("file.txt")) {
+        printf("\"file.txt\" not found\n");
+        return 0;
+    }
     FILE *myfile = fopen("file.txt", "r");
     char s[1000];
     
