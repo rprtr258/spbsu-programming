@@ -1,33 +1,9 @@
 #include <stdio.h>
 #include <string.h>
-
-struct BitMap {
-    char **data = nullptr;
-    int width = -1;
-    int height = 0;
-};
-
-void deleteMap(BitMap *&map) {
-    if (map == nullptr)
-        return;
-    for (int i = 0; i < map->height; i++)
-        delete[] map->data[i];
-    delete map;
-    map = nullptr;
-}
-
-void addRow(BitMap *map, const char *row) {
-    char **newData = new char*[map->height + 1];
-    if (map->data != nullptr)
-        memcpy(newData, map->data, map->height * sizeof(char*));
-    delete[] map->data;
-    
-    newData[map->height] = new char[map->width];
-    memcpy(newData[map->height], row, map->width);
-    
-    map->data = newData;
-    map->height++;
-}
+#include "heap.h"
+#include "nodeinfo.h"
+#include "bitmap.h"
+#include "astar.h"
 
 bool doesFileExist(const char *filename) {
     FILE *temp = fopen(filename, "r");
@@ -42,27 +18,15 @@ bool inBounds(int const value, int const leftBound, int const rightBound) {
 }
 
 void eraseMemory(BitMap *&map, char *&tempRow) {
-    deleteMap(map);
+    bitMapDelete(map);
     map = nullptr;
     delete[] tempRow;
     tempRow = nullptr;
 }
 
-void doAStar(BitMap *map, int const startI, int const startJ, int const destI, int const destJ) {
-    // TODO: try to display map in proccess
-    
-    // create FROM array
-    // create heap
-    // push start in heap
-    // cycle till heap isn't empty
-        // pop vertex
-        // break if it is destination
-        // update it's neighbours
-        // push them into heap if they were relaxed
-    // try to reconstruct path from FROM array and write it on map as arrows <> ^v
-}
-
 int main() {
+    printf("Path finder 2000\n");
+    printf("Write your map in \"file.txt\"\n");
     if (!doesFileExist("file.txt")) {
         printf("\"file.txt\" not found\n");
         return 0;
@@ -75,16 +39,16 @@ int main() {
         fgets(tempRow, 1000, file);
         if (feof(file))
             break;
-        printf("%s", tempRow);
         int curRowLength = strlen(tempRow) - 1;
         if (map->width != -1 && curRowLength != map->width) {
             printf("Incorrect row length in line %d\n", map->height);
             return 0;
         }
         map->width = curRowLength;
-        addRow(map, tempRow);
+        bitMapAddRow(map, tempRow);
     }
     fclose(file);
+    bitMapPrint(map);
     printf("Map size is %dx%d\n", map->height, map->width);
     
     bool areCordsOK = true;
@@ -130,7 +94,19 @@ int main() {
         return 0;
     }
     
-    doAStar(map, startI, startJ, destI, destJ);
+    printf("Print proccess of A*(y/n)?(Make sure you don't have epilepsy(i don't know how to do it correctly))\n");
+    char temp = '$';
+    while (temp != 'y' && temp != 'n') {
+        scanf(" %c", &temp);
+        if (temp != 'y' && temp != 'n')
+            printf("Sorry, please repeat\n");
+    }
+    bool printProccess = (temp == 'y');
+    
+    searchAStar(map, startI - 1, startJ - 1, destI - 1, destJ - 1, printProccess);
+    
+    printf("Result(\'#\' is wall, \'.\' is empty cell, \'<\', \'>\', \'^\', \'v\' shows path):\n");
+    bitMapPrint(map);
     
     eraseMemory(map, tempRow);
     return 0;
