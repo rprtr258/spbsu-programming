@@ -58,7 +58,7 @@ void sortArray(int *data, int const dataSize, int *&sortedArray, int *&occurence
 int main() {
     printf("Sort array of numbers v3000\n");
     
-    printf("Write array of numbers:\n");
+    printf("Write array of numbers(0 to end input):\n");
     int dataSize = 0;
     int *data = readArray(dataSize);
     
