@@ -31,7 +31,7 @@ bool printComments(const char *filename) {
 }
 
 int main() {
-    printf("Commantary printer. Put your program in \"program.txt\"\n");
+    printf("Commentary printer. Put your program in \"program.txt\"\n");
     if (!doesFileExist("program.txt")) {
         printf("\"program.txt\" not found\n");
         return 0;
