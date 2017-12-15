@@ -162,7 +162,11 @@ int main() {
     printf("Printing square array in spiral order\n");
     printf("Enter array dimension size: ");
     int sizeN = 0;
-    scanf("%d", &sizeN);
+    while (sizeN % 2 == 0) {
+        scanf("%d", &sizeN);
+        if (sizeN % 2 == 0)
+            printf("Size must be odd\n");
+    }
     
     int **matrix = allocateMemorySmart(sizeN, sizeN);
     printf("Write your square matrix, row by row:\n");
