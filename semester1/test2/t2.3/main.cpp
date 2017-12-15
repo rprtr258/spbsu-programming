@@ -9,7 +9,7 @@ bool doesFileExist(const char *filename) {
 }
 
 bool printComments(const char *filename) {
-    bool result = false;
+    bool foundComments = false;
     FILE *file = fopen(filename, "r");
     while (!feof(file)) {
         char symbol = '\0';
@@ -22,12 +22,12 @@ bool printComments(const char *filename) {
                 fscanf(file, "%c", &symbol);
             }
             printf("\n");
-            result = true;
+            foundComments = true;
         }
     }
     fclose(file);
     
-    return result;
+    return foundComments;
 }
 
 int main() {
