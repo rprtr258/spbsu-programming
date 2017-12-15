@@ -57,8 +57,8 @@ bool searchAStar(BitMap *map, int const startI, int const startJ, int const dest
             continue;
         
         if (vertex->i == destI && vertex->j == destJ) {
-            break;
             delete vertex;
+            break;
         }
         
         relax(vertex, map, dist, from, heap, destI, destJ, 0, -1, '<');
