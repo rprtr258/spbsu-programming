@@ -37,6 +37,7 @@ int main() {
     printf("Overall count: %d\n", getOverallCount(hashTable));
     printf("Empty cells: %d\n", getEmptyCells(hashTable));
     
+    fclose(file);
     deleteHashTable(hashTable);
     return 0;
 }
