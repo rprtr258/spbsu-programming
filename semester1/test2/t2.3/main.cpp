@@ -8,7 +8,8 @@ bool doesFileExist(const char *filename) {
     return true;
 }
 
-void printComments(const char *filename) {
+bool printComments(const char *filename) {
+    bool result = false;
     FILE *file = fopen(filename, "r");
     while (!feof(file)) {
         char symbol = '\0';
@@ -21,9 +22,12 @@ void printComments(const char *filename) {
                 fscanf(file, "%c", &symbol);
             }
             printf("\n");
+            result = true;
         }
     }
     fclose(file);
+    
+    return result;
 }
 
 int main() {
@@ -34,7 +38,9 @@ int main() {
     }
     
     printf("Found comments:\n");
-    printComments("program.txt");
+    bool found = printComments("program.txt");
+    if (!found)
+        printf("No comments found\n");
     return 0;
 }
 
