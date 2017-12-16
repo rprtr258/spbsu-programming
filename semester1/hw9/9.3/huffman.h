@@ -1,7 +1,7 @@
 #pragma once
 #include <stdio.h>
 #include <utility>
-#include "node.h"
+#include "huffmanNode.h"
 
 struct HuffmanTree {
     Node *root = nullptr;

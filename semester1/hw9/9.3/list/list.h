@@ -1,4 +1,5 @@
 #pragma once
+#include "huffmanNode.h"
 
 struct ListNode;
 

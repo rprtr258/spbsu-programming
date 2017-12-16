@@ -4,7 +4,7 @@
 #include <queue>
 #include <stack>
 #include "huffman.h"
-#include "node.h"
+#include "huffmanNode.h"
 #include "freqtable.h"
 
 int const alphabet = 256;
