@@ -1,6 +1,5 @@
 #include <string.h>
 #include <stdio.h>
-#include <math.h>
 #include "list/list.h"
 #include "huffman.h"
 #include "huffmanNode.h"
@@ -224,51 +223,21 @@ void saveTree(HuffmanTree *tree, FILE *file) {
     fprintf(file, "\n");
 }
 
-int traverse(HuffmanNode *node, char *buffer, FILE* file, int const textLength, int &codeSum, double &entropy, int const level = 0) {
-    if (isLeaf(node)) {
-        buffer[level] = '\0';
-        
-        double probability = (double)node->frequency / textLength;
-        entropy += probability * log(probability) / log(2);
-        codeSum += level * node->frequency;
-        
-        if (node->symbol == '\n')
-            fprintf(file, "\'\\n\'");
-        else
-            fprintf(file, "\'%c\' ", node->symbol);
-        fprintf(file, "(ASCII code: %02X): frequency: %3d, code: %s", (int)node->symbol, node->frequency, buffer);
-        if (node->symbol == '\n')
-            fprintf(file, ", P(\\n) = %.9f\n", probability);
-        else
-            fprintf(file, ", P(%c) = %.9f\n", node->symbol, probability);
-        
-        return node->frequency * level;
-    }
-    
-    int codeLength = 0;
-    
-    buffer[level] = '0';
-    codeLength += traverse(node->l, buffer, file, textLength, codeSum, entropy, level + 1);
-    
-    buffer[level] = '1';
-    codeLength += traverse(node->r, buffer, file, textLength, codeSum, entropy, level + 1);
-    
-    return codeLength;
-}
-
 void saveInfo(HuffmanTree *tree, FILE *file, int const textLength) {
-    char buffer[1000];
+    char *buffer = new char[getHeight(tree->root)];
     int codeSum = 0;
-    double entropy = 0;
+    double entropy = getEntropy(tree->root, textLength);
     fprintf(file, "Frequency table:\n");
-    int codeLength = traverse(tree->root, buffer, file, textLength, codeSum, entropy);
-    entropy *= -1;
+    int codeLength = getCodeLength(tree->root);
+    saveNodeInfo(tree->root, buffer, file, textLength);
     
     fprintf(file, "Entropy: %.20f\n", entropy);
-    fprintf(file, "Expected code length: %.20f\n", (double)codeSum / textLength);
+    fprintf(file, "Expected code length: %.20f\n", (double)codeLength / textLength);
     fprintf(file, "Length of text: %d\n", textLength * 8);
     fprintf(file, "Length of encoded text: %d\n", codeLength);
     fprintf(file, "Compression coeff.: %.20f\n", (8.0 * textLength) / codeLength);
+    
+    delete[] buffer;
 }
 
 void erase(HuffmanTree *tree) {
