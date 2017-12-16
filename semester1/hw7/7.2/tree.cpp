@@ -107,8 +107,9 @@ void removeNode(Node *&node, int const value) {
             Node *tmp = node->l;
             while (tmp->r != nullptr)
                 tmp = tmp->r;
+            int tempValue = tmp->value;
             removeNode(node, tmp->value);
-            node->value = tmp->value;
+            node->value = tempValue;
             node = balanceNode(node);
         } else if (node->l != nullptr) {
             Node *child = node->l;
