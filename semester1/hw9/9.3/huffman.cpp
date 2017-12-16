@@ -82,40 +82,33 @@ HuffmanTree* readTree(const char *filename) {
         fscanf(file, "%c", &symbol);
         if (symbol == '\n')
             break;
+        
+        HuffmanNode *node = new HuffmanNode();
         switch (symbol) {
             case '\0': {
-                HuffmanNode *node = new HuffmanNode();
                 node->symbol = '\n';
-                
-                insertAtBegin(tempStack, node);
-                delete node;
                 break;
             }
             case separator: {
-                HuffmanNode *node = new HuffmanNode();
-                
                 HuffmanNode *rightChild = peekBegin(tempStack);
                 deleteBegin(tempStack);
                 
                 HuffmanNode *leftChild = peekBegin(tempStack);
                 deleteBegin(tempStack);
                 
-                node->l = leftChild;
-                node->r = rightChild;
-                
-                insertAtBegin(tempStack, node);
-                delete node;
+                node->l = copy(leftChild);
+                node->r = copy(rightChild);
+                delete leftChild;
+                delete rightChild;
                 break;
             }
             default: {
-                HuffmanNode *node = new HuffmanNode();
                 node->symbol = symbol;
-                
-                insertAtBegin(tempStack, node);
-                delete node;
                 break;
             }
         }
+        insertAtBegin(tempStack, node);
+        delete node;
     }
     
     fclose(file);
