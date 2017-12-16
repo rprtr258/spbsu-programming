@@ -20,6 +20,6 @@ int main() {
     encodeFile("file.txt", "encoded.txt", "codeInfo.txt");
     decodeFile("encoded.txt", "decoded.txt");
     
-    printf("Done!");
+    printf("Done!\n");
     return 0;
 }

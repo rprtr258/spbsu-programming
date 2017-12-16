@@ -7,6 +7,9 @@ struct HuffmanNode {
     int frequency = -1;
 };
 
+HuffmanNode* createHuffmanNode(HuffmanNode *leftChild, HuffmanNode *rightChild);
+HuffmanNode* createHuffmanNode(char const symbol, int const frequency);
+
 void deleteHuffmanNode(HuffmanNode *node);
 
 HuffmanNode* copy(HuffmanNode *node);

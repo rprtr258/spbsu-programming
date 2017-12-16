@@ -37,9 +37,7 @@ HuffmanNode* buildTree(char const *str) {
     FrequencyTable *ftable = createFreqTable(str);
     
     for (int i = 0; i < ftable->size; i++) {
-        HuffmanNode *leaf = new HuffmanNode();
-        leaf->symbol = ftable->data[i].first;
-        leaf->frequency = ftable->data[i].second;
+        HuffmanNode *leaf = createHuffmanNode(ftable->data[i].first, ftable->data[i].second);
         insertAtEnd(firstQueue, leaf);
         deleteHuffmanNode(leaf);
     }
@@ -47,9 +45,7 @@ HuffmanNode* buildTree(char const *str) {
     for (int i = 0; i < ftable->size - 1; i++) {
         HuffmanNode *first = getRarestNode(firstQueue, secondQueue);
         HuffmanNode *second = getRarestNode(firstQueue, secondQueue);
-        HuffmanNode *parent = new HuffmanNode();
-        parent->l = first;
-        parent->r = second;
+        HuffmanNode *parent = createHuffmanNode(first, second);
         parent->frequency = first->frequency + second->frequency;
         insertAtEnd(secondQueue, parent);
         deleteHuffmanNode(parent);
@@ -84,6 +80,7 @@ void proccesSymbol(LinkedList *stack, char const symbol) {
             
             node->l = copy(leftChild);
             node->r = copy(rightChild);
+            
             deleteHuffmanNode(leftChild);
             deleteHuffmanNode(rightChild);
             break;
@@ -175,7 +172,7 @@ char decodeChar(HuffmanTree *tree, FILE *file, char const firstBit) {
 
 void putChar(char *&string, int &length, char const symbol) {
     char *newString = new char[length + 2];
-    strcpy(newString, string);
+    strncpy(newString, string, sizeof(char) * (length + 2));
     newString[length] = symbol;
     newString[length + 1] = '\0';
     length++;
