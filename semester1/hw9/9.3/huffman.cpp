@@ -1,8 +1,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#include <queue>
 #include <stack>
+#include "list/list.h"
 #include "huffman.h"
 #include "huffmanNode.h"
 #include "freqtable.h"
@@ -10,26 +10,33 @@
 int const alphabet = 256;
 char const separator = '\7';
 
-HuffmanNode* buildTree(char const *str) {
-    std::queue<HuffmanNode*> firstQueue;
-    std::queue<HuffmanNode*> secondQueue;
-    auto getRarestNode = [&]() {
-        HuffmanNode *result = nullptr;
-        if (firstQueue.empty()) {
-            result = secondQueue.front();
-            secondQueue.pop();
-        } else if (secondQueue.empty()) {
-            result = firstQueue.front();
-            firstQueue.pop();
-        } else if (secondQueue.front()->frequency < firstQueue.front()->frequency) {
-            result = secondQueue.front();
-            secondQueue.pop();
+HuffmanNode* getRarestNode(LinkedList *firstQueue, LinkedList *secondQueue) {
+    HuffmanNode *result = nullptr;
+    if (firstQueue->size == 0) {
+        result = peekBegin(secondQueue);
+        deleteBegin(secondQueue);
+    } else if (secondQueue->size == 0) {
+        result = peekBegin(firstQueue);
+        deleteBegin(firstQueue);
+    } else {
+        HuffmanNode *tempFirst = peekBegin(firstQueue);
+        HuffmanNode *tempSecond = peekBegin(secondQueue);
+        if (tempFirst->frequency < tempSecond->frequency) {
+            result = peekBegin(firstQueue);
+            deleteBegin(firstQueue);
         } else {
-            result = firstQueue.front();
-            firstQueue.pop();
+            result = peekBegin(secondQueue);
+            deleteBegin(secondQueue);
         }
-        return result;
-    };
+        delete tempFirst;
+        delete tempSecond;
+    }
+    return result;
+};
+
+HuffmanNode* buildTree(char const *str) {
+    LinkedList *firstQueue = createList();
+    LinkedList *secondQueue = createList();
     
     FrequencyTable *ftable = createFreqTable(str);
     
@@ -37,22 +44,27 @@ HuffmanNode* buildTree(char const *str) {
         HuffmanNode *leaf = new HuffmanNode();
         leaf->symbol = ftable->data[i].first;
         leaf->frequency = ftable->data[i].second;
-        firstQueue.push(leaf);
+        insertAtBegin(firstQueue, leaf);
+        delete leaf;
     }
     
     for (int i = 0; i < ftable->size - 1; i++) {
-        HuffmanNode *first = getRarestNode();
-        HuffmanNode *second = getRarestNode();
+        HuffmanNode *first = getRarestNode(firstQueue, secondQueue);
+        HuffmanNode *second = getRarestNode(firstQueue, secondQueue);
         HuffmanNode *parent = new HuffmanNode();
         parent->l = first;
         parent->r = second;
         parent->frequency = first->frequency + second->frequency;
-        secondQueue.push(parent);
+        insertAtBegin(secondQueue, parent);
+        delete parent;
     }
+    HuffmanNode *result = peekBegin(secondQueue);
     
     erase(ftable);
     delete ftable;
-    return secondQueue.front();
+    deleteList(firstQueue);
+    deleteList(secondQueue);
+    return result;
 }
 
 HuffmanTree* createTree(const char *str) {
