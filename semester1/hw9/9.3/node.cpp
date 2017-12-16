@@ -1,5 +1,5 @@
 #include "node.h"
 
-bool isLeaf(Node *node) {
+bool isLeaf(HuffmanNode *node) {
     return (node->l == nullptr && node->r == nullptr);
 }

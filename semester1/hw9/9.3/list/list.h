@@ -1,10 +1,10 @@
 #pragma once
 
-struct Node;
+struct ListNode;
 
 struct LinkedList {
-    Node *head = nullptr;
-    Node *tail = nullptr;
+    ListNode *head = nullptr;
+    ListNode *tail = nullptr;
     int size = 0;
 };
 
