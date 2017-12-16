@@ -9,3 +9,8 @@
 *.cpp~
 *.gch
 *.swp
+**/nbproject/*
+**/build/*
+**/dist/*
+*.inc
+**/Makefile
