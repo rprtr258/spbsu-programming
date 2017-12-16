@@ -1,5 +1,5 @@
 #pragma once
-#include "huffmanNode.h"
+#include "../huffmanNode.h"
 
 struct ListNode;
 
@@ -13,19 +13,14 @@ LinkedList* createList();
 void eraseList(LinkedList *list);
 void deleteList(LinkedList *&list);
 
-void insertAtEnd(LinkedList *list, int const value);
-void insertAtBegin(LinkedList *list, int const value);
-void insertAtIndex(LinkedList *list, int const value, int const index);
+void insertAtEnd(LinkedList *list, HuffmanNode *value);
+void insertAtBegin(LinkedList *list, HuffmanNode *value);
+void insertAtIndex(LinkedList *list, HuffmanNode *value, int const index);
 
-int peekBegin(LinkedList *list);
-int peekEnd(LinkedList *list);
-int peekIndex(LinkedList *list, int const index);
+HuffmanNode* peekBegin(LinkedList *list);
+HuffmanNode* peekEnd(LinkedList *list);
+HuffmanNode* peekIndex(LinkedList *list, int const index);
 
 void deleteBegin(LinkedList *list);
 void deleteEnd(LinkedList *list);
 void deleteIndex(LinkedList *list, int const index);
-
-int findElement(LinkedList *list, int const value);
-
-void printList(LinkedList *list);
-void printSiblings(LinkedList *list, int const index);

@@ -7,4 +7,6 @@ struct HuffmanNode {
     int frequency = -1;
 };
 
+HuffmanNode* copy(HuffmanNode *node);
+
 bool isLeaf(HuffmanNode *node);
