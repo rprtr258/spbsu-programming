@@ -17,6 +17,10 @@ void insertAtEnd(LinkedList *list, HuffmanNode *value);
 void insertAtBegin(LinkedList *list, HuffmanNode *value);
 void insertAtIndex(LinkedList *list, HuffmanNode *value, int const index);
 
+HuffmanNode* popBegin(LinkedList *list);
+HuffmanNode* popEnd(LinkedList *list);
+HuffmanNode* popIndex(LinkedList *list, int const index);
+
 HuffmanNode* peekBegin(LinkedList *list);
 HuffmanNode* peekEnd(LinkedList *list);
 HuffmanNode* peekIndex(LinkedList *list, int const index);

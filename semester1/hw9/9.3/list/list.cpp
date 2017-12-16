@@ -124,6 +124,24 @@ void insertAtIndex(LinkedList *list, HuffmanNode *value, int const index) {
     list->size++;
 }
 
+HuffmanNode* popBegin(LinkedList *list) {
+    HuffmanNode *result = peekBegin(list);
+    deleteBegin(list);
+    return result;
+}
+
+HuffmanNode* popEnd(LinkedList *list) {
+    HuffmanNode *result = peekEnd(list);
+    deleteEnd(list);
+    return result;
+}
+
+HuffmanNode* popIndex(LinkedList *list, int const index) {
+    HuffmanNode *result = peekIndex(list, index);
+    deleteIndex(list, index);
+    return result;
+}
+
 HuffmanNode* peekBegin(LinkedList *list) {
     if (list == nullptr || list->size == 0)
         return nullptr;

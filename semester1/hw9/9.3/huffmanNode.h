@@ -7,6 +7,8 @@ struct HuffmanNode {
     int frequency = -1;
 };
 
+void deleteHuffmanNode(HuffmanNode *node);
+
 HuffmanNode* copy(HuffmanNode *node);
 
 bool isLeaf(HuffmanNode *node);

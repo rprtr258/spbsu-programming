@@ -12,23 +12,20 @@ char const separator = '\7';
 HuffmanNode* getRarestNode(LinkedList *firstQueue, LinkedList *secondQueue) {
     HuffmanNode *result = nullptr;
     if (firstQueue->size == 0) {
-        result = peekBegin(secondQueue);
-        deleteBegin(secondQueue);
+        result = popBegin(secondQueue);
     } else if (secondQueue->size == 0) {
-        result = peekBegin(firstQueue);
-        deleteBegin(firstQueue);
+        result = popBegin(firstQueue);
     } else {
         HuffmanNode *tempFirst = peekBegin(firstQueue);
         HuffmanNode *tempSecond = peekBegin(secondQueue);
-        if (tempFirst->frequency < tempSecond->frequency) {
-            result = peekBegin(firstQueue);
-            deleteBegin(firstQueue);
-        } else {
-            result = peekBegin(secondQueue);
-            deleteBegin(secondQueue);
-        }
-        delete tempFirst;
-        delete tempSecond;
+        
+        if (tempFirst->frequency < tempSecond->frequency)
+            result = popBegin(firstQueue);
+        else
+            result = popBegin(secondQueue);
+        
+        deleteHuffmanNode(tempFirst);
+        deleteHuffmanNode(tempSecond);
     }
     return result;
 };
@@ -44,7 +41,7 @@ HuffmanNode* buildTree(char const *str) {
         leaf->symbol = ftable->data[i].first;
         leaf->frequency = ftable->data[i].second;
         insertAtEnd(firstQueue, leaf);
-        delete leaf;
+        deleteHuffmanNode(leaf);
     }
     
     for (int i = 0; i < ftable->size - 1; i++) {
@@ -55,9 +52,9 @@ HuffmanNode* buildTree(char const *str) {
         parent->r = second;
         parent->frequency = first->frequency + second->frequency;
         insertAtEnd(secondQueue, parent);
-        delete parent;
-        delete first;
-        delete second;
+        deleteHuffmanNode(parent);
+        deleteHuffmanNode(first);
+        deleteHuffmanNode(second);
     }
     HuffmanNode *result = peekBegin(secondQueue);
     
@@ -74,6 +71,32 @@ HuffmanTree* createTree(const char *str) {
     return tree;
 }
 
+void proccesSymbol(LinkedList *stack, char const symbol) {
+    HuffmanNode *node = new HuffmanNode();
+    switch (symbol) {
+        case '\0': {
+            node->symbol = '\n';
+            break;
+        }
+        case separator: {
+            HuffmanNode *rightChild = popBegin(stack);
+            HuffmanNode *leftChild = popBegin(stack);
+            
+            node->l = copy(leftChild);
+            node->r = copy(rightChild);
+            deleteHuffmanNode(leftChild);
+            deleteHuffmanNode(rightChild);
+            break;
+        }
+        default: {
+            node->symbol = symbol;
+            break;
+        }
+    }
+    insertAtBegin(stack, node);
+    delete node;
+}
+
 HuffmanTree* readTree(const char *filename) {
     char symbol = '\0';
     LinkedList *tempStack = createList();
@@ -83,32 +106,7 @@ HuffmanTree* readTree(const char *filename) {
         if (symbol == '\n')
             break;
         
-        HuffmanNode *node = new HuffmanNode();
-        switch (symbol) {
-            case '\0': {
-                node->symbol = '\n';
-                break;
-            }
-            case separator: {
-                HuffmanNode *rightChild = peekBegin(tempStack);
-                deleteBegin(tempStack);
-                
-                HuffmanNode *leftChild = peekBegin(tempStack);
-                deleteBegin(tempStack);
-                
-                node->l = copy(leftChild);
-                node->r = copy(rightChild);
-                delete leftChild;
-                delete rightChild;
-                break;
-            }
-            default: {
-                node->symbol = symbol;
-                break;
-            }
-        }
-        insertAtBegin(tempStack, node);
-        delete node;
+        proccesSymbol(tempStack, symbol);
     }
     
     fclose(file);
@@ -160,6 +158,31 @@ char* encode(HuffmanTree *tree, const char *str) {
     return result;
 }
 
+char decodeChar(HuffmanTree *tree, FILE *file, char const firstBit) {
+    HuffmanNode *temp = tree->root;
+    char bit = firstBit;
+    while (!isLeaf(temp)) {
+        if (bit == '0')
+            temp = temp->l;
+        else
+            temp = temp->r;
+        if (isLeaf(temp))
+            break;
+        fscanf(file, "%c", &bit);
+    }
+    return temp->symbol;
+}
+
+void putChar(char *&string, int &length, char const symbol) {
+    char *newString = new char[length + 2];
+    strcpy(newString, string);
+    newString[length] = symbol;
+    newString[length + 1] = '\0';
+    length++;
+    delete[] string;
+    string = newString;
+}
+
 char* decodeFile(HuffmanTree *tree, const char *fileInput) {
     char symbol = '\0';
     FILE *file = fopen(fileInput, "r");
@@ -167,7 +190,6 @@ char* decodeFile(HuffmanTree *tree, const char *fileInput) {
     while (symbol != '\n')
         fscanf(file, "%c", &symbol);
     
-    HuffmanNode *temp = tree->root;
     char *result = new char[1];
     int length = 0;
     result[0] = '\0';
@@ -175,26 +197,9 @@ char* decodeFile(HuffmanTree *tree, const char *fileInput) {
         fscanf(file, "%c", &symbol);
         if (feof(file))
             break;
-        while (!isLeaf(temp)) {
-            if (symbol == '0')
-                temp = temp->l;
-            else
-                temp = temp->r;
-            if (isLeaf(temp))
-                break;
-            fscanf(file, "%c", &symbol);
-        }
         
-        char newSymbol = temp->symbol;
-        char *newResult = new char[length + 2];
-        strcpy(newResult, result);
-        newResult[length] = newSymbol;
-        newResult[length + 1] = '\0';
-        length++;
-        delete[] result;
-        result = newResult;
-        
-        temp = tree->root;
+        char newSymbol = decodeChar(tree, file, symbol);
+        putChar(result, length, newSymbol);
     }
     
     fclose(file);
@@ -265,15 +270,7 @@ void saveInfo(HuffmanTree *tree, FILE *file, int const textLength) {
     fprintf(file, "Compression coeff.: %.20f\n", (8.0 * textLength) / codeLength);
 }
 
-void erase(HuffmanNode *node) {
-    if (node == nullptr)
-        return;
-    erase(node->l);
-    erase(node->r);
-    delete node;
-}
-
 void erase(HuffmanTree *tree) {
-    erase(tree->root);
+    deleteHuffmanNode(tree->root);
     tree->root = nullptr;
 }
