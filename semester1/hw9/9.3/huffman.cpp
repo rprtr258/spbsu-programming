@@ -1,8 +1,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#include <utility>
-#include <algorithm>
 #include <queue>
 #include <stack>
 #include "huffman.h"
