@@ -73,10 +73,6 @@ HuffmanTree* createTree(const char *str) {
 void proccesSymbol(LinkedList *stack, char const symbol) {
     HuffmanNode *node = new HuffmanNode();
     switch (symbol) {
-        case '\0': {
-            node->symbol = '\n';
-            break;
-        }
         case separator: {
             HuffmanNode *rightChild = popBegin(stack);
             HuffmanNode *leftChild = popBegin(stack);
@@ -89,7 +85,7 @@ void proccesSymbol(LinkedList *stack, char const symbol) {
             break;
         }
         default: {
-            node->symbol = symbol;
+            node->symbol = (symbol == '\0' ? '\n' : symbol);
             break;
         }
     }
