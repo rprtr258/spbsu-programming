@@ -30,6 +30,17 @@ HuffmanNode* getRarestNode(LinkedList *firstQueue, LinkedList *secondQueue) {
     return result;
 };
 
+void proccessRarest(LinkedList *firstQueue, LinkedList *secondQueue) {
+    HuffmanNode *first = getRarestNode(firstQueue, secondQueue);
+    HuffmanNode *second = getRarestNode(firstQueue, secondQueue);
+    HuffmanNode *parent = createHuffmanNode(first, second);
+    parent->frequency = first->frequency + second->frequency;
+    insertAtEnd(secondQueue, parent);
+    deleteHuffmanNode(parent);
+    deleteHuffmanNode(first);
+    deleteHuffmanNode(second);
+}
+
 HuffmanNode* buildTree(char const *str) {
     LinkedList *firstQueue = createList();
     LinkedList *secondQueue = createList();
@@ -42,16 +53,9 @@ HuffmanNode* buildTree(char const *str) {
         deleteHuffmanNode(leaf);
     }
     
-    for (int i = 0; i < ftable->size - 1; i++) {
-        HuffmanNode *first = getRarestNode(firstQueue, secondQueue);
-        HuffmanNode *second = getRarestNode(firstQueue, secondQueue);
-        HuffmanNode *parent = createHuffmanNode(first, second);
-        parent->frequency = first->frequency + second->frequency;
-        insertAtEnd(secondQueue, parent);
-        deleteHuffmanNode(parent);
-        deleteHuffmanNode(first);
-        deleteHuffmanNode(second);
-    }
+    for (int i = 0; i < ftable->size - 1; i++)
+        proccessRarest(firstQueue, secondQueue);
+    
     HuffmanNode *result = peekBegin(secondQueue);
     
     erase(ftable);
