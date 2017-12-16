@@ -46,7 +46,7 @@ int getHeight(HuffmanNode *node) {
         return 0;
     int heightLeft = getHeight(node->l);
     int heightRight = getHeight(node->r);
-    return (heightLeft >= heightLeft ? heightLeft : heightRight) + 1;
+    return (heightLeft >= heightRight ? heightLeft : heightRight) + 1;
 }
 
 int getCodeLength(HuffmanNode *node, int const level) {

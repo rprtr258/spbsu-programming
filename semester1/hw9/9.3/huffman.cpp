@@ -225,7 +225,6 @@ void saveTree(HuffmanTree *tree, FILE *file) {
 
 void saveInfo(HuffmanTree *tree, FILE *file, int const textLength) {
     char *buffer = new char[getHeight(tree->root)];
-    int codeSum = 0;
     double entropy = getEntropy(tree->root, textLength);
     fprintf(file, "Frequency table:\n");
     int codeLength = getCodeLength(tree->root);
