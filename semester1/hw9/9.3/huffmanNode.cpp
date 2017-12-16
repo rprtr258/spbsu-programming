@@ -93,6 +93,9 @@ void printNodeInfo(HuffmanNode *node, char *buffer, FILE* file, int const textLe
 }
 
 void saveNodeInfo(HuffmanNode *node, char *buffer, FILE* file, int const textLength, int const level) {
+    if (node == nullptr)
+        return;
+    
     if (isLeaf(node)) {
         buffer[level] = '\0';
         printNodeInfo(node, buffer, file, textLength);
