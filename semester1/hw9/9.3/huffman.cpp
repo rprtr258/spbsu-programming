@@ -1,7 +1,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#include <stack>
 #include "list/list.h"
 #include "huffman.h"
 #include "huffmanNode.h"
@@ -44,7 +43,7 @@ HuffmanNode* buildTree(char const *str) {
         HuffmanNode *leaf = new HuffmanNode();
         leaf->symbol = ftable->data[i].first;
         leaf->frequency = ftable->data[i].second;
-        insertAtBegin(firstQueue, leaf);
+        insertAtEnd(firstQueue, leaf);
         delete leaf;
     }
     
@@ -55,8 +54,10 @@ HuffmanNode* buildTree(char const *str) {
         parent->l = first;
         parent->r = second;
         parent->frequency = first->frequency + second->frequency;
-        insertAtBegin(secondQueue, parent);
+        insertAtEnd(secondQueue, parent);
         delete parent;
+        delete first;
+        delete second;
     }
     HuffmanNode *result = peekBegin(secondQueue);
     
@@ -75,7 +76,7 @@ HuffmanTree* createTree(const char *str) {
 
 HuffmanTree* readTree(const char *filename) {
     char symbol = '\0';
-    std::stack<HuffmanNode*> tempStack;
+    LinkedList *tempStack = createList();
     FILE *file = fopen(filename, "r");
     while (symbol != '\n') {
         fscanf(file, "%c", &symbol);
@@ -86,29 +87,32 @@ HuffmanTree* readTree(const char *filename) {
                 HuffmanNode *node = new HuffmanNode();
                 node->symbol = '\n';
                 
-                tempStack.push(node);
+                insertAtBegin(tempStack, node);
+                delete node;
                 break;
             }
             case separator: {
                 HuffmanNode *node = new HuffmanNode();
                 
-                HuffmanNode *rightChild = tempStack.top();
-                tempStack.pop();
+                HuffmanNode *rightChild = peekBegin(tempStack);
+                deleteBegin(tempStack);
                 
-                HuffmanNode *leftChild = tempStack.top();
-                tempStack.pop();
+                HuffmanNode *leftChild = peekBegin(tempStack);
+                deleteBegin(tempStack);
                 
                 node->l = leftChild;
                 node->r = rightChild;
                 
-                tempStack.push(node);
+                insertAtBegin(tempStack, node);
+                delete node;
                 break;
             }
             default: {
                 HuffmanNode *node = new HuffmanNode();
                 node->symbol = symbol;
                 
-                tempStack.push(node);
+                insertAtBegin(tempStack, node);
+                delete node;
                 break;
             }
         }
@@ -117,7 +121,10 @@ HuffmanTree* readTree(const char *filename) {
     fclose(file);
     
     HuffmanTree *result = new HuffmanTree();
-    result->root = tempStack.top();
+    result->root = peekBegin(tempStack);
+    
+    deleteList(tempStack);
+    
     return result;
 }
 
