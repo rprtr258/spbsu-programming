@@ -4,21 +4,11 @@
 #include <queue>
 #include <stack>
 #include "huffman.h"
+#include "node.h"
 #include "freqtable.h"
 
 int const alphabet = 256;
 char const separator = '\7';
-
-struct Node {
-    Node *l = nullptr;
-    Node *r = nullptr;
-    char symbol = '\0';
-    int frequency = -1;
-};
-
-bool isLeaf(Node *node) {
-    return (node->l == nullptr && node->r == nullptr);
-}
 
 Node* buildTree(char const *str) {
     std::queue<Node*> firstQueue;
