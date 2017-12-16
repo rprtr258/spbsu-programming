@@ -10,11 +10,11 @@
 int const alphabet = 256;
 char const separator = '\7';
 
-Node* buildTree(char const *str) {
-    std::queue<Node*> firstQueue;
-    std::queue<Node*> secondQueue;
-    auto getRarestNode = [&]() {
-        Node *result = nullptr;
+HuffmanNode* buildTree(char const *str) {
+    std::queue<HuffmanNode*> firstQueue;
+    std::queue<HuffmanNode*> secondQueue;
+    auto getRarestHuffmanNode = [&]() {
+        HuffmanNode *result = nullptr;
         if (firstQueue.empty()) {
             result = secondQueue.front();
             secondQueue.pop();
@@ -34,16 +34,16 @@ Node* buildTree(char const *str) {
     FrequencyTable *ftable = createFreqTable(str);
     
     for (int i = 0; i < ftable->size; i++) {
-        Node *leaf = new Node();
+        HuffmanNode *leaf = new HuffmanNode();
         leaf->symbol = ftable->data[i].first;
         leaf->frequency = ftable->data[i].second;
         firstQueue.push(leaf);
     }
     
     for (int i = 0; i < ftable->size - 1; i++) {
-        Node *first = getRarestNode();
-        Node *second = getRarestNode();
-        Node *parent = new Node();
+        HuffmanNode *first = getRarestHuffmanNode();
+        HuffmanNode *second = getRarestHuffmanNode();
+        HuffmanNode *parent = new HuffmanNode();
         parent->l = first;
         parent->r = second;
         parent->frequency = first->frequency + second->frequency;
@@ -63,7 +63,7 @@ HuffmanTree* createTree(const char *str) {
 
 HuffmanTree* readTree(const char *filename) {
     char symbol = '\0';
-    std::stack<Node*> tempStack;
+    std::stack<HuffmanNode*> tempStack;
     FILE *file = fopen(filename, "r");
     while (symbol != '\n') {
         fscanf(file, "%c", &symbol);
@@ -71,32 +71,32 @@ HuffmanTree* readTree(const char *filename) {
             break;
         switch (symbol) {
             case '\0': {
-                Node *node = new Node();
-                node->symbol = '\n';
+                HuffmanNode *HuffmanNode = new HuffmanNode();
+                HuffmanNode->symbol = '\n';
                 
-                tempStack.push(node);
+                tempStack.push(HuffmanNode);
                 break;
             }
             case separator: {
-                Node *node = new Node();
+                HuffmanNode *HuffmanNode = new HuffmanNode();
                 
-                Node *rightChild = tempStack.top();
+                HuffmanNode *rightChild = tempStack.top();
                 tempStack.pop();
                 
-                Node *leftChild = tempStack.top();
+                HuffmanNode *leftChild = tempStack.top();
                 tempStack.pop();
                 
-                node->l = leftChild;
-                node->r = rightChild;
+                HuffmanNode->l = leftChild;
+                HuffmanNode->r = rightChild;
                 
-                tempStack.push(node);
+                tempStack.push(HuffmanNode);
                 break;
             }
             default: {
-                Node *node = new Node();
-                node->symbol = symbol;
+                HuffmanNode *HuffmanNode = new HuffmanNode();
+                HuffmanNode->symbol = symbol;
                 
-                tempStack.push(node);
+                tempStack.push(HuffmanNode);
                 break;
             }
         }
@@ -109,19 +109,19 @@ HuffmanTree* readTree(const char *filename) {
     return result;
 }
 
-int writeCodes(Node *node, char **codes, char *buffer, int const level = 0) {
-    if (isLeaf(node)) {
-        codes[(int)node->symbol] = new char[level + 1];
-        memcpy(codes[(int)node->symbol], buffer, level);
-        codes[(int)node->symbol][level] = '\0';
+int writeCodes(HuffmanNode *HuffmanNode, char **codes, char *buffer, int const level = 0) {
+    if (isLeaf(HuffmanNode)) {
+        codes[(int)HuffmanNode->symbol] = new char[level + 1];
+        memcpy(codes[(int)HuffmanNode->symbol], buffer, level);
+        codes[(int)HuffmanNode->symbol][level] = '\0';
         
-        return node->frequency * level;
+        return HuffmanNode->frequency * level;
     }
     int result = 0;
     buffer[level] = '0';
-    result += writeCodes(node->l, codes, buffer, level + 1);
+    result += writeCodes(HuffmanNode->l, codes, buffer, level + 1);
     buffer[level] = '1';
-    result += writeCodes(node->r, codes, buffer, level + 1);
+    result += writeCodes(HuffmanNode->r, codes, buffer, level + 1);
     return result;
 }
 
@@ -155,7 +155,7 @@ char* decodeFile(HuffmanTree *tree, const char *fileInput) {
     while (symbol != '\n')
         fscanf(file, "%c", &symbol);
     
-    Node *temp = tree->root;
+    HuffmanNode *temp = tree->root;
     char *result = new char[1];
     int length = 0;
     result[0] = '\0';
@@ -190,50 +190,50 @@ char* decodeFile(HuffmanTree *tree, const char *fileInput) {
     return result;
 }
 
-void saveNode(Node *node, FILE *file) {
-    if (isLeaf(node)) {
+void saveHuffmanNode(HuffmanNode *HuffmanNode, FILE *file) {
+    if (isLeaf(HuffmanNode)) {
         // WARNING \n encoded as \0 so there is only one line for tree
-        fprintf(file, "%c", (node->symbol == '\n' ? '\0' : node->symbol));
+        fprintf(file, "%c", (HuffmanNode->symbol == '\n' ? '\0' : HuffmanNode->symbol));
     } else {
-        saveNode(node->l, file);
-        saveNode(node->r, file);
+        saveHuffmanNode(HuffmanNode->l, file);
+        saveHuffmanNode(HuffmanNode->r, file);
         fprintf(file, "%c", separator);
     }
 }
 
 void saveTree(HuffmanTree *tree, FILE *file) {
-    saveNode(tree->root, file);
+    saveHuffmanNode(tree->root, file);
     fprintf(file, "\n");
 }
 
-int traverse(Node *node, char *buffer, FILE* file, int const textLength, int &codeSum, double &entropy, int const level = 0) {
-    if (isLeaf(node)) {
+int traverse(HuffmanNode *HuffmanNode, char *buffer, FILE* file, int const textLength, int &codeSum, double &entropy, int const level = 0) {
+    if (isLeaf(HuffmanNode)) {
         buffer[level] = '\0';
         
-        double probability = (double)node->frequency / textLength;
+        double probability = (double)HuffmanNode->frequency / textLength;
         entropy += probability * log(probability) / log(2);
-        codeSum += level * node->frequency;
+        codeSum += level * HuffmanNode->frequency;
         
-        if (node->symbol == '\n')
+        if (HuffmanNode->symbol == '\n')
             fprintf(file, "\'\\n\'");
         else
-            fprintf(file, "\'%c\' ", node->symbol);
-        fprintf(file, "(ASCII code: %02X): frequency: %3d, code: %s", (int)node->symbol, node->frequency, buffer);
-        if (node->symbol == '\n')
+            fprintf(file, "\'%c\' ", HuffmanNode->symbol);
+        fprintf(file, "(ASCII code: %02X): frequency: %3d, code: %s", (int)HuffmanNode->symbol, HuffmanNode->frequency, buffer);
+        if (HuffmanNode->symbol == '\n')
             fprintf(file, ", P(\\n) = %.9f\n", probability);
         else
-            fprintf(file, ", P(%c) = %.9f\n", node->symbol, probability);
+            fprintf(file, ", P(%c) = %.9f\n", HuffmanNode->symbol, probability);
         
-        return node->frequency * level;
+        return HuffmanNode->frequency * level;
     }
     
     int codeLength = 0;
     
     buffer[level] = '0';
-    codeLength += traverse(node->l, buffer, file, textLength, codeSum, entropy, level + 1);
+    codeLength += traverse(HuffmanNode->l, buffer, file, textLength, codeSum, entropy, level + 1);
     
     buffer[level] = '1';
-    codeLength += traverse(node->r, buffer, file, textLength, codeSum, entropy, level + 1);
+    codeLength += traverse(HuffmanNode->r, buffer, file, textLength, codeSum, entropy, level + 1);
     
     return codeLength;
 }
@@ -253,12 +253,12 @@ void saveInfo(HuffmanTree *tree, FILE *file, int const textLength) {
     fprintf(file, "Compression coeff.: %.20f\n", (8.0 * textLength) / codeLength);
 }
 
-void erase(Node *node) {
-    if (node == nullptr)
+void erase(HuffmanNode *HuffmanNode) {
+    if (HuffmanNode == nullptr)
         return;
-    erase(node->l);
-    erase(node->r);
-    delete node;
+    erase(HuffmanNode->l);
+    erase(HuffmanNode->r);
+    delete HuffmanNode;
 }
 
 void erase(HuffmanTree *tree) {

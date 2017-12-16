@@ -4,7 +4,7 @@
 #include "huffmanNode.h"
 
 struct HuffmanTree {
-    Node *root = nullptr;
+    HuffmanNode *root = nullptr;
 };
 
 HuffmanTree* createTree(const char *str);
