@@ -15,7 +15,7 @@ void addChar(char *&string, char const symbol) {
 char* readString() {
     char *result = new char[1];
     result[0] = '\0';
-    char symbol = '\0';
+    char symbol = 0;
     symbol = getchar();
     while (symbol != '\n') {
         addChar(result, symbol);
