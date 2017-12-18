@@ -117,6 +117,7 @@ bool testSize1() {
 }
 
 bool testSize3() {
+    bool testResult = true;
     int **temp = allocateMemorySmart(3, 3);
     /*
         0 1 2
@@ -132,12 +133,12 @@ bool testSize3() {
     int correct[9] = {4, 3, 6, 7, 8, 5, 2, 1, 0};
     for (int i = 0; i < 9; i++)
         if (result[i] != correct[i])
-            return false;
+            testResult = false;
             
     delete[] temp[0];
     delete[] temp;
         
-    return true;
+    return testResult;
 }
 
 bool runTests() {
