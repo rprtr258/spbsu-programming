@@ -31,7 +31,7 @@ string add(string a, string b) {
 void printBinary(const long long &x) {
     long long unsigned bit = 0x8000000000000000;
     for (int i = 0; i < 64; i++) {
-        printf(x & bit ? "1" : "0");
+        printf((x & bit) ? "1" : "0");
         bit >>= 1;
     }
     printf("\n");
