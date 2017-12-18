@@ -29,7 +29,7 @@ int main() {
     printf("Checker of syntax\n");
     
     char str[100];
-    int strLength = -1;
+    int strLength = 0;
     printf("Write your text:\n");
     gets(str);
     strLength = strlen(str);
