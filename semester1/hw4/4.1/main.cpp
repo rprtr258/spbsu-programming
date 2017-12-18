@@ -32,6 +32,10 @@ enum Direction {
     down
 };
 
+bool isInBounds(int const leftBound, int const rightBound, const int value) {
+    return (leftBound <= value && value <= rightBound);
+}
+
 void travelMatrix(int *result, int **matrix, const int size) {
     int posI = 0;
     int posJ = 0;
@@ -43,46 +47,37 @@ void travelMatrix(int *result, int **matrix, const int size) {
     int upBound = 0;
     int downBound = size - 1;
     
+    auto move = [&](int const di, int const dj, Direction const newDir) {
+        while (isInBounds(upBound, downBound, posI + di) &&
+               isInBounds(leftBound, rightBound, posJ + dj)) {
+            result[ptr] = matrix[posI][posJ];
+            ptr++;
+            posI += di;
+            posJ += dj;
+        }
+        dir = newDir;
+    };
+    
     while (posI != size / 2 || posJ != size / 2) {
         switch (dir) {
-            case left: {
-                while (posJ - 1 >= leftBound) {
-                    result[ptr] = matrix[posI][posJ];
-                    ptr++;
-                    posJ--;
-                }
-                downBound--;
-                dir = up;
-                break;
-            }
             case right: {
-                while (posJ + 1 <= rightBound) {
-                    result[ptr] = matrix[posI][posJ];
-                    ptr++;
-                    posJ++;
-                }
+                move(0, 1, down);
                 upBound++;
-                dir = down;
-                break;
-            }
-            case up: {
-                while (posI - 1 >= upBound) {
-                    result[ptr] = matrix[posI][posJ];
-                    ptr++;
-                    posI--;
-                }
-                leftBound++;
-                dir = right;
                 break;
             }
             case down: {
-                while (posI + 1 <= downBound) {
-                    result[ptr] = matrix[posI][posJ];
-                    ptr++;
-                    posI++;
-                }
+                move(1, 0, left);
                 rightBound--;
-                dir = left;
+                break;
+            }
+            case left: {
+                move(0, -1, up);
+                downBound--;
+                break;
+            }
+            case up: {
+                move(-1, 0, right);
+                leftBound++;
                 break;
             }
         }
