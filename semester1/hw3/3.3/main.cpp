@@ -5,10 +5,10 @@
 int main() {
     printf("Program that reorder digits of your number to make smallest possible number.\n");
     
-    char number[100];
+    char number[101];
     int length = 0;
     printf("Write number: ");
-    scanf("%s", number);
+    scanf("%100s", number);
     length = strlen(number);
     
     const int digits = 10;
