@@ -45,7 +45,7 @@ string operator*(const string &x, const int &n) {
 }
 
 void parse(double &y, bool &sign, long long &exponent, string &mantissa, int &zeroes) {
-    long long *xPointer = (long long*)(&y);
+    long long *xPointer = reinterpret_cast<long long*>(&y);
     long long x = *xPointer;
 //    printf("x(%I64X):\n", x);
 //    printBinary(x);
