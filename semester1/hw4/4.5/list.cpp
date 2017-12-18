@@ -84,6 +84,7 @@ bool listTestModule() {
 bool listTestCreateErase() {
     LinkedList *temp = createList();
     listErase(temp);
+    delete temp;
     return true;
 }
 

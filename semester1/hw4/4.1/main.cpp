@@ -101,17 +101,19 @@ bool testAllocate() {
 }
 
 bool testSize1() {
+    bool testResult = false;
     int **temp = allocateMemorySmart(1, 1);
     temp[0][0] = 1;
     int *result = new int[1];
     travelMatrix(result, temp, 1);
-    if (result[0] != 1)
-        return false;
+    if (result[0] == 1)
+        testResult = true;
+    
     delete[] temp[0];
     delete[] temp;
     delete[] result;
         
-    return true;
+    return testResult;
 }
 
 bool testSize3() {
