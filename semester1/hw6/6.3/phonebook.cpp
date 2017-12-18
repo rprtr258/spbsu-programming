@@ -27,7 +27,7 @@ void readEntries(PhoneBook *book) {
     book->capacity = entriesNumber;
     for (int i = 0; i < entriesNumber; i++) {
         Entry &entry = book->data[i];
-        fscanf(fileInput, "%s %s", entry.name, entry.telephone);
+        fscanf(fileInput, "%20s %20s", entry.name, entry.telephone);
     }
     
     fclose(fileInput);

@@ -70,9 +70,9 @@ int main() {
     int listSize = 0;
     
     while (!feof(file)) {
-        char secondName[1000];
+        char secondName[101];
         int loyality = -1;
-        fscanf(file, "%s - %d", secondName, &loyality);
+        fscanf(file, "%100s - %d", secondName, &loyality);
         if (feof(file))
             break;
         

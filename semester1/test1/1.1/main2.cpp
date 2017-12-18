@@ -60,7 +60,7 @@ int main() {
     int *array = new int[arraySize];
     printf("Write type of array (\"rand\" fo random with values 11-42 or \"hand\" to write it) without quotes:\n");
     char s[5];
-    scanf("%s", s);
+    scanf("%4s", s);
     if (strcmp(s, "rand") == 0) {
         srand(time(nullptr));
         printf("Generated array:\n");
