@@ -2,13 +2,13 @@
 #include <string.h>
 
 int main() {
-    char text[100];
+    char text[101];
     printf("Write text without spaces:\n");
-    scanf("%s", text);
+    scanf("%100s", text);
     
-    char pattern[100];
+    char pattern[101];
     printf("Write pattern:\n");
-    scanf("%s", pattern);
+    scanf("%100s", pattern);
     
     int textLength = strlen(text);
     int patternLength = strlen(pattern);

@@ -17,10 +17,10 @@ int main() {
         return 0;
     }
     FILE *myfile = fopen("file.txt", "r");
-    char s[1000];
+    char s[1001];
     
     while (!feof(myfile)) {
-        fscanf(myfile, "%s", s);
+        fscanf(myfile, "%1000s", s);
         bool were[alphabet];
         for (int i = 0; i < alphabet; i++)
             were[i] = false;

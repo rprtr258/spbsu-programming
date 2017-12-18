@@ -14,9 +14,9 @@ bool isPalindrome(char *string, const int &length) {
 }
 
 int main() {
-    char string[100];
+    char string[101];
     printf("Write string you want to check for palindrome:\n");
-    scanf("%s", string);
+    scanf("%100s", string);
     
     int stringLength = strlen(string);
     bool palindromic = isPalindrome(string, stringLength);

@@ -48,7 +48,7 @@ int main() {
     while (mainGame.running) {
         char cmd[10];
         printf("Write variant: ");
-        scanf("%s", cmd);
+        scanf("%9s", cmd);
         CommandCode code = parseInput(mainGame, cmd);
         switch (code) {
             case helpCode: {
