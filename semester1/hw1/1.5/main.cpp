@@ -2,9 +2,9 @@
 #include <string.h>
 
 int main() {
-    char s[100];
+    char s[101];
     printf("Write bracket sequence:\n");
-    scanf("%s", s);
+    scanf("%100s", s);
     
     int opened = 0;
     int length = strlen(s);
