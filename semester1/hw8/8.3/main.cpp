@@ -22,8 +22,10 @@ int main() {
             
             fscanf(file, "%c", &symbol);
         }
-        if (isEmptyString(word))
+        if (isEmptyString(word)) {
             continue;
+            deleteString(word);
+        }
         
         insertString(hashTable, word);
         deleteString(word);

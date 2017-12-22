@@ -96,19 +96,16 @@ int findElement(LinkedList *list, String *value) {
     if (list == nullptr)
         return -1;
     
-    int result = -1;
     int i = 0;
     Node *temp = list->head;
     while (temp != nullptr) {
-        if (areEqual(temp->value, value)) {
-            result = i;
-            break;
-        }
+        if (areEqual(temp->value, value))
+            return i;
         temp = temp->next;
         i++;
     }
     
-    return result;
+    return -1;
 }
 
 String* getValueById(LinkedList *list, int const index) {
@@ -122,9 +119,9 @@ int getCountById(LinkedList *list, int const index) {
 }
 
 void printNode(Node *node) {
-    if (node == nullptr)
+    if (node == nullptr) {
         printf("(null)");
-    else {
+    } else {
         printString(node->value);
         printf("(%d)", node->count);
     }
