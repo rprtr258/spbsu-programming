@@ -32,7 +32,7 @@ String* subString(String *string, const int i, const int len) {
         return nullptr;
     
     char *substr = new char[len + 1];
-    memcpy(substr, string->data + i, len);
+    memcpy(substr, string->data + i, len * sizeof(char));
     substr[len] = '\0';
     
     String *result = createString(substr);
@@ -62,20 +62,18 @@ String* concate(String *str1, String *str2) {
 
 String* putChar(String *string, char symbol) {
     if (isEmptyString(string)) {
-        char tempString[2];
-        tempString[0] = symbol;
-        tempString[1] = '\0';
+        char tempString[2] = {symbol, '\0'};
         return createString(tempString);
     }
     
-    String *newString = createString();
-    newString->size = string->size + 1;
-    newString->data = new char[string->size + 2];
-    memcpy(newString->data, string->data, string->size);
-    newString->data[string->size] = symbol;
-    newString->data[string->size + 1] = '\0';
+    String *result = createString();
+    result->size = string->size + 1;
+    result->data = new char[result->size + 1];
+    memcpy(result->data, string->data, string->size);
+    result->data[string->size] = symbol;
+    result->data[string->size + 1] = '\0';
     
-    return newString;
+    return result;
 }
 
 void deleteString(String *&string) {
@@ -83,7 +81,7 @@ void deleteString(String *&string) {
         return;
     if (string->data != nullptr)
         delete[] string->data;
-
+    delete string;
     string = nullptr;
 }
 
