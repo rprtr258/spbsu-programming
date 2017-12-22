@@ -35,3 +35,7 @@ bool coordEquals(Coordinate const *first, Coordinate const *second) {
     
     return (first->i == second->i && first->j == second->j);
 }
+
+Coordinate* add(Coordinate const *coord, int const di, int const dj) {
+    return coordCreate(coord->i + di, coord->j + dj);
+}

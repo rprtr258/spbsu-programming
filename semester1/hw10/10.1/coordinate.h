@@ -11,3 +11,4 @@ void coordDelete(Coordinate *&coordinate);
 
 int coordDist(Coordinate const *first, Coordinate const *second);
 bool coordEquals(Coordinate const *first, Coordinate const *second);
+Coordinate* add(Coordinate const *coord, int const di, int const dj);

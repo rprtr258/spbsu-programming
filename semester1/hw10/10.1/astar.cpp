@@ -26,26 +26,40 @@ void setElement(int **array, Coordinate const *index, int const value) {
     array[index->i][index->j] = value;
 }
 
-void relax(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***from, Heap *heap, Coordinate const *dest, int const di, int const dj, char const arrow) {
-    int vertI = vertex->coord->i;
-    int vertJ = vertex->coord->j;
-    Coordinate *newPos = coordCreate(vertI + di, vertJ + dj);
-    if (bitMapIsInside(map, newPos) && map->data[vertI + di][vertJ + dj] != '1') {
-        if (getElement(dist, newPos) > vertex->dist + 1) {
-            setElement(dist, newPos, vertex->dist + 1);
-            
-            coordDelete(from[newPos->i][newPos->j]);
-            from[newPos->i][newPos->j] = coordCopy(vertex->coord);
-            
-            setElement(map->data, newPos, arrow);
-            
-            NodeInfo *neighbour = nodeInfoCreate(vertex->dist + 1, coordDist(newPos, dest), newPos);
-            heapPush(heap, neighbour);
-            
-            nodeInfoDelete(neighbour);
+void relaxNeighbours(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***from, Heap *heap, Coordinate const *dest) {
+    int const directions = 4;
+    int const move[directions][2] = {
+        {-1, 0},
+        {1, 0},
+        {0, -1},
+        {0, 1}
+    };
+    char const arrows[directions] = {
+        '^',
+        'v',
+        '<',
+        '>'
+    };
+    
+    for (int i = 0; i < directions; i++) {
+        Coordinate *newPos = add(vertex->coord, move[i][0], move[i][1]);
+        if (bitMapIsInside(map, newPos) && getElement(map->data, newPos) != '1') {
+            if (getElement(dist, newPos) > vertex->dist + 1) {
+                setElement(dist, newPos, vertex->dist + 1);
+
+                coordDelete(from[newPos->i][newPos->j]);
+                from[newPos->i][newPos->j] = coordCopy(vertex->coord);
+
+                setElement(map->data, newPos, arrows[i]);
+
+                NodeInfo *neighbour = nodeInfoCreate(vertex->dist + 1, coordDist(newPos, dest), newPos);
+                heapPush(heap, neighbour);
+
+                nodeInfoDelete(neighbour);
+            }
         }
+        coordDelete(newPos);
     }
-    coordDelete(newPos);
 }
 
 bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
@@ -81,10 +95,7 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
             break;
         }
         
-        relax(vertex, map, dist, from, heap, dest, 0, -1, '<');
-        relax(vertex, map, dist, from, heap, dest, 0, 1, '>');
-        relax(vertex, map, dist, from, heap, dest, 1, 0, 'v');
-        relax(vertex, map, dist, from, heap, dest, -1, 0, '^');
+        relaxNeighbours(vertex, map, dist, from, heap, dest);
 
         nodeInfoDelete(vertex);
     }
