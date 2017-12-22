@@ -2,40 +2,38 @@
 #include <string.h>
 #include "astar.h"
 #include "heap.h"
+#include "bitmap.h"
+#include "coordinate.h"
+#include "nodeinfo.h"
 
-struct Pair {
-    int i = -1;
-    int j = -1;
-};
-
-void relax(NodeInfo *vertex, BitMap *map, int **dist, Pair ***from, Heap *heap, int const destI, int const destJ, int const di, int const dj, char const arrow) {
-    int vertI = vertex->i;
-    int vertJ = vertex->j;
+void relax(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***from, Heap *heap, Coordinate const *dest, int const di, int const dj, char const arrow) {
+    int vertI = vertex->coord->i;
+    int vertJ = vertex->coord->j;
     if (bitMapIsInside(map, vertI + di, vertJ + dj) && map->data[vertI + di][vertJ + dj] != '1') {
         if (dist[vertI + di][vertJ + dj] > vertex->dist + 1) {
             dist[vertI + di][vertJ + dj] = vertex->dist + 1;
             
-            from[vertI + di][vertJ + dj]->i = vertI;
-            from[vertI + di][vertJ + dj]->j = vertJ;
+            coordDelete(from[vertI + di][vertJ + dj]);
+            from[vertI + di][vertJ + dj] = coordCreate(vertI, vertJ);
             
             map->data[vertI + di][vertJ + dj] = arrow;
             
-            NodeInfo *neighbour = nodeInfoCreate(vertex->dist + 1, -1, vertI + di, vertJ + dj);
-            int heuristic = nodeInfoGetHeuristic(neighbour, destI, destJ);
-            neighbour->h = heuristic;
+            Coordinate *newCoord = coordCreate(vertI + di, vertJ + dj);
+            NodeInfo *neighbour = nodeInfoCreate(vertex->dist + 1, coordDist(newCoord, dest), newCoord);
             heapPush(heap, neighbour);
             
+            coordDelete(newCoord);
             delete neighbour;
         }
     }
 }
 
-bool searchAStar(BitMap *map, int const startI, int const startJ, int const destI, int const destJ) {
-    Pair ***from = new Pair**[map->height];
+bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
+    Coordinate ***from = new Coordinate**[map->height];
     for (int i = 0; i < map->height; i++) {
-        from[i] = new Pair*[map->width];
+        from[i] = new Coordinate*[map->width];
         for (int j = 0; j < map->width; j++)
-            from[i][j] = new Pair();
+            from[i][j] = nullptr;
     }
     
     int **dist = new int*[map->height];
@@ -46,32 +44,32 @@ bool searchAStar(BitMap *map, int const startI, int const startJ, int const dest
     }
     
     Heap *heap = heapCreate(nodeInfoGetEstimation);
-    NodeInfo *start = nodeInfoCreate(0, 0, startI, startJ);
-    dist[startI][startJ] = 0;
+    NodeInfo *startNode = nodeInfoCreate(0, 0, start);
+    dist[start->i][start->j] = 0;
     
-    heapPush(heap, start);
+    heapPush(heap, startNode);
     while (heap->size > 0) {
         NodeInfo *vertex = heapPop(heap);
         
-        if (dist[vertex->i][vertex->j] < vertex->dist) {
-            delete vertex;
+        if (dist[vertex->coord->i][vertex->coord->j] < vertex->dist) {
+            nodeInfoDelete(vertex);
             continue;
         }
         
-        if (vertex->i == destI && vertex->j == destJ) {
-            delete vertex;
+        if (coordEquals(vertex->coord, dest)) {
+            nodeInfoDelete(vertex);
             break;
         }
         
-        relax(vertex, map, dist, from, heap, destI, destJ, 0, -1, '<');
-        relax(vertex, map, dist, from, heap, destI, destJ, 0, 1, '>');
-        relax(vertex, map, dist, from, heap, destI, destJ, 1, 0, 'v');
-        relax(vertex, map, dist, from, heap, destI, destJ, -1, 0, '^');
+        relax(vertex, map, dist, from, heap, dest, 0, -1, '<');
+        relax(vertex, map, dist, from, heap, dest, 0, 1, '>');
+        relax(vertex, map, dist, from, heap, dest, 1, 0, 'v');
+        relax(vertex, map, dist, from, heap, dest, -1, 0, '^');
 
-        delete vertex;
+        nodeInfoDelete(vertex);
     }
     
-    bool result = (map->data[destI][destJ] != '0');
+    bool result = (map->data[dest->i][dest->j] != '0');
     
     // clear arrows
     for (int i = 0; i < map->height; i++) {
@@ -81,24 +79,21 @@ bool searchAStar(BitMap *map, int const startI, int const startJ, int const dest
     }
     
     // reconstruct path
-    if (result || startI == destI && startJ == destJ) {
-        map->data[startI][startJ] = 'O';
-        int posI = destI;
-        int posJ = destJ;
-        while (posI != startI || posJ != startJ) {
+    if (result || coordEquals(start, dest)) {
+        map->data[start->i][start->j] = 'O';
+        int posI = dest->i;
+        int posJ = dest->j;
+        while (posI != start->i || posJ != start->j) {
             if (from[posI][posJ]->i == posI - 1) {
                 map->data[posI][posJ] = 'v';
                 posI--;
-            }
-            if (from[posI][posJ]->i == posI + 1) {
+            } else if (from[posI][posJ]->i == posI + 1) {
                 map->data[posI][posJ] = '^';
                 posI++;
-            }
-            if (from[posI][posJ]->j == posJ - 1) {
+            } else if (from[posI][posJ]->j == posJ - 1) {
                 map->data[posI][posJ] = '>';
                 posJ--;
-            }
-            if (from[posI][posJ]->j == posJ + 1) {
+            } else if (from[posI][posJ]->j == posJ + 1) {
                 map->data[posI][posJ] = '<';
                 posJ++;
             }
@@ -107,14 +102,14 @@ bool searchAStar(BitMap *map, int const startI, int const startJ, int const dest
     
     for (int i = 0; i < map->height; i++) {
         for (int j = 0; j < map->width; j++)
-            delete from[i][j];
+            coordDelete(from[i][j]);
         delete[] from[i];
     }
     delete[] from;
     for (int i = 0; i < map->height; i++)
         delete[] dist[i];
     delete[] dist;
-    delete start;
+    nodeInfoDelete(startNode);
     heapDelete(heap);
     
     return result;

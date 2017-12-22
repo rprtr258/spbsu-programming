@@ -1,4 +1,5 @@
 #pragma once
 #include "bitmap.h"
+#include "coordinate.h"
 
-bool searchAStar(BitMap *map, int const startI, int const startJ, int const destI, int const destJ);
+bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest);

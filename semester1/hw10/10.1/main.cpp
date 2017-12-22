@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "coordinate.h"
 #include "heap.h"
 #include "nodeinfo.h"
 #include "bitmap.h"
@@ -28,7 +29,9 @@ bool askUser(const char *question) {
     return (temp == 'y');
 }
 
-void readCoordinates(BitMap *map, const char *message, int &coordI, int &coordJ) {
+Coordinate* readCoordinates(BitMap *map, const char *message) {
+    int coordI = -1;
+    int coordJ = -1;
     while (true) {
         printf("%s: ", message);
         scanf("%d %d", &coordI, &coordJ);
@@ -41,6 +44,7 @@ void readCoordinates(BitMap *map, const char *message, int &coordI, int &coordJ)
         else
             break;
     }
+    return coordCreate(coordI - 1, coordJ - 1);
 }
 
 int main() {
@@ -55,13 +59,10 @@ int main() {
     bitMapPrint(map);
     printf("Map size is %dx%d\n", map->height, map->width);
     
-    int startI = 0, startJ = 0;
-    readCoordinates(map, "Write coordinates of start", startI, startJ);
+    Coordinate *start = readCoordinates(map, "Write coordinates of start");
+    Coordinate *dest = readCoordinates(map, "Write coordinates of destination");
     
-    int destI = 0, destJ = 0;
-    readCoordinates(map, "Write coordinates of destination", destI, destJ);
-    
-    bool found = searchAStar(map, startI - 1, startJ - 1, destI - 1, destJ - 1);
+    bool found = searchAStar(map, start, dest);
     
     if (found) {
         printf("Result(\'#\' is wall, \'.\' is empty cell, \'<\', \'>\', \'^\', \'v\' shows path):\n");
@@ -71,5 +72,7 @@ int main() {
     }
     
     bitMapDelete(map);
+    delete start;
+    delete dest;
     return 0;
 }
