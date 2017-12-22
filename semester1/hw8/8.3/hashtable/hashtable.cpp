@@ -16,7 +16,7 @@ unsigned int getHash(String *string, int const mod) {
 }
 
 HashTable* createHashTable(int const size) {
-    if (size <= 0)
+    if (size <= 1)
         return nullptr;
     
     HashTable *result = new HashTable();
@@ -37,13 +37,8 @@ void deleteHashTable(HashTable *&hashTable) {
 }
 
 void resize(HashTable *&hashTable, int const newSize) {
-    if (newSize <= 0)
+    if (newSize <= 1)
         return;
-    
-    if (hashTable == nullptr) {
-        hashTable = createHashTable(newSize);
-        return;
-    }
     
     HashTable *newHashTable = createHashTable(newSize);
     newHashTable->elements = hashTable->elements;
@@ -81,7 +76,7 @@ bool doesContain(HashTable *hashTable, String *string) {
         return false;
     
     unsigned int hash = getHash(string, hashTable->size);
-    return (findElement(hashTable->data[hash], string) != -1);
+    return hasElement(hashTable->data[hash], string);
 }
 
 double getLoadFactor(HashTable *hashTable) {
