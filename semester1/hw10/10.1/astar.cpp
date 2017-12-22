@@ -75,6 +75,21 @@ void reconstructPath(BitMap *map, Coordinate const *start, Coordinate const *des
     coordDelete(curPos);
 }
 
+void deleteFrom(Coordinate ***from, int const height, int const width) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++)
+            coordDelete(from[i][j]);
+        delete[] from[i];
+    }
+    delete[] from;
+}
+
+void deleteDist(int **dist, int const height) {
+    for (int i = 0; i < height; i++)
+        delete[] dist[i];
+    delete[] dist;
+}
+
 bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
     Coordinate ***from = new Coordinate**[map->height];
     for (int i = 0; i < map->height; i++) {
@@ -100,7 +115,7 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
         
         if (getElement(dist, vertex->coord) < vertex->dist) {
             nodeInfoDelete(vertex);
-            continue;
+            break;
         }
         if (coordEquals(vertex->coord, dest)) {
             nodeInfoDelete(vertex);
@@ -108,7 +123,6 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
         }
         
         relaxNeighbours(vertex, map, dist, from, heap, dest);
-
         nodeInfoDelete(vertex);
     }
     
@@ -119,15 +133,8 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
     if (result)
         reconstructPath(map, start, dest, from);
     
-    for (int i = 0; i < map->height; i++) {
-        for (int j = 0; j < map->width; j++)
-            coordDelete(from[i][j]);
-        delete[] from[i];
-    }
-    delete[] from;
-    for (int i = 0; i < map->height; i++)
-        delete[] dist[i];
-    delete[] dist;
+    deleteFrom(from, map->height, map->width);
+    deleteDist(dist, map->height);
     nodeInfoDelete(startNode);
     heapDelete(heap);
     
