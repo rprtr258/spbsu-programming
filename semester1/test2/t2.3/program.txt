@@ -1,0 +1,43 @@
+IncrementCount:
+	mov	cx,cntDigits
+	mov	di,counter+cntDigits-1
+	std			; go from LSB to MSB
+	stc			; this is our increment
+	pushf			; save carry flag
+.top
+	mov	ax,000fh	; convert from ASCII BCD to BCD
+	and	al,[di]		; get next digit of counter in al
+	popf			; recall carry flag
+	adc	al,ah		; add these digits
+	aaa			; convert to BCD
+	pushf
+	add	al,'0'		; convert back to ASCII BCD digit
+	stosb			; save and increment counter
+	loop	.top
+	popf			; recall carry flag
+	ret
+	
+
+CRLF:	mov	dx,eol
+	mov	cx,eollen
+	jmp	PrintString
+
+
+; static data
+
+eol	db  13,10		; DOS-style end of line
+eollen	equ $ - eol
+
+msg1	db  'Fibonacci('
+msg1len	equ $ - msg1
+
+msg2	db  '): '
+msg2len	equ $ - msg2
+
+; initialized data
+
+term dd maxTerms
+; static data
+counter:
+num1 equ counter+cntDigits
+num2 equ num1+digits
