@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "bitmap.h"
+#include "coordinate.h"
 
 BitMap* bitMapRead(const char *filename) {
     FILE *file = fopen("file.txt", "r");
@@ -81,9 +82,11 @@ void bitMapPrint(BitMap *map) {
     }
 }
 
-bool bitMapIsInside(BitMap *map, int const i, int const j) {
-    return (0 <= i && i < map->height &&
-            0 <= j && j < map->width);
+bool bitMapIsInside(BitMap *map, Coordinate const *pos) {
+    if (pos == nullptr || map == nullptr)
+        return false;
+    return (0 <= pos->i && pos->i < map->height &&
+            0 <= pos->j && pos->j < map->width);
 }
 
 void bitMapAddRow(BitMap *map, const char *row) {

@@ -30,7 +30,7 @@ void relax(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***from, Heap *
     int vertI = vertex->coord->i;
     int vertJ = vertex->coord->j;
     Coordinate *newPos = coordCreate(vertI + di, vertJ + dj);
-    if (bitMapIsInside(map, vertI + di, vertJ + dj) && map->data[vertI + di][vertJ + dj] != '1') {
+    if (bitMapIsInside(map, newPos) && map->data[vertI + di][vertJ + dj] != '1') {
         if (getElement(dist, newPos) > vertex->dist + 1) {
             setElement(dist, newPos, vertex->dist + 1);
             

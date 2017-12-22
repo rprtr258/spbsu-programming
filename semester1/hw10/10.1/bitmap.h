@@ -1,4 +1,5 @@
 #pragma once
+#include "coordinate.h"
 
 struct BitMap {
     char **data = nullptr;
@@ -11,6 +12,6 @@ BitMap* bitMapRead(const char *filename);
 void bitMapDelete(BitMap *&map);
 
 void bitMapPrint(BitMap *map);
-bool bitMapIsInside(BitMap *map, int const i, int const j);
+bool bitMapIsInside(BitMap *map, Coordinate const *pos);
 
 void bitMapAddRow(BitMap *map, const char *row);
