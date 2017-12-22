@@ -3,7 +3,7 @@
 #include <algorithm>
 #include "priorityQueue.h"
 
-struct HeapElement {
+struct PriorQueueElement {
     int value = 0;
     int priority = 0;
 };
@@ -41,20 +41,23 @@ void heapSiftDown(PriorityQueue *heap, int pos) {
     while (true) {
         int left = leftChild(i);
         int right = rightChild(i);
+        
         int curPriority = heap->data[i].priority;
+        int leftPriority = heap->data[left].priority;
+        int rightPriority = heap->data[right].priority;
         
         if (isInHeap(heap, left) && isInHeap(heap, right)) {
-            if (heap->data[left].priority >= heap->data[right].priority && heap->data[left].priority > curPriority) {
+            if (leftPriority >= rightPriority && leftPriority > curPriority) {
                 swap(heap->data[i], heap->data[left]);
                 i = left;
-            } else if (heap->data[right].priority >= heap->data[left].priority && heap->data[right].priority > curPriority) {
+            } else if (rightPriority >= leftPriority && rightPriority > curPriority) {
                 swap(heap->data[i], heap->data[right]);
                 i = right;
             } else {
                 break;
             }
         } else if (isInHeap(heap, left)) {
-            if (heap->data[left].priority > curPriority) {
+            if (leftPriority > curPriority) {
                 swap(heap->data[i], heap->data[left]);
                 i = left;
             } else {
@@ -67,8 +70,8 @@ void heapSiftDown(PriorityQueue *heap, int pos) {
 }
 
 void resize(PriorityQueue *&heap, int const newSize) {
-    HeapElement *newData = new HeapElement[newSize];
-    memcpy(newData, heap->data, sizeof(HeapElement) * heap->size);
+    PriorQueueElement *newData = new PriorQueueElement[newSize];
+    memcpy(newData, heap->data, sizeof(PriorQueueElement) * heap->size);
     heap->capacity *= 2;
     delete[] heap->data;
     heap->data = newData;
@@ -96,10 +99,10 @@ void enqueue(PriorityQueue *heap, int const value, int const priority) {
     if (heap->capacity < heap->size + 1)
         resize(heap, heap->size * 2);
     
-    HeapElement *newElement = new HeapElement();
+    PriorQueueElement *newElement = new PriorQueueElement();
     newElement->value = value;
     newElement->priority = priority;
-    memcpy(heap->data + heap->size, newElement, sizeof(HeapElement));
+    memcpy(heap->data + heap->size, newElement, sizeof(PriorQueueElement));
     delete newElement;
     heapSiftUp(heap, heap->size);
     heap->size++;
@@ -109,7 +112,7 @@ int dequeue(PriorityQueue *heap) {
     if (heap == nullptr || heap->size == 0)
         return -1;
     
-    HeapElement maxVal = heap->data[0];
+    PriorQueueElement maxVal = heap->data[0];
     
     swap(heap->data[0], heap->data[heap->size - 1]);
     heap->size--;

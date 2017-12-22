@@ -1,9 +1,9 @@
 #pragma once
 
-struct HeapElement;
+struct PriorQueueElement;
 
 struct PriorityQueue {
-    HeapElement *data = nullptr;
+    PriorQueueElement *data = nullptr;
     int size = -1;
     int capacity = -1;
 };
