@@ -6,7 +6,7 @@
 using std::swap;
 
 NodeInfo* max(Heap *heap, NodeInfo *a, NodeInfo *b) {
-    return (heap->getKey(a) >= heap->getKey(b) ? a : b);
+    return (a->h >= b->h ? a : b);
 }
 
 int parent(const int pos) {
@@ -26,7 +26,7 @@ bool heapIsIn(const Heap *heap, const int pos) {
 }
 
 int getKeyAt(Heap *heap, int const pos) {
-    return heap->getKey(heap->data[pos]);
+    return heap->data[pos]->h;
 }
 
 void heapSiftUp(Heap *heap, const int pos) {
@@ -45,17 +45,17 @@ void heapSiftDown(Heap *heap, int pos) {
         NodeInfo *curValue = heap->data[i];
         
         if (heapIsIn(heap, right)) {
-            if (getKeyAt(heap, left) <= getKeyAt(heap, right) && getKeyAt(heap, left) < heap->getKey(curValue)) {
+            if (getKeyAt(heap, left) <= getKeyAt(heap, right) && getKeyAt(heap, left) < curValue->h) {
                 swap(heap->data[i], heap->data[left]);
                 i = left;
-            } else if (getKeyAt(heap, right) <= getKeyAt(heap, left) && getKeyAt(heap, right) < heap->getKey(curValue)) {
+            } else if (getKeyAt(heap, right) <= getKeyAt(heap, left) && getKeyAt(heap, right) < curValue->h) {
                 swap(heap->data[i], heap->data[right]);
                 i = right;
             } else {
                 break;
             }
         } else if (heapIsIn(heap, left)) {
-            if (getKeyAt(heap, left) < heap->getKey(curValue)) {
+            if (getKeyAt(heap, left) < curValue->h) {
                 swap(heap->data[i], heap->data[left]);
                 i = left;
             } else {
@@ -67,11 +67,10 @@ void heapSiftDown(Heap *heap, int pos) {
     }
 }
 
-Heap* heapCreate(int (*getKey)(NodeInfo *node)) {
+Heap* heapCreate() {
     Heap *result = new Heap();
     result->size = 0;
     result->capacity = 0;
-    result->getKey = getKey;
     return result;
 }
 

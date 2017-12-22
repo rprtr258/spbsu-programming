@@ -5,10 +5,9 @@ struct Heap {
     NodeInfo **data = nullptr;
     int size = -1;
     int capacity = -1;
-    int (*getKey)(NodeInfo *node);
 };
 
-Heap* heapCreate(int (*getKey)(NodeInfo *node));
+Heap* heapCreate();
 void heapDelete(Heap *&heap);
 
 bool heapIsIn(const Heap *heap, const NodeInfo pos);

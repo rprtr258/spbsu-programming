@@ -26,7 +26,3 @@ void nodeInfoDelete(NodeInfo *&node) {
     delete node;
     node = nullptr;
 }
-
-int nodeInfoGetEstimation(NodeInfo *node) {
-    return node->dist + node->h;
-}

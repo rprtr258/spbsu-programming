@@ -63,7 +63,7 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
             dist[i][j] = INT_MAX;
     }
     
-    Heap *heap = heapCreate(nodeInfoGetEstimation);
+    Heap *heap = heapCreate();
     NodeInfo *startNode = nodeInfoCreate(0, 0, start);
     dist[start->i][start->j] = 0;
     
