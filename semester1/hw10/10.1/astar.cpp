@@ -75,44 +75,44 @@ void reconstructPath(BitMap *map, Coordinate const *start, Coordinate const *des
     coordDelete(curPos);
 }
 
-Coordinate*** createFromArray(int const height, int const width) {
-    Coordinate ***from = new Coordinate**[height];
-    for (int i = 0; i < height; i++) {
-        from[i] = new Coordinate*[width];
-        for (int j = 0; j < width; j++)
+Coordinate*** createFromArray(BitMap const *map) {
+    Coordinate ***from = new Coordinate**[map->height];
+    for (int i = 0; i < map->height; i++) {
+        from[i] = new Coordinate*[map->width];
+        for (int j = 0; j < map->width; j++)
             from[i][j] = nullptr;
     }
     return from;
 }
 
-void deleteFromArray(Coordinate ***from, int const height, int const width) {
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++)
+void deleteFromArray(Coordinate ***from, BitMap const *map) {
+    for (int i = 0; i < map->height; i++) {
+        for (int j = 0; j < map->width; j++)
             coordDelete(from[i][j]);
         delete[] from[i];
     }
     delete[] from;
 }
 
-int** createDistArray(int const height, int const width) {
-    int **dist = new int*[height];
-    for (int i = 0; i < height; i++) {
-        dist[i] = new int[width];
-        for (int j = 0; j < width; j++)
+int** createDistArray(BitMap const *map) {
+    int **dist = new int*[map->height];
+    for (int i = 0; i < map->height; i++) {
+        dist[i] = new int[map->width];
+        for (int j = 0; j < map->width; j++)
             dist[i][j] = INT_MAX;
     }
     return dist;
 }
 
-void deleteDistArray(int **dist, int const height) {
-    for (int i = 0; i < height; i++)
+void deleteDistArray(int **dist, BitMap const *map) {
+    for (int i = 0; i < map->height; i++)
         delete[] dist[i];
     delete[] dist;
 }
 
 bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
-    Coordinate ***from = createFromArray(map->height, map->width);
-    int **dist = createDistArray(map->height, map->width);
+    Coordinate ***from = createFromArray(map);
+    int **dist = createDistArray(map);
     
     Heap *heap = heapCreate();
     NodeInfo *startNode = nodeInfoCreate(0, 0, start);
@@ -138,8 +138,8 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
     if (result)
         reconstructPath(map, start, dest, from);
     
-    deleteFromArray(from, map->height, map->width);
-    deleteDistArray(dist, map->height);
+    deleteFromArray(from, map);
+    deleteDistArray(dist, map);
     nodeInfoDelete(startNode);
     heapDelete(heap);
     
