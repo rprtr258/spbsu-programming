@@ -48,6 +48,7 @@ void deleteList(LinkedList *&list) {
         return;
     
     deleteNode(list->head);
+    delete list;
     list = nullptr;
 }
 
