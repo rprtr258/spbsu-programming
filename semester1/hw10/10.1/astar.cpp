@@ -1,5 +1,5 @@
 #include <limits.h>
-#include <windows.h>
+#include <string.h>
 #include "astar.h"
 #include "heap.h"
 
@@ -30,7 +30,7 @@ void relax(NodeInfo *vertex, BitMap *map, int **dist, Pair ***from, Heap *heap, 
     }
 }
 
-bool searchAStar(BitMap *map, int const startI, int const startJ, int const destI, int const destJ, bool printProccess) {
+bool searchAStar(BitMap *map, int const startI, int const startJ, int const destI, int const destJ) {
     Pair ***from = new Pair**[map->height];
     for (int i = 0; i < map->height; i++) {
         from[i] = new Pair*[map->width];
@@ -53,8 +53,10 @@ bool searchAStar(BitMap *map, int const startI, int const startJ, int const dest
     while (heap->size > 0) {
         NodeInfo *vertex = heapPop(heap);
         
-        if (dist[vertex->i][vertex->j] < vertex->dist)
+        if (dist[vertex->i][vertex->j] < vertex->dist) {
+            delete vertex;
             continue;
+        }
         
         if (vertex->i == destI && vertex->j == destJ) {
             delete vertex;
@@ -66,10 +68,6 @@ bool searchAStar(BitMap *map, int const startI, int const startJ, int const dest
         relax(vertex, map, dist, from, heap, destI, destJ, 1, 0, 'v');
         relax(vertex, map, dist, from, heap, destI, destJ, -1, 0, '^');
 
-        if (printProccess) {
-            system("cls");
-            bitMapPrint(map);
-        }
         delete vertex;
     }
     

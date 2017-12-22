@@ -61,9 +61,7 @@ int main() {
     int destI = 0, destJ = 0;
     readCoordinates(map, "Write coordinates of destination", destI, destJ);
     
-    bool printProccess = askUser("Print proccess of A*(Make sure you don't have epilepsy(i don't know how to do it correctly))?");
-    
-    bool found = searchAStar(map, startI - 1, startJ - 1, destI - 1, destJ - 1, printProccess);
+    bool found = searchAStar(map, startI - 1, startJ - 1, destI - 1, destJ - 1);
     
     if (found) {
         printf("Result(\'#\' is wall, \'.\' is empty cell, \'<\', \'>\', \'^\', \'v\' shows path):\n");
