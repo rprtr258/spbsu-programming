@@ -15,7 +15,7 @@ NodeInfo* nodeInfoCopy(NodeInfo *node) {
     NodeInfo *result = new NodeInfo();
     result->dist = node->dist;
     result->h = node->h;
-    result->coord = node->coord;
+    result->coord = coordCopy(node->coord);
     return result;
 }
 

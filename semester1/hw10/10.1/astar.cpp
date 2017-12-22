@@ -6,26 +6,46 @@
 #include "coordinate.h"
 #include "nodeinfo.h"
 
+char& getElement(char **array, Coordinate const *index) {
+    return array[index->i][index->j];
+}
+
+int& getElement(int **array, Coordinate const *index) {
+    return array[index->i][index->j];
+}
+
+void setElement(char **array, Coordinate const *index, char const value) {
+    array[index->i][index->j] = value;
+}
+
+void setElement(Coordinate ***array, Coordinate const *index, Coordinate *value) {
+    array[index->i][index->j] = value;
+}
+
+void setElement(int **array, Coordinate const *index, int const value) {
+    array[index->i][index->j] = value;
+}
+
 void relax(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***from, Heap *heap, Coordinate const *dest, int const di, int const dj, char const arrow) {
     int vertI = vertex->coord->i;
     int vertJ = vertex->coord->j;
+    Coordinate *newPos = coordCreate(vertI + di, vertJ + dj);
     if (bitMapIsInside(map, vertI + di, vertJ + dj) && map->data[vertI + di][vertJ + dj] != '1') {
-        if (dist[vertI + di][vertJ + dj] > vertex->dist + 1) {
-            dist[vertI + di][vertJ + dj] = vertex->dist + 1;
+        if (getElement(dist, newPos) > vertex->dist + 1) {
+            setElement(dist, newPos, vertex->dist + 1);
             
-            coordDelete(from[vertI + di][vertJ + dj]);
-            from[vertI + di][vertJ + dj] = coordCreate(vertI, vertJ);
+            coordDelete(from[newPos->i][newPos->j]);
+            from[newPos->i][newPos->j] = coordCopy(vertex->coord);
             
-            map->data[vertI + di][vertJ + dj] = arrow;
+            setElement(map->data, newPos, arrow);
             
-            Coordinate *newCoord = coordCreate(vertI + di, vertJ + dj);
-            NodeInfo *neighbour = nodeInfoCreate(vertex->dist + 1, coordDist(newCoord, dest), newCoord);
+            NodeInfo *neighbour = nodeInfoCreate(vertex->dist + 1, coordDist(newPos, dest), newPos);
             heapPush(heap, neighbour);
             
-            coordDelete(newCoord);
-            delete neighbour;
+            nodeInfoDelete(neighbour);
         }
     }
+    coordDelete(newPos);
 }
 
 bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {

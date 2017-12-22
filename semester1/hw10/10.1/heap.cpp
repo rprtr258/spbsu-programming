@@ -80,7 +80,7 @@ void heapDelete(Heap *&heap) {
         return;
     if (heap->data != nullptr) {
         for (int i = 0; i < heap->size; i++)
-            delete heap->data[i];
+            nodeInfoDelete(heap->data[i]);
         delete[] heap->data;
     }
     delete heap;
