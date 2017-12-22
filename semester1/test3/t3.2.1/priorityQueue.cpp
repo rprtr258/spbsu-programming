@@ -8,6 +8,13 @@ struct PriorQueueElement {
     int priority = 0;
 };
 
+PriorQueueElement* createElement(int const value, int const priority) {
+    PriorQueueElement *result = new PriorQueueElement();
+    result->priority = priority;
+    result->value = value;
+    return result;
+}
+
 using std::swap;
 using std::max;
 
@@ -99,9 +106,7 @@ void enqueue(PriorityQueue *heap, int const value, int const priority) {
     if (heap->capacity < heap->size + 1)
         resize(heap, heap->size * 2);
     
-    PriorQueueElement *newElement = new PriorQueueElement();
-    newElement->value = value;
-    newElement->priority = priority;
+    PriorQueueElement *newElement = createElement(value, priority);
     memcpy(heap->data + heap->size, newElement, sizeof(PriorQueueElement));
     delete newElement;
     heapSiftUp(heap, heap->size);
