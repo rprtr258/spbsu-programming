@@ -34,12 +34,6 @@ void relaxNeighbours(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***fr
         {0, -1},
         {0, 1}
     };
-    char const arrows[directions] = {
-        '^',
-        'v',
-        '<',
-        '>'
-    };
     
     for (int i = 0; i < directions; i++) {
         Coordinate *newPos = add(vertex->coord, move[i][0], move[i][1]);
@@ -50,8 +44,6 @@ void relaxNeighbours(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***fr
                 coordDelete(from[newPos->i][newPos->j]);
                 from[newPos->i][newPos->j] = coordCopy(vertex->coord);
 
-                setElement(map->data, newPos, arrows[i]);
-
                 NodeInfo *neighbour = nodeInfoCreate(vertex->dist + 1, coordDist(newPos, dest), newPos);
                 heapPush(heap, neighbour);
 
@@ -60,6 +52,27 @@ void relaxNeighbours(NodeInfo *vertex, BitMap *map, int **dist, Coordinate ***fr
         }
         coordDelete(newPos);
     }
+}
+
+void reconstructPath(BitMap *map, Coordinate const *start, Coordinate const *dest, Coordinate ***from) {
+    setElement(map->data, start, 'O');
+    Coordinate *curPos = coordCopy(dest);
+    while (!coordEquals(curPos, start)) {
+        if (from[curPos->i][curPos->j]->i == curPos->i - 1) {
+            setElement(map->data, curPos, 'v');
+            curPos->i--;
+        } else if (from[curPos->i][curPos->j]->i == curPos->i + 1) {
+            setElement(map->data, curPos, '^');
+            curPos->i++;
+        } else if (from[curPos->i][curPos->j]->j == curPos->j - 1) {
+            setElement(map->data, curPos, '>');
+            curPos->j--;
+        } else if (from[curPos->i][curPos->j]->j == curPos->j + 1) {
+            setElement(map->data, curPos, '<');
+            curPos->j++;
+        }
+    }
+    coordDelete(curPos);
 }
 
 bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
@@ -85,11 +98,10 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
     while (heap->size > 0) {
         NodeInfo *vertex = heapPop(heap);
         
-        if (dist[vertex->coord->i][vertex->coord->j] < vertex->dist) {
+        if (getElement(dist, vertex->coord) < vertex->dist) {
             nodeInfoDelete(vertex);
             continue;
         }
-        
         if (coordEquals(vertex->coord, dest)) {
             nodeInfoDelete(vertex);
             break;
@@ -100,36 +112,12 @@ bool searchAStar(BitMap *map, Coordinate const *start, Coordinate const *dest) {
         nodeInfoDelete(vertex);
     }
     
-    bool result = (map->data[dest->i][dest->j] != '0');
-    
-    // clear arrows
-    for (int i = 0; i < map->height; i++) {
-        for (int j = 0; j < map->width; j++)
-            if (map->data[i][j] != '0' && map->data[i][j] != '1')
-                map->data[i][j] = '0';
-    }
+    bool result = (getElement(dist, dest) != INT_MAX);
+    result |= coordEquals(start, dest);
     
     // reconstruct path
-    if (result || coordEquals(start, dest)) {
-        map->data[start->i][start->j] = 'O';
-        int posI = dest->i;
-        int posJ = dest->j;
-        while (posI != start->i || posJ != start->j) {
-            if (from[posI][posJ]->i == posI - 1) {
-                map->data[posI][posJ] = 'v';
-                posI--;
-            } else if (from[posI][posJ]->i == posI + 1) {
-                map->data[posI][posJ] = '^';
-                posI++;
-            } else if (from[posI][posJ]->j == posJ - 1) {
-                map->data[posI][posJ] = '>';
-                posJ--;
-            } else if (from[posI][posJ]->j == posJ + 1) {
-                map->data[posI][posJ] = '<';
-                posJ++;
-            }
-        }
-    }
+    if (result)
+        reconstructPath(map, start, dest, from);
     
     for (int i = 0; i < map->height; i++) {
         for (int j = 0; j < map->width; j++)
