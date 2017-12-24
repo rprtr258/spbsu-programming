@@ -20,11 +20,9 @@ State getNextState(State const curState, char const symbol) {
                 return signState;
             else
                 return (isdigit(symbol) ? integerPartState : error);
-            break;
         }
         case signState: {
             return (isdigit(symbol) ? integerPartState : error);
-            break;
         }
         case integerPartState: {
             if (symbol == '.')
@@ -33,33 +31,27 @@ State getNextState(State const curState, char const symbol) {
                 return exponentSymbolState;
             else
                 return (isdigit(symbol) ? integerPartState : error);
-            break;
         }
         case dotState: {
             return (isdigit(symbol) ? fractPartState : error);
-            break;
         }
         case fractPartState: {
             if (symbol == 'E')
                 return exponentSymbolState;
             else
                 return (isdigit(symbol) ? fractPartState : error);
-            break;
         }
         case exponentSymbolState: {
             if (isSignChar(symbol))
                 return exponentSignState;
             else
                 return (isdigit(symbol) ? exponentState : error);
-            break;
         }
         case exponentSignState: {
             return (isdigit(symbol) ? exponentState : error);
-            break;
         }
         case exponentState: {
             return (isdigit(symbol) ? exponentState : error);
-            break;
         }
     }
 }
