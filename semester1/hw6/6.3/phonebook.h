@@ -1,8 +1,8 @@
 #pragma once
 
 struct Entry {
-    char telephone[20];
-    char name[20];
+    char telephone[21];
+    char name[21];
 };
 
 struct PhoneBook {
@@ -19,6 +19,6 @@ void saveEntries(PhoneBook *book);
 void findByPhone(PhoneBook *book, char *phone);
 void findByName(PhoneBook *book, char *name);
 
-void addEntry(PhoneBook *book, char name[20], char phone[20]);
+void addEntry(PhoneBook *book, char name[21], char phone[21]);
 
 void erase(PhoneBook *book);

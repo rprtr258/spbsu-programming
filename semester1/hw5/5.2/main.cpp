@@ -3,7 +3,7 @@
 void printBinary(const int unsigned x) {
     int unsigned bit = 0x800000;
     while (bit) {
-        printf(x & bit ? "1" : "0");
+        printf((x & bit) ? "1" : "0");
         bit >>= 1;
     }
     printf("\n");

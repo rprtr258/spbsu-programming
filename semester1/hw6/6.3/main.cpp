@@ -9,7 +9,7 @@ int main() {
     while (true) {
         char cmd[10] = "";
         printf("> ");
-        scanf("%s", cmd);
+        scanf("%9s", cmd);
         if (strcmp(cmd, "exit") == 0) {
             saveEntries(book);
             break;
@@ -24,22 +24,22 @@ int main() {
         } else if (strcmp(cmd, "print") == 0) {
             printBook(book);
         } else if (strcmp(cmd, "add") == 0) {
-            char name[20];
+            char name[21];
             printf("Write name of person: ");
-            scanf("%s", name);
-            char phone[20];
+            scanf("%20s", name);
+            char phone[21];
             printf("Write phone of person: ");
-            scanf("%s", phone);
+            scanf("%20s", phone);
             addEntry(book, name, phone);
         } else if (strcmp(cmd, "findphone") == 0) {
-            char phone[20];
+            char phone[21];
             printf("Write phone you want to find:\n");
-            scanf(" %s", phone);
+            scanf(" %20s", phone);
             findByPhone(book, phone);
         } else if (strcmp(cmd, "findname") == 0) {
-            char name[20];
+            char name[21];
             printf("Write name you want to find:\n");
-            scanf(" %s", name);
+            scanf(" %20s", name);
             findByName(book, name);
         } else if (strcmp(cmd, "save") == 0) {
             saveEntries(book);
