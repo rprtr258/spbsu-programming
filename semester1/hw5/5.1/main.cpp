@@ -31,7 +31,7 @@ string add(string a, string b) {
 void printBinary(const long long &x) {
     long long unsigned bit = 0x8000000000000000;
     for (int i = 0; i < 64; i++) {
-        printf(x & bit ? "1" : "0");
+        printf((x & bit) ? "1" : "0");
         bit >>= 1;
     }
     printf("\n");
@@ -45,7 +45,7 @@ string operator*(const string &x, const int &n) {
 }
 
 void parse(double &y, bool &sign, long long &exponent, string &mantissa, int &zeroes) {
-    long long *xPointer = (long long*)(&y);
+    long long *xPointer = reinterpret_cast<long long*>(&y);
     long long x = *xPointer;
 //    printf("x(%I64X):\n", x);
 //    printBinary(x);
