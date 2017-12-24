@@ -29,6 +29,6 @@ Frequency table:
 'c'(ASCII code: 63): frequency:   5, code: 111111, P(c) = 0.022522523
 Entropy: 4.33568045047010208748
 Expected code length: 4.38288288288288274686
-Length of text: 1776
-Length of encoded text: 973
+Length of text(in bytes): 222
+Length of encoded text(in bytes): 121
 Compression coeff.: 1.82528263103802679268

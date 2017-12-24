@@ -42,8 +42,10 @@ FrequencyTable* createFreqTable(const char *str) {
     return ftable;
 }
 
-void erase(FrequencyTable *ftable) {
+void deleteFreqTable(FrequencyTable *&ftable) {
+    if (ftable == nullptr)
+        return;
     delete[] ftable->data;
-    ftable->data = nullptr;
-    ftable->size = 0;
+    delete ftable;
+    ftable = nullptr;
 }

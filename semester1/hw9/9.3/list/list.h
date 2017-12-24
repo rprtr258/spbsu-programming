@@ -13,6 +13,8 @@ LinkedList* createList();
 void eraseList(LinkedList *list);
 void deleteList(LinkedList *&list);
 
+bool isEmpty(LinkedList *list);
+
 void insertAtEnd(LinkedList *list, HuffmanNode *value);
 void insertAtBegin(LinkedList *list, HuffmanNode *value);
 void insertAtIndex(LinkedList *list, HuffmanNode *value, int const index);

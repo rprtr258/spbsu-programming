@@ -6,6 +6,7 @@ HuffmanNode* createHuffmanNode(HuffmanNode *leftChild, HuffmanNode *rightChild) 
     HuffmanNode *result = new HuffmanNode();
     result->l = copy(leftChild);
     result->r = copy(rightChild);
+    result->frequency = leftChild->frequency + rightChild->frequency;
     return result;
 }
 
@@ -14,14 +15,6 @@ HuffmanNode* createHuffmanNode(char const symbol, int const frequency) {
     result->symbol = symbol;
     result->frequency = frequency;
     return result;
-}
-
-void deleteHuffmanNode(HuffmanNode *node) {
-    if (node == nullptr)
-        return;
-    deleteHuffmanNode(node->l);
-    deleteHuffmanNode(node->r);
-    delete node;
 }
 
 HuffmanNode* copy(HuffmanNode *node) {
@@ -35,6 +28,29 @@ HuffmanNode* copy(HuffmanNode *node) {
     result->frequency = node->frequency;
     
     return result;
+}
+
+void deleteHuffmanNode(HuffmanNode *&node) {
+    if (node == nullptr)
+        return;
+    deleteHuffmanNode(node->l);
+    deleteHuffmanNode(node->r);
+    delete node;
+}
+
+char decodeChar(HuffmanNode *root, FILE *file, char const firstBit) {
+    HuffmanNode *temp = root;
+    char bit = firstBit;
+    while (!isLeaf(temp)) {
+        if (bit == '0')
+            temp = temp->l;
+        else
+            temp = temp->r;
+        if (isLeaf(temp))
+            break;
+        fscanf(file, "%c", &bit);
+    }
+    return temp->symbol;
 }
 
 bool isLeaf(HuffmanNode *node) {

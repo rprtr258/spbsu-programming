@@ -4,6 +4,7 @@
 #include "huffman.h"
 #include "huffmanNode.h"
 #include "freqtable.h"
+#include "putChar.h"
 
 int const alphabet = 256;
 char const separator = '\7';
@@ -32,9 +33,10 @@ HuffmanNode* getRarestNode(LinkedList *firstQueue, LinkedList *secondQueue) {
 void proccessRarest(LinkedList *firstQueue, LinkedList *secondQueue) {
     HuffmanNode *first = getRarestNode(firstQueue, secondQueue);
     HuffmanNode *second = getRarestNode(firstQueue, secondQueue);
+    
     HuffmanNode *parent = createHuffmanNode(first, second);
-    parent->frequency = first->frequency + second->frequency;
     insertAtEnd(secondQueue, parent);
+    
     deleteHuffmanNode(parent);
     deleteHuffmanNode(first);
     deleteHuffmanNode(second);
@@ -57,8 +59,7 @@ HuffmanNode* buildTree(char const *str) {
     
     HuffmanNode *result = peekBegin(secondQueue);
     
-    erase(ftable);
-    delete ftable;
+    deleteFreqTable(ftable);
     deleteList(firstQueue);
     deleteList(secondQueue);
     return result;
@@ -71,64 +72,61 @@ HuffmanTree* createTree(const char *str) {
 }
 
 void proccesSymbol(LinkedList *stack, char const symbol) {
-    HuffmanNode *node = new HuffmanNode();
-    switch (symbol) {
-        case separator: {
-            HuffmanNode *rightChild = popBegin(stack);
-            HuffmanNode *leftChild = popBegin(stack);
-            
-            node->l = copy(leftChild);
-            node->r = copy(rightChild);
-            
-            deleteHuffmanNode(leftChild);
-            deleteHuffmanNode(rightChild);
-            break;
-        }
-        default: {
-            node->symbol = (symbol == '\0' ? '\n' : symbol);
-            break;
-        }
+    HuffmanNode *node = nullptr;
+    if (symbol == separator) {
+        HuffmanNode *rightChild = popBegin(stack);
+        HuffmanNode *leftChild = popBegin(stack);
+
+        node = createHuffmanNode(leftChild, rightChild);
+
+        deleteHuffmanNode(leftChild);
+        deleteHuffmanNode(rightChild);
+    } else {
+        node = createHuffmanNode(symbol == '\0' ? '\n' : symbol);
     }
     insertAtBegin(stack, node);
-    delete node;
+    deleteHuffmanNode(node);
 }
 
 HuffmanTree* readTree(const char *filename) {
-    char symbol = '\0';
     LinkedList *tempStack = createList();
     FILE *file = fopen(filename, "r");
-    while (symbol != '\n') {
-        fscanf(file, "%c", &symbol);
-        if (symbol == '\n')
-            break;
-        
-        proccesSymbol(tempStack, symbol);
-    }
     
-    fclose(file);
+    char symbol = '\0';
+    fscanf(file, "%c", &symbol);
+    while (symbol != '\n') {
+        proccesSymbol(tempStack, symbol);
+        fscanf(file, "%c", &symbol);
+    }
     
     HuffmanTree *result = new HuffmanTree();
     result->root = peekBegin(tempStack);
     
     deleteList(tempStack);
-    
+    fclose(file);
     return result;
 }
 
-int writeCodes(HuffmanNode *node, char **codes, char *buffer, int const level = 0) {
+void deleteTree(HuffmanTree *&tree) {
+    if (tree == nullptr)
+        return;
+    deleteHuffmanNode(tree->root);
+    delete tree;
+    tree = nullptr;
+}
+
+void writeCodes(HuffmanNode *node, char **codes, char *buffer, int const level = 0) {
     if (isLeaf(node)) {
-        codes[(int)node->symbol] = new char[level + 1];
-        memcpy(codes[(int)node->symbol], buffer, level);
-        codes[(int)node->symbol][level] = '\0';
-        
-        return node->frequency * level;
+        int unsigned const symbolCode = (int)node->symbol;
+        codes[symbolCode] = new char[level + 1];
+        memcpy(codes[symbolCode], buffer, level * sizeof(char));
+        codes[symbolCode][level] = '\0';
+        return;
     }
-    int result = 0;
     buffer[level] = '0';
-    result += writeCodes(node->l, codes, buffer, level + 1);
+    writeCodes(node->l, codes, buffer, level + 1);
     buffer[level] = '1';
-    result += writeCodes(node->r, codes, buffer, level + 1);
-    return result;
+    writeCodes(node->r, codes, buffer, level + 1);
 }
 
 char* encode(HuffmanTree *tree, const char *str) {
@@ -136,47 +134,25 @@ char* encode(HuffmanTree *tree, const char *str) {
     for (int i = 0; i < alphabet; i++)
         codes[i] = nullptr;
     
-    char buffer[1000];
-    int resultLength = writeCodes(tree->root, codes, buffer);
+    char buffer[alphabet];
+    writeCodes(tree->root, codes, buffer);
     
     int strLength = strlen(str);
+    int resultLength = getCodeLength(tree->root);
     char *result = new char[resultLength + 1];
     int j = 0;
     for (int i = 0; i < strLength; i++) {
-        int codeLength = strlen(codes[(int)str[i]]);
-        memcpy(result + j, codes[(int)str[i]], codeLength);
+        int unsigned const symbolCode = (int)str[i];
+        int codeLength = strlen(codes[symbolCode]);
+        memcpy(result + j, codes[symbolCode], codeLength * sizeof(char));
         j += codeLength;
     }
     result[resultLength] = '\0';
     
     for (int i = 0; i < alphabet; i++)
-        delete[] codes[i];
+        if (codes[i] != nullptr)
+            delete[] codes[i];
     return result;
-}
-
-char decodeChar(HuffmanTree *tree, FILE *file, char const firstBit) {
-    HuffmanNode *temp = tree->root;
-    char bit = firstBit;
-    while (!isLeaf(temp)) {
-        if (bit == '0')
-            temp = temp->l;
-        else
-            temp = temp->r;
-        if (isLeaf(temp))
-            break;
-        fscanf(file, "%c", &bit);
-    }
-    return temp->symbol;
-}
-
-void putChar(char *&string, int &length, char const symbol) {
-    char *newString = new char[length + 2];
-    strncpy(newString, string, sizeof(char) * (length + 2));
-    newString[length] = symbol;
-    newString[length + 1] = '\0';
-    length++;
-    delete[] string;
-    string = newString;
 }
 
 char* decodeFile(HuffmanTree *tree, const char *fileInput) {
@@ -187,25 +163,22 @@ char* decodeFile(HuffmanTree *tree, const char *fileInput) {
         fscanf(file, "%c", &symbol);
     
     char *result = new char[1];
-    int length = 0;
     result[0] = '\0';
+    fscanf(file, "%c", &symbol);
     while (!feof(file)) {
-        fscanf(file, "%c", &symbol);
-        if (feof(file))
-            break;
+        char newSymbol = decodeChar(tree->root, file, symbol);
+        putChar(result, newSymbol);
         
-        char newSymbol = decodeChar(tree, file, symbol);
-        putChar(result, length, newSymbol);
+        fscanf(file, "%c", &symbol);
     }
     
     fclose(file);
-    
     return result;
 }
 
 void saveHuffmanNode(HuffmanNode *node, FILE *file) {
     if (isLeaf(node)) {
-        // WARNING \n encoded as \0 so there is only one line for tree
+        // WARNING: \n encoded as \0 so there is only one line for tree
         fprintf(file, "%c", (node->symbol == '\n' ? '\0' : node->symbol));
     } else {
         saveHuffmanNode(node->l, file);
@@ -220,7 +193,7 @@ void saveTree(HuffmanTree *tree, FILE *file) {
 }
 
 void saveInfo(HuffmanTree *tree, FILE *file, int const textLength) {
-    char *buffer = new char[getHeight(tree->root)];
+    char *buffer = new char[alphabet];
     double entropy = getEntropy(tree->root, textLength);
     fprintf(file, "Frequency table:\n");
     int codeLength = getCodeLength(tree->root);
@@ -228,14 +201,9 @@ void saveInfo(HuffmanTree *tree, FILE *file, int const textLength) {
     
     fprintf(file, "Entropy: %.20f\n", entropy);
     fprintf(file, "Expected code length: %.20f\n", (double)codeLength / textLength);
-    fprintf(file, "Length of text: %d\n", textLength * 8);
-    fprintf(file, "Length of encoded text: %d\n", codeLength);
-    fprintf(file, "Compression coeff.: %.20f\n", (8.0 * textLength) / codeLength);
+    fprintf(file, "Length of text(in bytes): %d\n", textLength);
+    fprintf(file, "Length of encoded text(in bytes): %d\n", codeLength / 8);
+    fprintf(file, "Compression coeff.: %.20f\n", textLength / (codeLength / 8.0));
     
     delete[] buffer;
-}
-
-void erase(HuffmanTree *tree) {
-    deleteHuffmanNode(tree->root);
-    tree->root = nullptr;
 }

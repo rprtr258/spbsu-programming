@@ -28,7 +28,7 @@ void deleteSingleListNode(ListNode *node) {
         return;
     
     if (node->value != nullptr)
-        delete node->value;
+        deleteHuffmanNode(node->value);
     delete node;
 }
 
@@ -61,13 +61,17 @@ void eraseList(LinkedList *list) {
     list->size = 0;
 }
 
+bool isEmpty(LinkedList *list) {
+    return (list == nullptr || list->size == 0);
+}
+
 void insertAtEnd(LinkedList *list, HuffmanNode *value) {
     if (list == nullptr)
         return;
     
     ListNode *node = new ListNode();
     node->value = copy(value);
-    if (list->head == nullptr) {
+    if (isEmpty(list)) {
         list->head = node;
         list->tail = node;
     } else {
@@ -84,7 +88,7 @@ void insertAtBegin(LinkedList *list, HuffmanNode *value) {
     
     ListNode *node = new ListNode();
     node->value = copy(value);
-    if (list->head == nullptr) {
+    if (isEmpty(list)) {
         list->head = node;
         list->tail = node;
     } else {
@@ -102,13 +106,13 @@ void insertAtIndex(LinkedList *list, HuffmanNode *value, int const index) {
     if (index < 0 || index > list->size)
         return;
     
-    if (index == list->size) {
-        insertAtEnd(list, value);
+    if (index == 0) {
+        insertAtBegin(list, value);
         return;
     }
     
-    if (index == 0) {
-        insertAtBegin(list, value);
+    if (index == list->size) {
+        insertAtEnd(list, value);
         return;
     }
     
@@ -117,27 +121,36 @@ void insertAtIndex(LinkedList *list, HuffmanNode *value, int const index) {
     
     ListNode *temp = getListListNode(list, index);
 
-    temp->prev->next = node;
     node->prev = temp->prev;
     node->next = temp;
+    temp->prev->next = node;
     temp->prev = node;
     
     list->size++;
 }
 
 HuffmanNode* popBegin(LinkedList *list) {
+    if (list == nullptr || list->size == 0)
+        return nullptr;
+    
     HuffmanNode *result = peekBegin(list);
     deleteBegin(list);
     return result;
 }
 
 HuffmanNode* popEnd(LinkedList *list) {
+    if (list == nullptr || list->size == 0)
+        return nullptr;
+    
     HuffmanNode *result = peekEnd(list);
     deleteEnd(list);
     return result;
 }
 
 HuffmanNode* popIndex(LinkedList *list, int const index) {
+    if (list == nullptr || list->size == 0)
+        return nullptr;
+    
     HuffmanNode *result = peekIndex(list, index);
     deleteIndex(list, index);
     return result;

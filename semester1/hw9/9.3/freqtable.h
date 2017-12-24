@@ -11,4 +11,4 @@ struct FrequencyTable {
 
 FrequencyTable* createFreqTable(const char *str);
 
-void erase(FrequencyTable *ftable);
+void deleteFreqTable(FrequencyTable *&ftable);

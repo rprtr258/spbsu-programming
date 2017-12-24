@@ -2,22 +2,19 @@
 #include <string.h>
 #include "filesencode.h"
 #include "huffman.h"
+#include "putChar.h"
 
 char* readFile(const char *filename) {
     FILE *file = fopen(filename, "r");
-    char buffer[10000];
+    char *result = new char[1];
+    result[0] = '\0';
+    
     char symbol = '\0';
-    int i = 0;
+    fscanf(file, "%c", &symbol);
     while (!feof(file)) {
+        putChar(result, symbol);
         fscanf(file, "%c", &symbol);
-        if (feof(file))
-            continue;
-        buffer[i] = symbol;
-        i++;
     }
-    buffer[i] = '\0';
-    char *result = new char[i + 1];
-    strcpy(result, buffer);
     
     fclose(file);
     return result;
@@ -40,8 +37,7 @@ int encodeFile(const char *fileInput, const char *fileOutput, const char *fileIn
     fclose(infoFile);
     delete[] codeString;
     delete[] str;
-    erase(tree);
-    delete tree;
+    deleteTree(tree);
     return 0;
 }
 
@@ -52,8 +48,7 @@ int decodeFile(const char *fileInput, const char *fileOutput) {
     FILE *fileOut = fopen(fileOutput, "w");
     fprintf(fileOut, "%s", text);
     
-    erase(tree);
-    delete tree;
+    deleteTree(tree);
     delete[] text;
     fclose(fileOut);
     return 0;
