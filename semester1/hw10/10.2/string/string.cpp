@@ -123,6 +123,8 @@ LinkedList* findOccurences(String* text, String* pattern) {
 bool areEqual(String *str1, String *str2) {
     if (isEmptyString(str1) && isEmptyString(str2))
         return true;
+    if (isEmptyString(str1) || isEmptyString(str2))
+        return false;
     
     return (strcmp(str1->data, str2->data) == 0);
 }
