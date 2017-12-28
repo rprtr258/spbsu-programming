@@ -71,7 +71,13 @@ void sortByStrings(EntryList *entryList) {
         for (int j = 0; j < i; j++) {
             if (strcmp(entryList->data[i]->string, entryList->data[j]->string) < 0) {
                 std::swap(entryList->data[i], entryList->data[j]);
-            } else if (strcmp(entryList->data[i]->string, entryList->data[j]->string) == 0 &&
+            }
+        }
+    }
+    // stabilizing indexes
+    for (int i = 0; i < entryList->size; i++) {
+        for (int j = 0; j < i; j++) {
+            if (strcmp(entryList->data[i]->string, entryList->data[j]->string) == 0 &&
                        entryList->data[i]->index < entryList->data[j]->index) {
                 std::swap(entryList->data[i], entryList->data[j]);
             }
