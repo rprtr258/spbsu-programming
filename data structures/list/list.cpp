@@ -7,7 +7,7 @@ struct Node {
     Node *next = nullptr;
 };
 
-Node* getListNode(LinkedList *list, int const index) {
+Node* getListNode(IntLinkedList *list, int const index) {
     if (index < 0 || index >= list->size)
         return nullptr;
     
@@ -17,8 +17,8 @@ Node* getListNode(LinkedList *list, int const index) {
     return result;
 }
 
-LinkedList* createList() {
-    LinkedList *result = new LinkedList();
+IntLinkedList* intListCreate() {
+    IntLinkedList *result = new IntLinkedList();
     return result;
 }
 
@@ -31,7 +31,7 @@ void deleteNode(Node *node) {
     delete node;
 }
 
-void deleteList(LinkedList *&list) {
+void intListDelete(IntLinkedList *&list) {
     if (list == nullptr)
         return;
     
@@ -40,7 +40,7 @@ void deleteList(LinkedList *&list) {
     list = nullptr;
 }
 
-void eraseList(LinkedList *list) {
+void intListErase(IntLinkedList *list) {
     if (list == nullptr)
         return;
     
@@ -50,7 +50,7 @@ void eraseList(LinkedList *list) {
     list->size = 0;
 }
 
-void insertAtEnd(LinkedList *list, int const value) {
+void intListInsertAtEnd(IntLinkedList *list, int const value) {
     if (list == nullptr)
         return;
     
@@ -67,7 +67,7 @@ void insertAtEnd(LinkedList *list, int const value) {
     list->size++;
 }
 
-void insertAtBegin(LinkedList *list, int const value) {
+void intListInsertAtBegin(IntLinkedList *list, int const value) {
     if (list == nullptr)
         return;
     
@@ -84,7 +84,7 @@ void insertAtBegin(LinkedList *list, int const value) {
     list->size++;
 }
 
-void insertAtIndex(LinkedList *list, int const value, int const index) {
+void intListInsertAtIndex(IntLinkedList *list, int const value, int const index) {
     if (list == nullptr)
         return;
     
@@ -92,12 +92,12 @@ void insertAtIndex(LinkedList *list, int const value, int const index) {
         return;
     
     if (index == list->size) {
-        insertAtEnd(list, value);
+        intListInsertAtEnd(list, value);
         return;
     }
     
     if (index == 0) {
-        insertAtBegin(list, value);
+        intListInsertAtBegin(list, value);
         return;
     }
     
@@ -114,21 +114,21 @@ void insertAtIndex(LinkedList *list, int const value, int const index) {
     list->size++;
 }
 
-int peekBegin(LinkedList *list) {
+int intListPeekBegin(IntLinkedList *list) {
     if (list == nullptr || list->size == 0)
         return -1;
     
     return list->head->value;
 }
 
-int peekEnd(LinkedList *list) {
+int intListPeekEnd(IntLinkedList *list) {
     if (list == nullptr || list->size == 0)
         return -1;
     
     return list->tail->value;
 }
 
-int peekIndex(LinkedList *list, int const index) {
+int intListPeekIndex(IntLinkedList *list, int const index) {
     if (list == nullptr || list->size == 0)
         return -1;
     
@@ -140,7 +140,7 @@ int peekIndex(LinkedList *list, int const index) {
     return temp->value;
 }
 
-void deleteBegin(LinkedList *list) {
+void intListDeleteBegin(IntLinkedList *list) {
     if (list == nullptr || list->size == 0)
         return;
     
@@ -157,7 +157,7 @@ void deleteBegin(LinkedList *list) {
     list->size--;
 }
 
-void deleteEnd(LinkedList *list) {
+void intListDeleteEnd(IntLinkedList *list) {
     if (list == nullptr || list->size == 0)
         return;
     
@@ -174,7 +174,7 @@ void deleteEnd(LinkedList *list) {
     list->size--;
 }
 
-void deleteIndex(LinkedList *list, int const index) {
+void intListDeleteIndex(IntLinkedList *list, int const index) {
     if (list == nullptr || list->size == 0)
         return;
     
@@ -182,12 +182,12 @@ void deleteIndex(LinkedList *list, int const index) {
         return;
     
     if (index == 0) {
-        deleteBegin(list);
+        intListDeleteBegin(list);
         return;
     }
     
     if (index == list->size - 1) {
-        deleteEnd(list);
+        intListDeleteEnd(list);
         return;
     }
     
@@ -199,7 +199,7 @@ void deleteIndex(LinkedList *list, int const index) {
     list->size--;
 }
 
-int findElement(LinkedList *list, int const value) {
+int intListFind(IntLinkedList *list, int const value) {
     if (list == nullptr)
         return -1;
     
@@ -219,7 +219,7 @@ int findElement(LinkedList *list, int const value) {
     return result;
 }
 
-void printList(LinkedList *list) {
+void intListPrint(IntLinkedList *list) {
     if (list == nullptr)
         return;
     
@@ -241,7 +241,7 @@ void printNode(Node *node) {
         printf("%d", node->value);
 }
 
-void printSiblings(LinkedList *list, int const index) {
+void intListPrintSiblings(IntLinkedList *list, int const index) {
     if (list == nullptr)
         return;
     if (index < 0 || index >= list->size)
@@ -254,4 +254,60 @@ void printSiblings(LinkedList *list, int const index) {
     printf("\nnext: ");
     printNode(temp->next);
     printf("\n");
+}
+
+bool testIntLinkedList(bool const printDebug) {
+    bool result = true;
+    
+    IntLinkedList *temp = intListCreate();
+    
+    if (printDebug)
+        printf("Empty list: ");
+    intListPrint(temp);
+    
+    if (printDebug)
+        printf("Insert \'1\' at begin: ");
+    intListInsertAtBegin(temp, 1);
+    intListPrint(temp);
+    
+    if (printDebug)
+        printf("Insert \'3\' at end: ");
+    intListInsertAtEnd(temp, 3);
+    intListPrint(temp);
+    
+    int j = intListFind(temp, 3);
+    if (printDebug)
+        printf("Insert 2 at position %d: ", j);
+    intListInsertAtIndex(temp, 2, j);
+    intListPrint(temp);
+    
+    if (printDebug)
+        printf("Siblings of 1:\n");
+    j = intListFind(temp, 1);
+    intListPrintSiblings(temp, j);
+    intListPrint(temp);
+    
+    result &= (intListPeekBegin(temp) == 1);
+    result &= (intListPeekIndex(temp, 1) == 2);
+    result &= (intListPeekEnd(temp) == 3);
+    
+    if (printDebug)
+        printf("Delete element at index 1: ");
+    intListDeleteIndex(temp, 1);
+    intListPrint(temp);
+    result &= (temp->size == 2);
+    
+    if (printDebug)
+        printf("Delete element at begin: ");
+    intListDeleteBegin(temp);
+    intListPrint(temp);
+    result &= (temp->size == 1);
+    
+    if (printDebug)
+        printf("Delete element at end: ");
+    intListDeleteEnd(temp);
+    intListPrint(temp);
+    result &= (temp->size == 0);
+    
+    return result;
 }

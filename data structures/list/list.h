@@ -2,29 +2,31 @@
 
 struct Node;
 
-struct LinkedList {
+struct IntLinkedList {
     Node *head = nullptr;
     Node *tail = nullptr;
     int size = 0;
 };
 
-LinkedList* createList();
-void eraseList(LinkedList *list);
-void deleteList(LinkedList *&list);
+IntLinkedList* intListCreate();
+void intListErase(IntLinkedList *list);
+void intListDelete(IntLinkedList *&list);
 
-void insertAtEnd(LinkedList *list, int const value);
-void insertAtBegin(LinkedList *list, int const value);
-void insertAtIndex(LinkedList *list, int const value, int const index);
+void intListInsertAtEnd(IntLinkedList *list, int const value);
+void intListInsertAtBegin(IntLinkedList *list, int const value);
+void intListInsertAtIndex(IntLinkedList *list, int const value, int const index);
 
-int peekBegin(LinkedList *list);
-int peekEnd(LinkedList *list);
-int peekIndex(LinkedList *list, int const index);
+int intListPeekBegin(IntLinkedList *list);
+int intListPeekEnd(IntLinkedList *list);
+int intListPeekIndex(IntLinkedList *list, int const index);
 
-void deleteBegin(LinkedList *list);
-void deleteEnd(LinkedList *list);
-void deleteIndex(LinkedList *list, int const index);
+void intListDeleteBegin(IntLinkedList *list);
+void intListDeleteEnd(IntLinkedList *list);
+void intListDeleteIndex(IntLinkedList *list, int const index);
 
-int findElement(LinkedList *list, int const value);
+int intListFind(IntLinkedList *list, int const value);
 
-void printList(LinkedList *list);
-void printSiblings(LinkedList *list, int const index);
+void intListPrint(IntLinkedList *list);
+void intListPrintSiblings(IntLinkedList *list, int const index);
+
+bool testIntLinkedList(bool const printDebug = true);
