@@ -5,16 +5,16 @@
 int main() {
     printf("Program that tests if you can change order of chars in one string to make other.\n");
     
-    char str1[100] = "\0";
+    char str1[101] = "\0";
     int str1Length = 0;
-    char str2[100] = "\0";
+    char str2[101] = "\0";
     int str2Length = 0;
     
     printf("Write first string:\n");
-    scanf("%s", str1);
+    scanf("%100s", str1);
     str1Length = strlen(str1);
     printf("Write second string:\n");
-    scanf("%s", str2);
+    scanf("%100s", str2);
     str2Length = strlen(str2);
     
     std::sort(str1, str1 + str1Length);
