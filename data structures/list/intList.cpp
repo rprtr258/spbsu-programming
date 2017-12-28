@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "list.h"
+#include "intList.h"
 
 struct Node {
     int value = 0;
@@ -261,53 +261,61 @@ bool testIntLinkedList(bool const printDebug) {
     
     IntLinkedList *temp = intListCreate();
     
-    if (printDebug)
+    if (printDebug) {
         printf("Empty list: ");
-    intListPrint(temp);
+        intListPrint(temp);
+    }
     
-    if (printDebug)
-        printf("Insert \'1\' at begin: ");
     intListInsertAtBegin(temp, 1);
-    intListPrint(temp);
+    if (printDebug) {
+        printf("Insert \'1\' at begin: ");
+        intListPrint(temp);
+    }
     
-    if (printDebug)
-        printf("Insert \'3\' at end: ");
     intListInsertAtEnd(temp, 3);
-    intListPrint(temp);
+    if (printDebug) {
+        printf("Insert \'3\' at end: ");
+        intListPrint(temp);
+    }
     
     int j = intListFind(temp, 3);
-    if (printDebug)
-        printf("Insert 2 at position %d: ", j);
     intListInsertAtIndex(temp, 2, j);
-    intListPrint(temp);
+    if (printDebug) {
+        printf("Insert 2 at position %d: ", j);
+        intListPrint(temp);
+    }
     
-    if (printDebug)
-        printf("Siblings of 1:\n");
     j = intListFind(temp, 1);
-    intListPrintSiblings(temp, j);
-    intListPrint(temp);
+    if (printDebug) {
+        printf("Siblings of 1:\n");
+        intListPrintSiblings(temp, j);
+        intListPrint(temp);
+    }
     
     result &= (intListPeekBegin(temp) == 1);
     result &= (intListPeekIndex(temp, 1) == 2);
     result &= (intListPeekEnd(temp) == 3);
     
-    if (printDebug)
-        printf("Delete element at index 1: ");
     intListDeleteIndex(temp, 1);
-    intListPrint(temp);
     result &= (temp->size == 2);
+    if (printDebug) {
+        printf("Delete element at index 1: ");
+        intListPrint(temp);
+    }
     
-    if (printDebug)
-        printf("Delete element at begin: ");
     intListDeleteBegin(temp);
-    intListPrint(temp);
     result &= (temp->size == 1);
+    if (printDebug) {
+        printf("Delete element at begin: ");
+        intListPrint(temp);
+    }
     
-    if (printDebug)
-        printf("Delete element at end: ");
     intListDeleteEnd(temp);
-    intListPrint(temp);
     result &= (temp->size == 0);
+    if (printDebug) {
+        printf("Delete element at end: ");
+        intListPrint(temp);
+    }
     
     return result;
 }
