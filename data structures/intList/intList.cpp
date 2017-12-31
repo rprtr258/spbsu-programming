@@ -22,20 +22,16 @@ IntLinkedList* intListCreate() {
     return result;
 }
 
-void deleteNode(Node *node) {
-    if (node == nullptr)
-        return;
-    
-    if (node->next != nullptr)
-        deleteNode(node->next);
-    delete node;
-}
-
 void intListDelete(IntLinkedList *&list) {
     if (list == nullptr)
         return;
     
-    deleteNode(list->head);
+    Node *tmp = list->head;
+    for (int i = 0; i < list->size; i++) {
+        Node *nextTmp = tmp->next;
+        delete tmp;
+        tmp = nextTmp;
+    }
     delete list;
     list = nullptr;
 }
@@ -44,7 +40,12 @@ void intListErase(IntLinkedList *list) {
     if (list == nullptr)
         return;
     
-    deleteNode(list->head);
+    Node *tmp = list->head;
+    for (int i = 0; i < list->size; i++) {
+        Node *nextTmp = tmp->next;
+        delete tmp;
+        tmp = nextTmp;
+    }
     list->head = nullptr;
     list->tail = nullptr;
     list->size = 0;
