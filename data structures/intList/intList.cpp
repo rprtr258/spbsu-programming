@@ -257,6 +257,40 @@ void intListLeaveUniques(IntLinkedList *list) {
     }
 }
 
+void mergeSort(IntLinkedList *&list) {
+    if (list->size == 1)
+        return;
+    
+    int half = list->size / 2;
+    IntLinkedList *first = intListCreate();
+    IntLinkedList *second = intListCreate();
+    
+    for (int i = 0; i < half; i++) {
+        int value = intListPeekIndex(list, i);
+        intListInsertAtEnd(first, value);
+    }
+    for (int i = half; i < list->size; i++) {
+        int value = intListPeekIndex(list, i);
+        intListInsertAtEnd(second, value);
+    }
+    
+    mergeSort(first);
+    mergeSort(second);
+    intListDelete(list);
+    
+    list = intListMergeSorted(first, second);
+    
+    intListDelete(first);
+    intListDelete(second);
+}
+
+void intListSort(IntLinkedList *&list) {
+    if (list == nullptr || list->size == 0)
+        return;
+    
+    mergeSort(list);
+}
+
 int intListFind(IntLinkedList *list, int const value) {
     if (list == nullptr)
         return -1;

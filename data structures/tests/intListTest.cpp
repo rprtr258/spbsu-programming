@@ -204,6 +204,27 @@ bool testCopy() {
     return result;
 }
 
+bool testMergeSort() {
+    bool result = true;
+    
+    IntLinkedList *temp = intListCreate();
+    intListInsertAtEnd(temp, 2);
+    intListInsertAtEnd(temp, 1);
+    intListInsertAtEnd(temp, 4);
+    intListInsertAtEnd(temp, 3);
+    
+    intListSort(temp);
+    intListPrint(temp);
+    result &= (intListFind(temp, 1) == 0);
+    result &= (intListFind(temp, 2) == 1);
+    result &= (intListFind(temp, 3) == 2);
+    result &= (intListFind(temp, 4) == 3);
+    
+    intListDelete(temp);
+    
+    return result;
+}
+
 int main() {
     if (!testCreationDeletion()) {
         printf("CreationDeletion test failed!\n");
@@ -234,6 +255,9 @@ int main() {
     }
     if (!testMergeSorted()) {
         printf("MergeSorted test failed!\n");
+    }
+    if (!testMergeSort()) {
+        printf("MergeSort test failed!\n");
     }
     return 0;
 }
