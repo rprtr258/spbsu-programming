@@ -214,13 +214,29 @@ bool testMergeSort() {
     intListInsertAtEnd(temp, 3);
     
     intListSort(temp);
-    intListPrint(temp);
     result &= (intListFind(temp, 1) == 0);
     result &= (intListFind(temp, 2) == 1);
     result &= (intListFind(temp, 3) == 2);
     result &= (intListFind(temp, 4) == 3);
     
     intListDelete(temp);
+    
+    return result;
+}
+
+bool testGetArray() {
+    bool result = true;
+    
+    IntLinkedList *temp = intListCreate();
+    intListInsertAtEnd(temp, 0);
+    intListInsertAtEnd(temp, 1);
+    intListInsertAtEnd(temp, 2);
+    intListInsertAtEnd(temp, 3);
+    int *array = intListGetAsArray(temp);
+    for (int i = 0; i < temp->size; i++)
+        result &= (array[i] == i);
+    intListDelete(temp);
+    delete[] array;
     
     return result;
 }
@@ -258,6 +274,9 @@ int main() {
     }
     if (!testMergeSort()) {
         printf("MergeSort test failed!\n");
+    }
+    if (!testGetArray()) {
+        printf("GetArray test failed!\n");
     }
     return 0;
 }

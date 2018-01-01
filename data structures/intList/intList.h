@@ -31,6 +31,7 @@ void intListSort(IntLinkedList *&list);
 
 int intListFind(IntLinkedList *list, int const value);
 bool intListIsSorted(IntLinkedList *list);
+int* intListGetAsArray(IntLinkedList *list);
 
 void intListPrint(IntLinkedList *list);
 void intListPrintSiblings(IntLinkedList *list, int const index);

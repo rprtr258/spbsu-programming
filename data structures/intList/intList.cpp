@@ -326,6 +326,21 @@ bool intListIsSorted(IntLinkedList *list) {
     return result;
 }
 
+int* intListGetAsArray(IntLinkedList *list) {
+    if (list == nullptr)
+        return nullptr;
+    
+    int *result = new int[list->size];
+    int i = 0;
+    Node *node = list->head;
+    while (node != nullptr) {
+        result[i] = node->value;
+        node = node->next;
+        i++;
+    }
+    return result;
+}
+
 void intListPrint(IntLinkedList *list) {
     if (list == nullptr)
         return;
