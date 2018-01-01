@@ -232,6 +232,21 @@ int intListFind(IntLinkedList *list, int const value) {
     return result;
 }
 
+bool intListIsSorted(IntLinkedList *list) {
+    if (list == nullptr)
+        return false;
+    int result = true;
+    for (int i = 0; i + 1 < list->size; i++) {
+        int value = intListPeekIndex(list, i);
+        int nextValue = intListPeekIndex(list, i + 1);
+        if (value > nextValue) {
+            result = false;
+            break;
+        }
+    }
+    return result;
+}
+
 void intListPrint(IntLinkedList *list) {
     if (list == nullptr)
         return;
@@ -311,11 +326,21 @@ bool testIntLinkedList(bool const printDebug) {
         intListPrint(temp);
     }
     
+    bool isSorted1 = intListIsSorted(temp);
+    result &= (!isSorted1);
+    if (printDebug)
+        printf("Is sorted: %s\n", isSorted1 ? "YES" : "NO");
+    
     intListLeaveUniques(temp);
     if (printDebug) {
         printf("Leave uniques:\n");
         intListPrint(temp);
     }
+    
+    bool isSorted2 = intListIsSorted(temp);
+    result &= (isSorted2);
+    if (printDebug)
+        printf("Is sorted: %s\n", isSorted2 ? "YES" : "NO");
     
     intListDeleteIndex(temp, 1);
     if (printDebug) {

@@ -26,6 +26,7 @@ void intListDeleteIndex(IntLinkedList *list, int const index);
 
 void intListLeaveUniques(IntLinkedList *list);
 int intListFind(IntLinkedList *list, int const value);
+bool intListIsSorted(IntLinkedList *list);
 
 void intListPrint(IntLinkedList *list);
 void intListPrintSiblings(IntLinkedList *list, int const index);
