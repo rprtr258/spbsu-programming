@@ -9,6 +9,8 @@ struct IntLinkedList {
 };
 
 IntLinkedList* intListCreate();
+IntLinkedList* intListCopy(IntLinkedList *other);
+IntLinkedList* mergeSorted(IntLinkedList *first, IntLinkedList *second);
 void intListErase(IntLinkedList *list);
 void intListDelete(IntLinkedList *&list);
 
@@ -31,4 +33,3 @@ bool intListIsSorted(IntLinkedList *list);
 void intListPrint(IntLinkedList *list);
 void intListPrintSiblings(IntLinkedList *list, int const index);
 
-bool testIntLinkedList(bool const printDebug = true);
