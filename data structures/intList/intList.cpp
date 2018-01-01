@@ -76,15 +76,6 @@ void deleteNodes(IntLinkedList *list) {
     }
 }
 
-void intListDelete(IntLinkedList *&list) {
-    if (list == nullptr)
-        return;
-    
-    deleteNodes(list);
-    delete list;
-    list = nullptr;
-}
-
 void intListErase(IntLinkedList *list) {
     if (list == nullptr)
         return;
@@ -93,6 +84,15 @@ void intListErase(IntLinkedList *list) {
     list->head = nullptr;
     list->tail = nullptr;
     list->size = 0;
+}
+
+void intListDelete(IntLinkedList *&list) {
+    if (list == nullptr)
+        return;
+    
+    intListErase(list);
+    delete list;
+    list = nullptr;
 }
 
 void intListInsertAtEnd(IntLinkedList *list, int const value) {
