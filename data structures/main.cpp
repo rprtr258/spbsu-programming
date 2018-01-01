@@ -7,17 +7,6 @@
  */
 bool runTests(bool const printDebug = false) {
     printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
-    printf("IntLinkedList tests have started\n");
-    printf("===============================\n");
-    if (!testIntLinkedList(printDebug)) {
-        printf("\nIntLinkedList tests failed\n");
-        return false;
-    }
-    printf("===============================\n");
-    printf("IntLinkedList tests have passed\n");
-    printf("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n");
-    
-    printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
     printf("String tests have started\n");
     printf("===============================\n");
     if (!testString(printDebug)) {
