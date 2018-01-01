@@ -56,6 +56,7 @@ bool testPop() {
 }
 
 int main() {
+    printf("Something\n");
     if (!testCreationDeletion()) {
         printf("CreationDeletion test failed!\n");
     }

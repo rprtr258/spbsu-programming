@@ -49,6 +49,7 @@ bool testTwo() {
 }
 
 int main() {
+    printf("Something\n");
     if (!testOne()) {
         printf("One test failed\n");
     }

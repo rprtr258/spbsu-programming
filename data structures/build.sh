@@ -1,6 +1,9 @@
 #!/bin/bash
-echo "Building program"
+printf "Building program\n"
 make
-echo "Launching a.exe"
+printf "Launching a.exe\n"
 ./a
 rm a
+
+exit 0
+
