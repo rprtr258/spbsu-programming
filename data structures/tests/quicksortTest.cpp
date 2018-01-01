@@ -30,10 +30,20 @@ bool testSort2() {
 bool testOne() {
     bool result = true;
     
-    int array[1] = {4};
+    int array[] = {4};
     quickSort(array, 1);
-    for (int unsigned i = 0; i < 1; i++)
-        result &= (array[i] == (int)i + 1);
+    result &= (array[0] == 4);
+    
+    return result;
+}
+
+bool testTwo() {
+    bool result = true;
+    
+    int array[2] = {1, 0};
+    quickSort(array, 2);
+    for (int unsigned i = 0; i < 2; i++)
+        result &= (array[i] == (int)i);
     
     return result;
 }
@@ -42,10 +52,14 @@ int main() {
     if (!testOne()) {
         printf("One test failed\n");
     }
+    if (!testTwo()) {
+        printf("Two test failed\n");
+    }
     if (!testSort()) {
         printf("Sort test failed\n");
     }
     if (!testSort2()) {
         printf("Sort2 test failed\n");
     }
+    return 0;
 }

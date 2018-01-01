@@ -1,20 +1,20 @@
 #include <utility>
 #include "quicksort.h"
 
-void quickSort(int *array, int unsigned const left, int unsigned const right) {
+void quickSort(int *array, int const left, int const right) {
     if (right <= left)
         return;
     
     const int midVal = array[left];
-    int unsigned i = left;
-    int unsigned j = right;
+    int i = left;
+    int j = right;
     while (i < j) {
         while (i < right && array[i] < midVal)
             i++;
         while (j > left && array[j] >= midVal)
             j--;
         
-        if (i < j) {
+        if (i <= j) {
             std::swap(array[i], array[j]);
             i++;
             j--;
