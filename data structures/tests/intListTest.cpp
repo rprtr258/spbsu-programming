@@ -207,43 +207,33 @@ bool testCopy() {
 int main() {
     if (!testCreationDeletion()) {
         printf("CreationDeletion test failed!\n");
-        return 0;
     }
     if (!testInsertAtBegin()) {
         printf("InsertAtBegin test failed!\n");
-        return 0;
     }
     if (!testInsertAtIndex()) {
         printf("InsertAtIndex test failed!\n");
-        return 0;
     }
     if (!testInsertAtEnd()) {
         printf("InsertAtEnd test failed!\n");
-        return 0;
     }
     if (!testCreationEraseDeletion()) {
         printf("CreationEraseDeletion test failed!\n");
-        return 0;
     }
     if (!testPrint()) {
         printf("Print test failed!\n");
-        return 0;
     }
     if (!testFind()) {
         printf("Find test failed!\n");
-        return 0;
     }
     if (!testIsSorted()) {
         printf("IsSorted test failed!\n");
-        return 0;
     }
     if (!testCopy()) {
         printf("Copy test failed!\n");
-        return 0;
     }
     if (!testMergeSorted()) {
         printf("MergeSorted test failed!\n");
-        return 0;
     }
     return 0;
 }
