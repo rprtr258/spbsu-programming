@@ -34,10 +34,10 @@ IntLinkedList* intListCopy(IntLinkedList *other) {
     return result;
 }
 
-IntLinkedList* mergeSorted(IntLinkedList *first, IntLinkedList *second) {
+IntLinkedList* intListMergeSorted(IntLinkedList *first, IntLinkedList *second) {
     if (first == nullptr || second == nullptr)
         return nullptr;
-    if (!intListIsSorted(first) || intListIsSorted(second))
+    if (!intListIsSorted(first) || !intListIsSorted(second))
         return nullptr;
     
     IntLinkedList *result = intListCreate();

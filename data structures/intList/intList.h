@@ -10,7 +10,7 @@ struct IntLinkedList {
 
 IntLinkedList* intListCreate();
 IntLinkedList* intListCopy(IntLinkedList *other);
-IntLinkedList* mergeSorted(IntLinkedList *first, IntLinkedList *second);
+IntLinkedList* intListMergeSorted(IntLinkedList *first, IntLinkedList *second);
 void intListErase(IntLinkedList *list);
 void intListDelete(IntLinkedList *&list);
 

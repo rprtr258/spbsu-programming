@@ -117,7 +117,6 @@ bool testFind() {
     intListInsertAtEnd(temp, 1);
     intListInsertAtEnd(temp, 2);
     intListInsertAtEnd(temp, 3);
-    intListPrint(temp);
     result &= (intListFind(temp, 1) == 0);
     result &= (intListFind(temp, 2) == 1);
     result &= (intListFind(temp, 3) == 2);
@@ -161,6 +160,50 @@ bool testIsSorted() {
     return result;
 }
 
+bool testMergeSorted() {
+    bool result = true;
+    
+    IntLinkedList *temp1 = intListCreate(); // [1, 3, 5, 7]
+    intListInsertAtEnd(temp1, 1);
+    intListInsertAtEnd(temp1, 3);
+    intListInsertAtEnd(temp1, 5);
+    intListInsertAtEnd(temp1, 7);
+    
+    IntLinkedList *temp2 = intListCreate(); // [2, 4, 6]
+    intListInsertAtEnd(temp2, 2);
+    intListInsertAtEnd(temp2, 4);
+    intListInsertAtEnd(temp2, 6);
+    
+    IntLinkedList *merged = intListMergeSorted(temp1, temp2);
+    result &= intListIsSorted(merged);
+    result &= (merged->size == temp1->size + temp2->size);
+    
+    intListDelete(temp1);
+    intListDelete(temp2);
+    intListDelete(merged);
+    
+    return result;
+}
+
+bool testCopy() {
+    bool result = true;
+    
+    IntLinkedList *temp1 = intListCreate();
+    intListInsertAtEnd(temp1, 1);
+    intListInsertAtEnd(temp1, 2);
+    intListInsertAtEnd(temp1, 3);
+    
+    IntLinkedList *temp2 = intListCopy(temp1);
+    result &= (intListFind(temp2, 1) == 0);
+    result &= (intListFind(temp2, 2) == 1);
+    result &= (intListFind(temp2, 3) == 2);
+    
+    intListDelete(temp1);
+    intListDelete(temp2);
+    
+    return result;
+}
+
 int main() {
     if (!testCreationDeletion()) {
         printf("CreationDeletion test failed!\n");
@@ -192,6 +235,14 @@ int main() {
     }
     if (!testIsSorted()) {
         printf("IsSorted test failed!\n");
+        return 0;
+    }
+    if (!testCopy()) {
+        printf("Copy test failed!\n");
+        return 0;
+    }
+    if (!testMergeSorted()) {
+        printf("MergeSorted test failed!\n");
         return 0;
     }
     return 0;
