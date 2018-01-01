@@ -199,6 +199,19 @@ void intListDeleteIndex(IntLinkedList *list, int const index) {
     list->size--;
 }
 
+void intListLeaveUniques(IntLinkedList *list) {
+    if (list == nullptr)
+        return;
+    for (int i = 0; i < list->size; i++) {
+        int value = intListPeekIndex(list, i);
+        int prev = intListFind(list, value);
+        if (prev != -1 && prev < i) {
+            intListDeleteIndex(list, i);
+            i--;
+        }
+    }
+}
+
 int intListFind(IntLinkedList *list, int const value) {
     if (list == nullptr)
         return -1;
@@ -285,6 +298,12 @@ bool testIntLinkedList(bool const printDebug) {
         intListPrint(temp);
     }
     
+    result &= (intListPeekBegin(temp) == 1);
+    result &= (intListPeekIndex(temp, 1) == 2);
+    result &= (intListPeekEnd(temp) == 3);
+    
+    intListInsertAtEnd(temp, 1);
+    
     j = intListFind(temp, 1);
     if (printDebug) {
         printf("Siblings of 1:\n");
@@ -292,30 +311,33 @@ bool testIntLinkedList(bool const printDebug) {
         intListPrint(temp);
     }
     
-    result &= (intListPeekBegin(temp) == 1);
-    result &= (intListPeekIndex(temp, 1) == 2);
-    result &= (intListPeekEnd(temp) == 3);
+    intListLeaveUniques(temp);
+    if (printDebug) {
+        printf("Leave uniques:\n");
+        intListPrint(temp);
+    }
     
     intListDeleteIndex(temp, 1);
-    result &= (temp->size == 2);
     if (printDebug) {
         printf("Delete element at index 1: ");
         intListPrint(temp);
     }
     
     intListDeleteBegin(temp);
-    result &= (temp->size == 1);
     if (printDebug) {
         printf("Delete element at begin: ");
         intListPrint(temp);
     }
     
     intListDeleteEnd(temp);
-    result &= (temp->size == 0);
     if (printDebug) {
         printf("Delete element at end: ");
         intListPrint(temp);
     }
     
+    intListErase(temp);
+    result &= (temp->size == 0);
+    
+    intListDelete(temp);
     return result;
 }

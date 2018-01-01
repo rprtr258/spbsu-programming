@@ -24,6 +24,7 @@ void intListDeleteBegin(IntLinkedList *list);
 void intListDeleteEnd(IntLinkedList *list);
 void intListDeleteIndex(IntLinkedList *list, int const index);
 
+void intListLeaveUniques(IntLinkedList *list);
 int intListFind(IntLinkedList *list, int const value);
 
 void intListPrint(IntLinkedList *list);
