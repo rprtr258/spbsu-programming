@@ -51,5 +51,18 @@ printf "Quicksort tests have passed\n"
 printf "Exit code: %d\n" $CODE
 printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
 
+printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+printf "String tests have started\n"
+printf "===============================\n"
+g++ -std=c++11 -Wall -O0 tests/stringTest.cpp string/string.cpp -o "s_test"
+./s_test
+CODE="$?"
+sleep 1
+rm s_test
+printf "===============================\n"
+printf "String tests have passed\n"
+printf "Exit code: %d\n" $CODE
+printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
+
 exit 0
 
