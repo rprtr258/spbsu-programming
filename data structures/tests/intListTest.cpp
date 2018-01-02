@@ -233,8 +233,8 @@ bool testGetArray() {
     intListInsertAtEnd(temp, 2);
     intListInsertAtEnd(temp, 3);
     int *array = intListGetAsArray(temp);
-    for (int i = 0; i < temp->size; i++)
-        result &= (array[i] == i);
+    for (int unsigned i = 0; i < temp->size; i++)
+        result &= (array[i] == (int)i);
     intListDelete(temp);
     delete[] array;
     

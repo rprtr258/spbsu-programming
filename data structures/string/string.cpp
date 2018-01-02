@@ -3,26 +3,42 @@
 #include "string.h"
 
 String* stringCreate() {
-    String *newString = new String();
-    return newString;
+    return stringCreate("");
 }
 
 String* stringCreate(const char *string) {
     if (string == nullptr)
         return nullptr;
     
-    String *newString = new String();
+    String *result = new String();
 
-    newString->size = strlen(string);
-    newString->data = new char[newString->size + 1];
-    strcpy(newString->data, string);
+    result->size = strlen(string);
+    result->data = new char[result->size + 1];
+    strcpy(result->data, string);
 
-    return newString;
+    return result;
+}
+
+String* stringCopy(String *string) {
+    if (string == nullptr || string->data == nullptr)
+        return nullptr;
+    
+    String *result = stringCreate(string->data);
+    return result;
+}
+
+void stringErase(String *&string) {
+    if (string == nullptr)
+        return;
+    
+    stringDelete(string);
+    string = stringCreate();
 }
 
 void stringDelete(String *&string) {
     if (string == nullptr)
         return;
+    
     if (string->data != nullptr) {
         delete[] string->data;
     }
@@ -31,28 +47,35 @@ void stringDelete(String *&string) {
 }
 
 bool stringAreEqual(String *str1, String *str2) {
-    if (stringIsEmpty(str1) && stringIsEmpty(str2))
-        return true;
+    if (str1 == nullptr || str2 == nullptr)
+        return false;
     
     return (strcmp(str1->data, str2->data) == 0);
 }
 
+bool stringIsLess(String *str1, String *str2) {
+    if (str1 == nullptr || str2 == nullptr)
+        return false;
+    
+    return (strcmp(str1->data, str2->data) < 0);
+}
+
+int stringLength(String *string) {
+    return (string == nullptr ? -1 : string->size);
+}
+
 bool stringIsEmpty(String *string) {
-    return (string == nullptr || lengthString(string) == 0);
+    return (stringLength(string) == 0);
 }
 
 String* stringConcate(String *str1, String *str2) {
-    if (stringIsEmpty(str1) && stringIsEmpty(str2))
+    if (str1 == nullptr || str2 == nullptr)
         return nullptr;
-    if (stringIsEmpty(str1))
-        return stringCopy(str2);
-    if (stringIsEmpty(str2))
-        return stringCopy(str1);
 
-    char *newData = new char[lengthString(str1) + lengthString(str2) + 1];
+    char *newData = new char[stringLength(str1) + stringLength(str2) + 1];
 
     strcpy(newData, str1->data);
-    strcpy(newData + lengthString(str1), str2->data);
+    strcpy(newData + stringLength(str1), str2->data);
 
     String *result = stringCreate(newData);
 
@@ -60,18 +83,11 @@ String* stringConcate(String *str1, String *str2) {
     return result;
 }
 
-String* stringCopy(String *string) {
-    if (string == nullptr || string->data == nullptr)
-        return nullptr;
-    String *newString = stringCreate(string->data);
-    return newString;
-}
-
-String* stringGetSubstring(String *string, const int i, const int len) {
+String* stringGetSubstring(String *string, int unsigned const i, int unsigned const len) {
     if (string == nullptr)
         return nullptr;
     
-    if (i < 0 || len <= 0 || i + len >= string->size)
+    if (len == 0 || i + len >= string->size)
         return nullptr;
     
     char *substr = new char[len + 1];
@@ -79,45 +95,17 @@ String* stringGetSubstring(String *string, const int i, const int len) {
     substr[len] = '\0';
     
     String *result = stringCreate(substr);
-    delete[] substr;
     
+    delete[] substr;
     return result;
 }
 
-int lengthString(String *string) {
-    return (string == nullptr ? 0 : string->size);
-}
-
-char* rawString(String *string) {
-    if (string == nullptr || string->data == nullptr)
+char* stringGetRaw(String *string) {
+    if (string == nullptr)
         return nullptr;
-    char *newString = new char[string->size + 1];
-    strcpy(newString, string->data);
-    return newString;
-}
-
-bool testString(bool const printDebug) {
-    String* epic = stringCreate("Hello, ");
-    String* win = stringCreate("World!");
-    String* wut = stringConcate(epic, win);
-    char *tmp = rawString(wut);
     
-    String *substr1 = stringGetSubstring(wut, 3, 2);
-    String *substr2 = stringGetSubstring(substr1, 0, 1);
-    String *substr = stringConcate(substr1, substr2);
-    
-    if (printDebug) {
-        printf("%s\n", tmp);
-        printf("%s\n", substr->data);
-    }
-
-    stringDelete(epic);
-    stringDelete(win);
-    stringDelete(wut);
-    stringDelete(substr1);
-    stringDelete(substr2);
-    stringDelete(substr);
-    delete[] tmp;
-    return true;
+    char *result = new char[string->size + 1];
+    strcpy(result, string->data);
+    return result;
 }
 

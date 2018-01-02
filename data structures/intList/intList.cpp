@@ -7,12 +7,12 @@ struct Node {
     Node *next = nullptr;
 };
 
-Node* getListNode(IntLinkedList *list, int const index) {
-    if (index < 0 || index >= list->size)
+Node* getListNode(IntLinkedList *list, int unsigned const index) {
+    if (index >= list->size)
         return nullptr;
     
     Node *result = list->head;
-    for (int i = 0; i < index; i++)
+    for (int unsigned i = 0; i < index; i++)
         result = result->next;
     return result;
 }
@@ -27,7 +27,7 @@ IntLinkedList* intListCopy(IntLinkedList *other) {
         return nullptr;
     
     IntLinkedList *result = new IntLinkedList();
-    for (int i = 0; i < other->size; i++) {
+    for (int unsigned i = 0; i < other->size; i++) {
         int value = intListPeekIndex(other, i);
         intListInsertAtEnd(result, value);
     }
@@ -41,8 +41,8 @@ IntLinkedList* intListMergeSorted(IntLinkedList *first, IntLinkedList *second) {
         return nullptr;
     
     IntLinkedList *result = intListCreate();
-    int i1 = 0;
-    int i2 = 0;
+    int unsigned i1 = 0;
+    int unsigned i2 = 0;
     while (i1 < first->size && i2 < second->size) {
         int firstValue = intListPeekIndex(first, i1);
         int secondValue = intListPeekIndex(second, i2);
@@ -69,7 +69,7 @@ IntLinkedList* intListMergeSorted(IntLinkedList *first, IntLinkedList *second) {
 
 void deleteNodes(IntLinkedList *list) {
     Node *tmp = list->head;
-    for (int i = 0; i < list->size; i++) {
+    for (int unsigned i = 0; i < list->size; i++) {
         Node *nextTmp = tmp->next;
         delete tmp;
         tmp = nextTmp;
@@ -129,11 +129,11 @@ void intListInsertAtBegin(IntLinkedList *list, int const value) {
     list->size++;
 }
 
-void intListInsertAtIndex(IntLinkedList *list, int const value, int const index) {
+void intListInsertAtIndex(IntLinkedList *list, int const value, int unsigned const index) {
     if (list == nullptr)
         return;
     
-    if (index < 0 || index > list->size)
+    if (index > list->size)
         return;
     
     if (index == list->size) {
@@ -173,11 +173,11 @@ int intListPeekEnd(IntLinkedList *list) {
     return list->tail->value;
 }
 
-int intListPeekIndex(IntLinkedList *list, int const index) {
+int intListPeekIndex(IntLinkedList *list, int unsigned const index) {
     if (list == nullptr || list->size == 0)
         return -1;
     
-    if (index < 0 || index >= list->size)
+    if (index >= list->size)
         return -1;
     
     Node *temp = getListNode(list, index);
@@ -219,11 +219,11 @@ void intListDeleteEnd(IntLinkedList *list) {
     list->size--;
 }
 
-void intListDeleteIndex(IntLinkedList *list, int const index) {
+void intListDeleteIndex(IntLinkedList *list, int unsigned const index) {
     if (list == nullptr || list->size == 0)
         return;
     
-    if (index < 0 || index >= list->size)
+    if (index >= list->size)
         return;
     
     if (index == 0) {
@@ -247,10 +247,10 @@ void intListDeleteIndex(IntLinkedList *list, int const index) {
 void intListLeaveUniques(IntLinkedList *list) {
     if (list == nullptr)
         return;
-    for (int i = 0; i < list->size; i++) {
+    for (int unsigned i = 0; i < list->size; i++) {
         int value = intListPeekIndex(list, i);
-        int prev = intListFind(list, value);
-        if (prev != -1 && prev < i) {
+        int unsigned prev = intListFind(list, value);
+        if (prev != list->size && prev < i) {
             intListDeleteIndex(list, i);
             i--;
         }
@@ -269,7 +269,7 @@ void mergeSort(IntLinkedList *&list) {
         int value = intListPeekIndex(list, i);
         intListInsertAtEnd(first, value);
     }
-    for (int i = half; i < list->size; i++) {
+    for (int unsigned i = half; i < list->size; i++) {
         int value = intListPeekIndex(list, i);
         intListInsertAtEnd(second, value);
     }
@@ -291,13 +291,13 @@ void intListSort(IntLinkedList *&list) {
     mergeSort(list);
 }
 
-int intListFind(IntLinkedList *list, int const value) {
+int unsigned intListFind(IntLinkedList *list, int const value) {
     if (list == nullptr)
-        return -1;
+        return 287;
     
-    int result = -1;
+    int unsigned result = list->size;
     
-    int i = 0;
+    int unsigned i = 0;
     Node *temp = list->head;
     while (temp != nullptr) {
         if (temp->value == value) {
@@ -315,7 +315,7 @@ bool intListIsSorted(IntLinkedList *list) {
     if (list == nullptr)
         return false;
     int result = true;
-    for (int i = 0; i + 1 < list->size; i++) {
+    for (int unsigned i = 0; i + 1 < list->size; i++) {
         int value = intListPeekIndex(list, i);
         int nextValue = intListPeekIndex(list, i + 1);
         if (value > nextValue) {
@@ -363,10 +363,10 @@ void printNode(Node *node) {
         printf("%d", node->value);
 }
 
-void intListPrintSiblings(IntLinkedList *list, int const index) {
+void intListPrintSiblings(IntLinkedList *list, int unsigned const index) {
     if (list == nullptr)
         return;
-    if (index < 0 || index >= list->size)
+    if (index >= list->size)
         return;
     
     Node *temp = getListNode(list, index);

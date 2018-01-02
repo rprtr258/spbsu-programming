@@ -13,6 +13,6 @@ void intStackPush(IntStack *stack, int const value);
 int intStackPeek(IntStack *stack);
 void intStackPop(IntStack *stack);
 
-int intStackGetSize(IntStack *stack);
+int unsigned intStackGetSize(IntStack *stack);
 bool intStackIsEmpty(IntStack *stack);
 

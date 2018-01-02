@@ -2,22 +2,23 @@
 
 struct String {
     char *data = nullptr;
-    int size = 0;
+    int unsigned size = 0;
 };
 
 String* stringCreate();
-String* createString(const char *string);
+String* stringCreate(const char *string);
+String* stringCopy(String *string);
+void stringErase(String *&string);
 void stringDelete(String *&string);
 
 bool stringAreEqual(String *str1, String *str2);
+bool stringIsLess(String *str1, String *str2);
+
+int stringLength(String *string);
 bool stringIsEmpty(String *string);
 
 String* stringConcate(String *str1, String *str2);
-String* stringCopy(String *string);
-String* stringGetSubstring(String *string, const int i, const int len);
+String* stringGetSubstring(String *string, int unsigned const i, int unsigned const len);
 
-int lengthString(String *string);
-char* rawString(String *string);
-
-bool testString(bool const printDebug = false);
+char* stringGetRaw(String *string);
 

@@ -13,6 +13,6 @@ void intQueuePush(IntQueue *queue, int const value);
 int intQueuePeek(IntQueue *queue);
 void intQueuePop(IntQueue *queue);
 
-int intQueueGetSize(IntQueue *queue);
+int unsigned intQueueGetSize(IntQueue *queue);
 bool intQueueIsEmpty(IntQueue *queue);
 

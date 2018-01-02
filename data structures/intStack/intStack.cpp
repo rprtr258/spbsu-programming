@@ -44,7 +44,7 @@ void intStackPop(IntStack *stack) {
     intListDeleteBegin(stack->data);
 }
 
-int intStackGetSize(IntStack *stack) {
+int unsigned intStackGetSize(IntStack *stack) {
     if (stack == nullptr || stack->data == nullptr)
         return -1;
     

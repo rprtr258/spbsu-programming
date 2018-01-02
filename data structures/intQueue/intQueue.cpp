@@ -44,7 +44,7 @@ void intQueuePop(IntQueue *queue) {
     intListDeleteBegin(queue->data);
 }
 
-int intQueueGetSize(IntQueue *queue) {
+int unsigned intQueueGetSize(IntQueue *queue) {
     if (queue == nullptr || queue->data == nullptr)
         return -1;
     
