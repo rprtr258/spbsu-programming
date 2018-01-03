@@ -66,12 +66,25 @@ void hashTableInsert(HashTable *&hashTable, String *string) {
         hashTableResize(hashTable, hashTable->size * 2 + 1);
 }
 
+void hashTableInsert(HashTable *&hashTable, char const *value) {
+    String *string = stringCreate(value);
+    hashTableInsert(hashTable, value);
+    stringDelete(string);
+}
+
 bool hashTableContains(HashTable *hashTable, String *string) {
     if (hashTable == nullptr)
         return false;
     
     unsigned int hash = getHash(string, hashTable->size);
     return stringListContains(hashTable->data[hash], string);
+}
+
+bool hashTableContains(HashTable *hashTable, char const *value) {
+    String *string = stringCreate(value);
+    bool result = hashTableContains(hashTable, string);
+    stringDelete(string);
+    return result;
 }
 
 double hashTableGetLoadFactor(HashTable *hashTable) {
