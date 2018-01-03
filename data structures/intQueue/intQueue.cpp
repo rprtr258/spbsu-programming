@@ -27,7 +27,7 @@ void intQueuePush(IntQueue *queue, int const value) {
     if (queue == nullptr)
         return;
     
-    intListInsertAtBegin(queue->data, value);
+    intListInsertAtEnd(queue->data, value);
 }
 
 int intQueuePeek(IntQueue *queue) {

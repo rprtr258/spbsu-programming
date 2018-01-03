@@ -36,7 +36,8 @@ bool testPush() {
     
     IntQueue *temp = intQueueCreate();
     intQueuePush(temp, 1);
-    result &= (intQueueGetSize(temp) == 1);
+    intQueuePush(temp, 2);
+    result &= (intQueueGetSize(temp) == 2);
     result &= (intQueuePeek(temp) == 1);
     intQueueDelete(temp);
     
@@ -48,26 +49,23 @@ bool testPop() {
     
     IntQueue *temp = intQueueCreate();
     intQueuePush(temp, 1);
+    intQueuePush(temp, 2);
     intQueuePop(temp);
-    result &= (intQueueGetSize(temp) == 0);
+    result &= (intQueueGetSize(temp) == 1);
+    result &= (intQueuePeek(temp) == 2);
     intQueueDelete(temp);
     
     return result;
 }
 
 int main() {
-    printf("Something\n");
-    if (!testCreationDeletion()) {
-        printf("CreationDeletion test failed!\n");
-    }
-    if (!testPush()) {
-        printf("Push test failed!\n");
-    }
-    if (!testPop()) {
-        printf("Pop test failed!\n");
-    }
-    if (!testCreationEraseDeletion()) {
-        printf("CreationEraseDeletion test failed!\n");
-    }
+    char passed[] = "\x1b[32mpassed\x1b[0m";
+    char failed[] = "\x1b[31mfailed\x1b[0m";
+    
+    printf("CreationDeletion test %s!\n", testCreationDeletion() ? passed : failed);
+    printf("CreationEraseDeletion test %s!\n", testCreationEraseDeletion() ? passed : failed);
+    printf("Push test %s!\n", testPush() ? passed : failed);
+    printf("Pop test %s!\n", testPop() ? passed : failed);
+
     return 0;
 }

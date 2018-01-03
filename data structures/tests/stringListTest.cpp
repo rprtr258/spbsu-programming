@@ -349,18 +349,20 @@ bool testGetArray() {
 }
 
 int main() {
-    printf("CreationDeletion test %s!\n", testCreationDeletion() ? "passed" : "failed");
-    printf("InsertAtBegin test %s!\n", testInsertAtBegin() ? "passed" : "failed");
-    printf("InsertAtIndex test %s!\n", testInsertAtIndex() ? "passed" : "failed");
-    printf("InsertAtEnd test %s!\n", testInsertAtEnd() ? "passed" : "failed");
-    printf("CreationEraseDeletion test %s!\n", testCreationEraseDeletion() ? "passed" : "failed");
-    printf("Print test %s!\n", testPrint() ? "passed" : "failed");
-    printf("Find test %s!\n", testFind() ? "passed" : "failed");
-    printf("IsSorted test %s!\n", testIsSorted() ? "passed" : "failed");
-    printf("Copy test %s!\n", testCopy() ? "passed" : "failed");
-    printf("MergeSorted test %s!\n", testMergeSorted() ? "passed" : "failed");
-    printf("MergeSort test %s!\n", testMergeSort() ? "passed" : "failed");
-    printf("GetArray test %s!\n", testGetArray() ? "passed" : "failed");
+    char passed[] = "\x1b[32mpassed\x1b[0m";
+    char failed[] = "\x1b[31mfailed\x1b[0m";
+    printf("CreationDeletion test %s!\n", testCreationDeletion() ? passed : failed);
+    printf("InsertAtBegin test %s!\n", testInsertAtBegin() ? passed : failed);
+    printf("InsertAtIndex test %s!\n", testInsertAtIndex() ? passed : failed);
+    printf("InsertAtEnd test %s!\n", testInsertAtEnd() ? passed : failed);
+    printf("CreationEraseDeletion test %s!\n", testCreationEraseDeletion() ? passed : failed);
+    printf("Print test %s!\n", testPrint() ? passed : failed);
+    printf("Find test %s!\n", testFind() ? passed : failed);
+    printf("IsSorted test %s!\n", testIsSorted() ? passed : failed);
+    printf("Copy test %s!\n", testCopy() ? passed : failed);
+    printf("MergeSorted test %s!\n", testMergeSorted() ? passed : failed);
+    printf("MergeSort test %s!\n", testMergeSort() ? passed : failed);
+    printf("GetArray test %s!\n", testGetArray() ? passed : failed);
     
     return 0;
 }

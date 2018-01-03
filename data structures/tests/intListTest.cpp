@@ -233,8 +233,8 @@ bool testGetArray() {
     intListInsertAtEnd(temp, 2);
     intListInsertAtEnd(temp, 3);
     int *array = intListGetAsArray(temp);
-    for (int unsigned i = 0; i < temp->size; i++)
-        result &= (array[i] == (int)i);
+    for (int i = 0; i < (int)temp->size; i++)
+        result &= (array[i] == i);
     intListDelete(temp);
     delete[] array;
     
@@ -242,41 +242,20 @@ bool testGetArray() {
 }
 
 int main() {
-    if (!testCreationDeletion()) {
-        printf("CreationDeletion test failed!\n");
-    }
-    if (!testInsertAtBegin()) {
-        printf("InsertAtBegin test failed!\n");
-    }
-    if (!testInsertAtIndex()) {
-        printf("InsertAtIndex test failed!\n");
-    }
-    if (!testInsertAtEnd()) {
-        printf("InsertAtEnd test failed!\n");
-    }
-    if (!testCreationEraseDeletion()) {
-        printf("CreationEraseDeletion test failed!\n");
-    }
-    if (!testPrint()) {
-        printf("Print test failed!\n");
-    }
-    if (!testFind()) {
-        printf("Find test failed!\n");
-    }
-    if (!testIsSorted()) {
-        printf("IsSorted test failed!\n");
-    }
-    if (!testCopy()) {
-        printf("Copy test failed!\n");
-    }
-    if (!testMergeSorted()) {
-        printf("MergeSorted test failed!\n");
-    }
-    if (!testMergeSort()) {
-        printf("MergeSort test failed!\n");
-    }
-    if (!testGetArray()) {
-        printf("GetArray test failed!\n");
-    }
+    char passed[] = "\x1b[32mpassed\x1b[0m";
+    char failed[] = "\x1b[31mfailed\x1b[0m";
+    printf("CreationDeletion test %s!\n", testCreationDeletion() ? passed : failed);
+    printf("InsertAtBegin test %s!\n", testInsertAtBegin() ? passed : failed);
+    printf("InsertAtIndex test %s!\n", testInsertAtIndex() ? passed : failed);
+    printf("InsertAtEnd test %s!\n", testInsertAtEnd() ? passed : failed);
+    printf("CreationEraseDeletion test %s!\n", testCreationEraseDeletion() ? passed : failed);
+    printf("Print test %s!\n", testPrint() ? passed : failed);
+    printf("Find test %s!\n", testFind() ? passed : failed);
+    printf("IsSorted test %s!\n", testIsSorted() ? passed : failed);
+    printf("Copy test %s!\n", testCopy() ? passed : failed);
+    printf("MergeSorted test %s!\n", testMergeSorted() ? passed : failed);
+    printf("MergeSort test %s!\n", testMergeSort() ? passed : failed);
+    printf("GetArray test %s!\n", testGetArray() ? passed : failed);
+    
     return 0;
 }
