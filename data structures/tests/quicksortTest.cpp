@@ -49,18 +49,13 @@ bool testTwo() {
 }
 
 int main() {
-    printf("Something\n");
-    if (!testOne()) {
-        printf("One test failed\n");
-    }
-    if (!testTwo()) {
-        printf("Two test failed\n");
-    }
-    if (!testSort()) {
-        printf("Sort test failed\n");
-    }
-    if (!testSort2()) {
-        printf("Sort2 test failed\n");
-    }
+    char passed[] = "\x1b[32mpassed\x1b[0m";
+    char failed[] = "\x1b[31mfailed\x1b[0m";
+    
+    printf("One test %s\n", testOne() ? passed : failed);
+    printf("Two test %s\n", testTwo() ? passed : failed);
+    printf("Sort test %s\n", testSort() ? passed : failed);
+    printf("Sort2 test %s\n", testSort2() ? passed : failed);
+    
     return 0;
 }

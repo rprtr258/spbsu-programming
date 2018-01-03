@@ -36,8 +36,9 @@ bool testPush() {
     
     IntStack *temp = intStackCreate();
     intStackPush(temp, 1);
-    result &= (intStackGetSize(temp) == 1);
-    result &= (intStackPeek(temp) == 1);
+    intStackPush(temp, 2);
+    result &= (intStackGetSize(temp) == 2);
+    result &= (intStackPeek(temp) == 2);
     intStackDelete(temp);
     
     return result;
@@ -48,26 +49,23 @@ bool testPop() {
     
     IntStack *temp = intStackCreate();
     intStackPush(temp, 1);
+    intStackPush(temp, 2);
     intStackPop(temp);
-    result &= (intStackGetSize(temp) == 0);
+    result &= (intStackGetSize(temp) == 1);
+    result &= (intStackPeek(temp) == 1);
     intStackDelete(temp);
     
     return result;
 }
 
 int main() {
-    printf("Something\n");
-    if (!testCreationDeletion()) {
-        printf("CreationDeletion test failed!\n");
-    }
-    if (!testPush()) {
-        printf("Push test failed!\n");
-    }
-    if (!testPop()) {
-        printf("Pop test failed!\n");
-    }
-    if (!testCreationEraseDeletion()) {
-        printf("CreationEraseDeletion test failed!\n");
-    }
+    char passed[] = "\x1b[32mpassed\x1b[0m";
+    char failed[] = "\x1b[31mfailed\x1b[0m";
+    
+    printf("CreationDeletion test %s!\n", testCreationDeletion() ? passed : failed);
+    printf("CreationEraseDeletion test %s!\n", testCreationEraseDeletion() ? passed : failed);
+    printf("Push test %s!\n", testPush() ? passed : failed);
+    printf("Pop test %s!\n", testPop() ? passed : failed);
+    
     return 0;
 }

@@ -14,6 +14,20 @@ bool testCreationDeletion() {
     return result;
 }
 
+bool testCreationEraseDeletion() {
+    bool result = true;
+    
+    String *temp = stringCreate();
+    stringErase(temp);
+    stringDelete(temp);
+    
+    String *temp2 = stringCreate("Omaewa");
+    stringErase(temp2);
+    stringDelete(temp2);
+    
+    return result;
+}
+
 bool testGetRaw() {
     bool result = true;
     
@@ -82,21 +96,15 @@ bool testIsLess() {
 }
 
 int main() {
-    printf("Something\n");
-    if (!testCreationDeletion()) {
-        printf("CreationDeletion test failed!\n");
-    }
-    if (!testGetRaw()) {
-        printf("GetRaw test failed!\n");
-    }
-    if (!testSubstring()) {
-        printf("Substring test failed!\n");
-    }
-    if (!testConcate()) {
-        printf("Concate test failed!\n");
-    }
-    if (!testIsLess()) {
-        printf("IsLess test failed!\n");
-    }
+    char passed[] = "\x1b[32mpassed\x1b[0m";
+    char failed[] = "\x1b[31mfailed\x1b[0m";
+    
+    printf("CreationDeletion test %s!\n", testCreationDeletion() ? passed : failed);
+    printf("CreationEraseDeletion test %s!\n", testCreationEraseDeletion() ? passed : failed);
+    printf("GetRaw test %s!\n", testGetRaw() ? passed : failed);
+    printf("Substring test %s!\n", testSubstring() ? passed : failed);
+    printf("Concate test %s!\n", testConcate() ? passed : failed);
+    printf("IsLess test %s!\n", testIsLess() ? passed : failed);
+    
     return 0;
 }
