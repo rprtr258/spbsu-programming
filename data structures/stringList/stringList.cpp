@@ -67,15 +67,14 @@ StringLinkedList* stringListMergeSorted(StringLinkedList *first, StringLinkedLis
     return result;
 }
 
-void deleteSingleNode(Node *&node) {
+void deleteSingleNode(Node *node) {
     stringDelete(node->value);
     delete node;
-    node = nullptr;
 }
 
 void deleteNodes(StringLinkedList *list) {
     Node *tmp = list->head;
-    for (Index i = 0; i < list->size; i++) {
+    while (tmp != nullptr) {
         Node *nextTmp = tmp->next;
         deleteSingleNode(tmp);
         tmp = nextTmp;
@@ -96,7 +95,7 @@ void stringListDelete(StringLinkedList *&list) {
     if (list == nullptr)
         return;
     
-    stringListErase(list);
+    deleteNodes(list);
     delete list;
     list = nullptr;
 }
@@ -118,6 +117,12 @@ void stringListInsertAtEnd(StringLinkedList *list, String *value) {
     list->size++;
 }
 
+void stringListInsertAtEnd(StringLinkedList *list, char const *value) {
+    String *temp = stringCreate(value);
+    stringListInsertAtEnd(list, temp);
+    stringDelete(temp);
+}
+
 void stringListInsertAtBegin(StringLinkedList *list, String *value) {
     if (list == nullptr)
         return;
@@ -133,6 +138,12 @@ void stringListInsertAtBegin(StringLinkedList *list, String *value) {
         list->head = node;
     }
     list->size++;
+}
+
+void stringListInsertAtBegin(StringLinkedList *list, char const *value) {
+    String *temp = stringCreate(value);
+    stringListInsertAtBegin(list, temp);
+    stringDelete(temp);
 }
 
 void stringListInsertAtIndex(StringLinkedList *list, String *value, Index const index) {
@@ -163,6 +174,12 @@ void stringListInsertAtIndex(StringLinkedList *list, String *value, Index const 
     temp->prev = node;
     
     list->size++;
+}
+
+void stringListInsertAtIndex(StringLinkedList *list, char const *value, Index const index) {
+    String *temp = stringCreate(value);
+    stringListInsertAtIndex(list, temp, index);
+    stringDelete(temp);
 }
 
 String* stringListPeekBegin(StringLinkedList *list) {
@@ -297,8 +314,10 @@ void stringListSort(StringLinkedList *&list) {
 }
 
 Index stringListFind(StringLinkedList *list, String *value) {
-    if (list == nullptr)
+    if (list == nullptr) {
+        throw 1;
         return 37;
+    }
     
     Index result = list->size;
     
@@ -316,6 +335,13 @@ Index stringListFind(StringLinkedList *list, String *value) {
     return result;
 }
 
+Index stringListFind(StringLinkedList *list, char const *value) {
+    String *temp = stringCreate(value);
+    Index result = stringListFind(list, temp);
+    stringDelete(temp);
+    return result;
+}
+    
 bool stringListIsSorted(StringLinkedList *list) {
     if (list == nullptr)
         return false;
@@ -329,6 +355,22 @@ bool stringListIsSorted(StringLinkedList *list) {
             break;
         }
     }
+    return result;
+}
+
+bool stringListContains(StringLinkedList *list, String *value) {
+    if (list == nullptr) {
+        throw 1;
+        return true;
+    }
+    
+    return (stringListFind(list, value) != list->size);
+}
+
+bool stringListContains(StringLinkedList *list, char const *value) {
+    String *temp = stringCreate(value);
+    bool result = stringListContains(list, temp);
+    stringDelete(temp);
     return result;
 }
 

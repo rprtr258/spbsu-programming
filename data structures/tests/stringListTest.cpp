@@ -26,11 +26,9 @@ bool testCreationEraseDeletion() {
     stringListDelete(temp1);
     
     StringLinkedList *temp2 = stringListCreate();
-    String *one = stringCreate("1");
-    stringListInsertAtBegin(temp2, one);
+    stringListInsertAtBegin(temp2, "1");
     stringListErase(temp2);
     result &= (temp2->size == 0);
-    stringDelete(one);
     stringListDelete(temp2);
     
     return result;
@@ -52,17 +50,11 @@ bool testPrintNonEmpty() {
     
     printf("Non-empty list: ");
     StringLinkedList *temp = stringListCreate();
-    String *one = stringCreate("100");
-    String *two = stringCreate("500");
-    String *three = stringCreate("300");
-    stringListInsertAtEnd(temp, one);
-    stringListInsertAtEnd(temp, two);
-    stringListInsertAtEnd(temp, three);
+    stringListInsertAtEnd(temp, "lol");
+    stringListInsertAtEnd(temp, "kek");
+    stringListInsertAtEnd(temp, "cheburek");
     stringListPrint(temp);
     stringListDelete(temp);
-    stringDelete(one);
-    stringDelete(two);
-    stringDelete(three);
     
     return result;
 }
@@ -164,15 +156,12 @@ bool testFind() {
     String *one = stringCreate("1");
     String *two = stringCreate("2");
     String *three = stringCreate("3");
-    stringListInsertAtEnd(temp, one);
-    stringListInsertAtEnd(temp, two);
-    stringListInsertAtEnd(temp, three);
+    stringListInsertAtEnd(temp, "1");
+    stringListInsertAtEnd(temp, "2");
+    stringListInsertAtEnd(temp, "3");
     result &= (stringListFind(temp, one) == 0);
     result &= (stringListFind(temp, two) == 1);
     result &= (stringListFind(temp, three) == 2);
-    stringDelete(one);
-    stringDelete(two);
-    stringDelete(three);
     stringListDelete(temp);
     
     return result;
@@ -182,16 +171,10 @@ bool testSorted() {
     bool result = true;
     
     StringLinkedList *temp = stringListCreate();
-    String *one = stringCreate("1");
-    String *two = stringCreate("2");
-    String *three = stringCreate("3");
-    stringListInsertAtEnd(temp, one);
-    stringListInsertAtEnd(temp, two);
-    stringListInsertAtEnd(temp, three);
+    stringListInsertAtEnd(temp, "");
+    stringListInsertAtEnd(temp, "bc");
+    stringListInsertAtEnd(temp, "d");
     result &= stringListIsSorted(temp);
-    stringDelete(one);
-    stringDelete(two);
-    stringDelete(three);
     stringListDelete(temp);
     
     return result;
@@ -201,14 +184,10 @@ bool testNonSorted() {
     bool result = true;
     
     StringLinkedList *temp = stringListCreate();
-    String *two = stringCreate("2");
-    String *three = stringCreate("3");
-    stringListInsertAtEnd(temp, three);
-    stringListInsertAtEnd(temp, two);
-    stringListInsertAtEnd(temp, three);
+    stringListInsertAtEnd(temp, "b");
+    stringListInsertAtEnd(temp, "ak47");
+    stringListInsertAtEnd(temp, "azino");
     result &= (!stringListIsSorted(temp));
-    stringDelete(two);
-    stringDelete(three);
     stringListDelete(temp);
     
     return result;
@@ -227,35 +206,20 @@ bool testMergeSorted() {
     bool result = true;
     
     StringLinkedList *temp1 = stringListCreate(); // [1, 3, 5, 7]
-    String *one = stringCreate("1");
-    String *two = stringCreate("3");
-    String *three = stringCreate("5");
-    String *four = stringCreate("7");
-    stringListInsertAtEnd(temp1, one);
-    stringListInsertAtEnd(temp1, two);
-    stringListInsertAtEnd(temp1, three);
-    stringListInsertAtEnd(temp1, four);
-    stringErase(one);
-    stringErase(two);
-    stringErase(three);
-    stringErase(four);
+    stringListInsertAtEnd(temp1, "1");
+    stringListInsertAtEnd(temp1, "3");
+    stringListInsertAtEnd(temp1, "5");
+    stringListInsertAtEnd(temp1, "7");
     
     StringLinkedList *temp2 = stringListCreate(); // [2, 4, 6]
-    one = stringCreate("2");
-    two = stringCreate("4");
-    three = stringCreate("6");
-    stringListInsertAtEnd(temp2, one);
-    stringListInsertAtEnd(temp2, two);
-    stringListInsertAtEnd(temp2, three);
+    stringListInsertAtEnd(temp2, "2");
+    stringListInsertAtEnd(temp2, "4");
+    stringListInsertAtEnd(temp2, "6");
     
     StringLinkedList *merged = stringListMergeSorted(temp1, temp2);
     result &= stringListIsSorted(merged);
     result &= (merged->size == temp1->size + temp2->size);
     
-    stringDelete(one);
-    stringDelete(two);
-    stringDelete(three);
-    stringDelete(four);
     stringListDelete(temp1);
     stringListDelete(temp2);
     stringListDelete(merged);
@@ -266,23 +230,16 @@ bool testMergeSorted() {
 bool testCopy() {
     bool result = true;
     
-    String *one = stringCreate("1");
-    String *two = stringCreate("2");
-    String *three = stringCreate("3");
-    
     StringLinkedList *temp1 = stringListCreate();
-    stringListInsertAtEnd(temp1, one);
-    stringListInsertAtEnd(temp1, two);
-    stringListInsertAtEnd(temp1, three);
+    stringListInsertAtEnd(temp1, "1");
+    stringListInsertAtEnd(temp1, "2");
+    stringListInsertAtEnd(temp1, "ololo");
     
     StringLinkedList *temp2 = stringListCopy(temp1);
-    result &= (stringListFind(temp2, one) == 0);
-    result &= (stringListFind(temp2, two) == 1);
-    result &= (stringListFind(temp2, three) == 2);
+    result &= (stringListFind(temp2, "1") == 0);
+    result &= (stringListFind(temp2, "2") == 1);
+    result &= (stringListFind(temp2, "ololo") == 2);
     
-    stringDelete(one);
-    stringDelete(two);
-    stringDelete(three);
     stringListDelete(temp1);
     stringListDelete(temp2);
     
@@ -293,25 +250,17 @@ bool testMergeSort() {
     bool result = true;
     
     StringLinkedList *temp = stringListCreate();
-    String *one = stringCreate("2");
-    String *two = stringCreate("1");
-    String *three = stringCreate("4");
-    String *four = stringCreate("3");
-    stringListInsertAtEnd(temp, one);
-    stringListInsertAtEnd(temp, two);
-    stringListInsertAtEnd(temp, three);
-    stringListInsertAtEnd(temp, four);
+    stringListInsertAtEnd(temp, "2");
+    stringListInsertAtEnd(temp, "1");
+    stringListInsertAtEnd(temp, "4");
+    stringListInsertAtEnd(temp, "3");
     
     stringListSort(temp);
-    result &= (stringListFind(temp, two) == 0);
-    result &= (stringListFind(temp, one) == 1);
-    result &= (stringListFind(temp, four) == 2);
-    result &= (stringListFind(temp, three) == 3);
+    result &= (stringListFind(temp, "1") == 0);
+    result &= (stringListFind(temp, "2") == 1);
+    result &= (stringListFind(temp, "3") == 2);
+    result &= (stringListFind(temp, "4") == 3);
     
-    stringDelete(one);
-    stringDelete(two);
-    stringDelete(three);
-    stringDelete(four);
     stringListDelete(temp);
     
     return result;
