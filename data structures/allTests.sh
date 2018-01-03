@@ -26,6 +26,19 @@ printf "Exit code: %d\n" $CODE
 printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
 
 printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+printf "Hashtable tests have started\n"
+printf "==============================================================\n"
+g++ -std=c++11 -Wpedantic -Wextra -Wall -O0 string/string.cpp tests/hashtableTest.cpp stringList/stringList.cpp hashtable/hashtable.cpp -o "ht_test"
+./ht_test
+CODE="$?"
+sleep 1
+rm ht_test
+printf "==============================================================\n"
+printf "Hashtable tests have passed\n"
+printf "Exit code: %d\n" $CODE
+printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
+
+printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 printf "IntLinkedList tests have started\n"
 printf "==============================================================\n"
 g++ -std=c++11 -Wpedantic -Wextra -Wall -O0 tests/intListTest.cpp intList/intList.cpp -o "il_test"

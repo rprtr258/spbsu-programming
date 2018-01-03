@@ -4,7 +4,7 @@
 unsigned int getHash(String *string, int unsigned const mod) {
     int unsigned const q = 29;
     unsigned int result = 0;
-    for (int i = 0; i < string->size; i++) {
+    for (int unsigned i = 0; i < string->size; i++) {
         result = (result * q) % mod;
         result = (result + string->data[i]) % mod;
     }
@@ -17,8 +17,8 @@ HashTable* hashTableCreate(int unsigned const size) {
     
     HashTable *result = new HashTable();
     result->size = size;
-    result->data = new StringList*[size];
-    for (int i = 0; i < size; i++)
+    result->data = new StringLinkedList*[size];
+    for (int unsigned i = 0; i < size; i++)
         result->data[i] = stringListCreate();
     return result;
 }
@@ -27,7 +27,7 @@ void hashTableDelete(HashTable *&hashTable) {
     if (hashTable == nullptr)
         return;
     
-    for (int i = 0; i < hashTable->size; i++)
+    for (int unsigned i = 0; i < hashTable->size; i++)
         stringListDelete(hashTable->data[i]);
     delete hashTable;
     hashTable = nullptr;
@@ -42,11 +42,8 @@ void hashTableResize(HashTable *&hashTable, int unsigned const newSize) {
     newHashTable->size = newSize;
     for (int unsigned i = 0; i < hashTable->size; i++) {
         for (int unsigned j = 0; j < hashTable->data[i]->size; j++) {
-            String *curValue = stringListPeekAtIndex(hashTable->data[i], j);
-            int hash = getHash(curValue, newSize);
-            
-            hashTableInsert(newHashTable->data[hash], curValue);
-            
+            String *curValue = stringListPeekIndex(hashTable->data[i], j);
+            hashTableInsert(newHashTable, curValue);
             stringDelete(curValue);
         }
     }
@@ -68,7 +65,7 @@ void hashTableInsert(HashTable *&hashTable, String *string) {
 
 void hashTableInsert(HashTable *&hashTable, char const *value) {
     String *string = stringCreate(value);
-    hashTableInsert(hashTable, value);
+    hashTableInsert(hashTable, string);
     stringDelete(string);
 }
 
@@ -133,6 +130,10 @@ int unsigned hashTableGetEmptyCellsCount(HashTable *hashTable) {
 void hashTablePrint(HashTable *hashTable, bool const showEmpty) {
     if (hashTable == nullptr) {
         printf("Nullptr HashTable\n");
+        return;
+    }
+    if (hashTable->elements == 0) {
+        printf("Empty hashtable\n");
         return;
     }
     

@@ -3,7 +3,7 @@
 #include "../string/string.h"
 
 struct HashTable {
-    StrongList **data = nullptr;
+    StringLinkedList **data = nullptr;
     int unsigned size = 0;
     int unsigned elements = 0;
 };
