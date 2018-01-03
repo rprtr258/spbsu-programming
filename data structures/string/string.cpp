@@ -39,9 +39,9 @@ void stringDelete(String *&string) {
     if (string == nullptr)
         return;
     
-    if (string->data != nullptr) {
+    if (string->data != nullptr)
         delete[] string->data;
-    }
+    
     delete string;
     string = nullptr;
 }

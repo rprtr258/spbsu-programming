@@ -68,6 +68,19 @@ bool testConcate() {
     return result;
 }
 
+bool testIsLess() {
+    bool result = true;
+    
+    String *string1 = stringCreate("1");
+    String *string2 = stringCreate("2");
+    result &= stringIsLess(string1, string2);
+    
+    stringDelete(string1);
+    stringDelete(string2);
+    
+    return result;
+}
+
 int main() {
     printf("Something\n");
     if (!testCreationDeletion()) {
@@ -81,6 +94,9 @@ int main() {
     }
     if (!testConcate()) {
         printf("Concate test failed!\n");
+    }
+    if (!testIsLess()) {
+        printf("IsLess test failed!\n");
     }
     return 0;
 }

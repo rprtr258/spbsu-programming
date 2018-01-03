@@ -64,5 +64,18 @@ printf "String tests have passed\n"
 printf "Exit code: %d\n" $CODE
 printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
 
+printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+printf "StringLinkedList tests have started\n"
+printf "===============================\n"
+g++ -std=c++11 -Wall -O0 string/string.cpp tests/stringListTest.cpp stringList/stringList.cpp -o "sl_test"
+./sl_test
+CODE="$?"
+sleep 1
+rm sl_test
+printf "===============================\n"
+printf "StringLinkedList tests have passed\n"
+printf "Exit code: %d\n" $CODE
+printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
+
 exit 0
 
