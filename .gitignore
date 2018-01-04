@@ -9,6 +9,7 @@
 *.cpp~
 *.gch
 *.swp
+*.out
 **/nbproject/*
 **/build/*
 **/dist/*
