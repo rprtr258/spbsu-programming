@@ -13,6 +13,19 @@ printf "Exit code: %d\n" $CODE
 printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
 
 printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+printf "Set tests have started\n"
+printf "==============================================================\n"
+g++ -std=c++11 -Wpedantic -Wextra -Wall -O0 tests/setTest.cpp set/set.cpp -o "is_test"
+./is_test
+CODE="$?"
+sleep 1
+rm is_test
+printf "==============================================================\n"
+printf "Set tests have passed\n"
+printf "Exit code: %d\n" $CODE
+printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
+
+printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 printf "Fileops tests have started\n"
 printf "==============================================================\n"
 g++ -std=c++11 -Wpedantic -Wextra -Wall -O0 tests/fileopsTest.cpp string/string.cpp fileops/fileops.cpp -o "fo_test"

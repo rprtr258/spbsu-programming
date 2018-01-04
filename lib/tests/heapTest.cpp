@@ -20,16 +20,11 @@ bool testArray() {
     int array[] = {5, 2, 1, 6};
     Heap *temp = heapBuildOnArray(array, 4);
     heapPush(temp, 7);
-    printf("%d\n", heapPeek(temp));
     result &= (heapPop(temp) == 1);
-    printf("%d\n", heapPeek(temp));
     result &= (heapPop(temp) == 2);
-    printf("%d\n", heapPeek(temp));
     result &= (heapPop(temp) == 5);
-    printf("%d\n", heapPeek(temp));
     result &= (heapPop(temp) == 6);
-    printf("%d\n", heapPeek(temp));
-    //result &= (heapPop(temp) == 7);
+    result &= (heapPop(temp) == 7);
     
     heapDelete(temp);
     
