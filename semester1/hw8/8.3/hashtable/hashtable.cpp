@@ -32,6 +32,7 @@ void deleteHashTable(HashTable *&hashTable) {
         return;
     for (int i = 0; i < hashTable->size; i++)
         deleteList(hashTable->data[i]);
+    delete[] hashTable->data;
     delete hashTable;
     hashTable = nullptr;
 }
