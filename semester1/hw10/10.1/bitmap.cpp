@@ -3,6 +3,20 @@
 #include "bitmap.h"
 #include "coordinate.h"
 
+void bitMapAddRow(BitMap *map, const char *row) {
+    char **newData = new char*[map->height + 1];
+    if (map->data != nullptr) {
+        memcpy(newData, map->data, map->height * sizeof(char*));
+    	delete[] map->data;
+    }
+    
+    newData[map->height] = new char[map->width];
+    memcpy(newData[map->height], row, map->width);
+    
+    map->data = newData;
+    map->height++;
+}
+
 BitMap* bitMapRead(const char *filename) {
     FILE *file = fopen("file.txt", "r");
     char tempRow[10001];
@@ -30,6 +44,7 @@ void bitMapDelete(BitMap *&map) {
         return;
     for (int i = 0; i < map->height; i++)
         delete[] map->data[i];
+    delete[] map->data;
     delete map;
     map = nullptr;
 }
@@ -89,15 +104,3 @@ bool bitMapIsInside(BitMap *map, Coordinate const *pos) {
             0 <= pos->j && pos->j < map->width);
 }
 
-void bitMapAddRow(BitMap *map, const char *row) {
-    char **newData = new char*[map->height + 1];
-    if (map->data != nullptr)
-        memcpy(newData, map->data, map->height * sizeof(char*));
-    delete[] map->data;
-    
-    newData[map->height] = new char[map->width];
-    memcpy(newData[map->height], row, map->width);
-    
-    map->data = newData;
-    map->height++;
-}

@@ -109,7 +109,7 @@ void heapPush(Heap *heap, NodeInfo *value) {
 }
 
 NodeInfo* heapPop(Heap *heap) {
-    NodeInfo *minVal = nodeInfoCopy(heap->data[0]);
+    NodeInfo *minVal = heap->data[0];
     
     swap(heap->data[0], heap->data[heap->size - 1]);
     heap->size--;
