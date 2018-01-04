@@ -1,5 +1,18 @@
 #!/bin/bash
 printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
+printf "Heap tests have started\n"
+printf "==============================================================\n"
+g++ -std=c++11 -Wpedantic -Wextra -Wall -O0 tests/heapTest.cpp heap/heap.cpp -o "ih_test"
+./ih_test
+CODE="$?"
+sleep 1
+rm ih_test
+printf "==============================================================\n"
+printf "Heap tests have passed\n"
+printf "Exit code: %d\n" $CODE
+printf "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n"
+
+printf ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 printf "Fileops tests have started\n"
 printf "==============================================================\n"
 g++ -std=c++11 -Wpedantic -Wextra -Wall -O0 tests/fileopsTest.cpp string/string.cpp fileops/fileops.cpp -o "fo_test"
@@ -7,6 +20,9 @@ g++ -std=c++11 -Wpedantic -Wextra -Wall -O0 tests/fileopsTest.cpp string/string.
 CODE="$?"
 sleep 1
 rm fo_test
+rm ints.txt
+rm strings.txt
+rm words.txt
 printf "==============================================================\n"
 printf "Fileops tests have passed\n"
 printf "Exit code: %d\n" $CODE
