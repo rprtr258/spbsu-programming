@@ -5,7 +5,7 @@
 
 using std::swap;
 
-NodeInfo* max(Heap *heap, NodeInfo *a, NodeInfo *b) {
+NodeInfo* max(NodeInfo *a, NodeInfo *b) {
     return (a->h >= b->h ? a : b);
 }
 

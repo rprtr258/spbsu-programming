@@ -18,7 +18,7 @@ void bitMapAddRow(BitMap *map, const char *row) {
 }
 
 BitMap* bitMapRead(const char *filename) {
-    FILE *file = fopen("file.txt", "r");
+    FILE *file = fopen(filename, "r");
     char tempRow[10001];
     
     BitMap *result = new BitMap();
