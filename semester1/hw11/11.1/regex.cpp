@@ -53,6 +53,9 @@ State getNextState(State const curState, char const symbol) {
         case exponentState: {
             return (isdigit(symbol) ? exponentState : error);
         }
+        default: {
+            return error;
+        }
     }
 }
 
