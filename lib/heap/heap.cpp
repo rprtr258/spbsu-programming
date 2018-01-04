@@ -104,10 +104,9 @@ void heapDelete(Heap *&heap) {
 }
 
 void heapPush(Heap *&heap, int const value) {
-    if (heap == nullptr) {
+    if (heap == nullptr)
         throw 1;
-        return;
-    }
+    
     if (heap->size == heap->capacity)
         resize(heap, heap->capacity * 2 + 1);
     
@@ -117,19 +116,15 @@ void heapPush(Heap *&heap, int const value) {
 }
 
 int heapPeek(Heap *heap) {
-    if (heap == nullptr || heap->size < 1) {
+    if (heap == nullptr || heap->size < 1)
         throw 1;
-        return -1;
-    }
     
     return heap->data[0];
 }
 
 int heapPop(Heap *heap) {
-    if (heap == nullptr || heap->size < 1) {
+    if (heap == nullptr || heap->size < 1)
         throw 1;
-        return -1;
-    }
     
     int result = heap->data[0];
     
