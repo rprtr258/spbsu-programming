@@ -29,6 +29,7 @@ void hashTableDelete(HashTable *&hashTable) {
     
     for (int unsigned i = 0; i < hashTable->size; i++)
         stringListDelete(hashTable->data[i]);
+    delete[] hashTable->data;
     delete hashTable;
     hashTable = nullptr;
 }
