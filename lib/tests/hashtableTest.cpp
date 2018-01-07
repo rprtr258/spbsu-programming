@@ -11,7 +11,7 @@ bool testCreationDeletion() {
     HashTable *temp2 = hashTableCreate();
     String *one = stringCreate("1");
     hashTableInsert(temp2, one);
-    hashTableDelete(temp1);
+    hashTableDelete(temp2);
     stringDelete(one);
     
     return result;

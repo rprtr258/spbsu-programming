@@ -163,6 +163,9 @@ bool testFind() {
     result &= (stringListFind(temp, two) == 1);
     result &= (stringListFind(temp, three) == 2);
     stringListDelete(temp);
+    stringDelete(one);
+    stringDelete(two);
+    stringDelete(three);
     
     return result;
 }
