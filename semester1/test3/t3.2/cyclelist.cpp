@@ -21,13 +21,27 @@ CycleList* listCreate(int const size, int const lowestValue, int const highestVa
         node->value = generateValue(lowestValue, highestValue);
 
         list->cur->next = node;
-
         list->cur = node;
     }
     list->cur->next = head;
     list->cur = head;
     list->size = size;
     return list;
+}
+
+void listDelete(CycleList *&list) {
+    if (list == nullptr)
+        return;
+    
+    ListElement *tmp = list->cur->next;
+    while (tmp != list->cur) {
+        ListElement *next = tmp->next;
+        delete tmp;
+        tmp = next;
+    }
+    delete tmp;
+    delete list;
+    list = nullptr;
 }
 
 void listPrint(CycleList *list) {
@@ -66,19 +80,4 @@ void listReverse(CycleList *list) {
 
 int listSize(CycleList *list) {
     return list->size;
-}
-
-void listDelete(CycleList *&list) {
-    if (list == nullptr)
-        return;
-    
-    ListElement *tmp = list->cur->next;
-    while (tmp->next != list->cur) {
-        ListElement *next = tmp->next;
-        delete tmp;
-        tmp = next;
-    }
-    delete tmp;
-    delete list;
-    list = nullptr;
 }
