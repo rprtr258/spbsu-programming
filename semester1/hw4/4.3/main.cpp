@@ -6,7 +6,7 @@
 int main() {
 //    if (!test())
 //        return 0;
-    printf("Program to transform infix notation into postfix\n");
+    printf("Program to transform infix notion into postfix\n");
     char expr[1000];
     gets(expr);
     int exprLength = strlen(expr);

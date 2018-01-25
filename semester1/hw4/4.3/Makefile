@@ -1,2 +1,2 @@
 all:
-	g++ -std=c++11 -Wall list.cpp main.cpp parse.cpp stack.cpp tests.cpp list.h parse.h stack.h tests.h
+	g++ -g -std=c++11 -Wall -Wextra main.cpp parse.cpp ../../../lib/intStack/intStack.cpp ../../../lib/intList/intList.cpp
