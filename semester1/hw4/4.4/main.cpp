@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "stack.h"
+#include "../../../lib/intStack/intStack.h"
 
 int eval(char *expr, const int exprLength) {
-    Stack *stack = createStack();
+    IntStack *stack = intStackCreate();
     for (int i = 0; i < exprLength; i++) {
         if (isdigit(expr[i])) {
-            stackPush(stack, expr[i] - '0');
+            intStackPush(stack, expr[i] - '0');
         } else {
             int operandA = 0;
             int operandB = 0;
             int temp = 0;
-            operandB = stackTop(stack);
-            stackPop(stack);
-            operandA = stackTop(stack);
-            stackPop(stack);
+            operandB = intStackPeek(stack);
+            intStackPop(stack);
+            operandA = intStackPeek(stack);
+            intStackPop(stack);
             switch (expr[i]) {
                 case '+': {
                     temp = operandA + operandB;
@@ -34,13 +34,12 @@ int eval(char *expr, const int exprLength) {
                     break;
                 }
             }
-            stackPush(stack, temp);
+            intStackPush(stack, temp);
         }
     }
     
-    int result = stackTop(stack);
-    stackErase(stack);
-    delete stack;
+    int result = intStackPeek(stack);
+    intStackDelete(stack);
     
     return result;
 }
@@ -55,16 +54,6 @@ bool testEval() {
     return true;
 }
 
-bool test() {
-    if (!stackTestModule() || !listTestModule())
-        return false;
-    if (!testEval()) {
-        printf("Eval test failed\n");
-        return false;
-    }
-    return true;
-}
-
 int main() {
 //    if (!test())
 //        return 0;
@@ -75,6 +64,6 @@ int main() {
     
     int result = eval(expr, exprLength);
     
-    printf("Result: %d", result);
+    printf("Result: %d\n", result);
     return 0;
 }
