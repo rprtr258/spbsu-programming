@@ -1,7 +1,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "parse.h"
-#include "stack.h"
+#include "../../../lib/intStack/intStack.h"
 
 bool isOperator(const char sym) {
     return (sym == '+' || sym == '-' || sym == '*' || sym == '/');
@@ -15,38 +15,37 @@ int priority(const char op) {
 
 void parse(char *expr, const int exprLength, char *out) {
     int ptr = 0;
-    Stack *stack = createStack();
+    IntStack *stack = intStackCreate();
     for (int i = 0; i < exprLength; i++) {
         if (isdigit(expr[i])) {
             out[ptr] = expr[i];
             ptr++;
         } else if (expr[i] == '(') {
-            stackPush(stack, '(');
+            intStackPush(stack, '(');
         } else if (expr[i] == ')') {
-            while (stackTop(stack) != '(') {
-                out[ptr] = stackTop(stack);
+            while (intStackPeek(stack) != '(') {
+                out[ptr] = intStackPeek(stack);
                 ptr++;
-                stackPop(stack);
+                intStackPop(stack);
             }
-            stackPop(stack); // remove '('
+            intStackPop(stack); // remove '('
         } else {
-            while (!stackIsEmpty(stack) && isOperator(stackTop(stack)) && priority(expr[i]) <= priority(stackTop(stack))) {
-                out[ptr] = stackTop(stack);
+            while (!intStackIsEmpty(stack) && isOperator(intStackPeek(stack)) && priority(expr[i]) <= priority(intStackPeek(stack))) {
+                out[ptr] = intStackPeek(stack);
                 ptr++;
-                stackPop(stack);
+                intStackPop(stack);
             }
-            stackPush(stack, expr[i]);
+            intStackPush(stack, expr[i]);
         }
     }
-    while (!stackIsEmpty(stack)) {
-        out[ptr] = stackTop(stack);
+    while (!intStackIsEmpty(stack)) {
+        out[ptr] = intStackPeek(stack);
         ptr++;
-        stackPop(stack);
+        intStackPop(stack);
     }
     out[ptr] = '\0';
     
-    stackErase(stack);
-    delete stack;
+    intStackDelete(stack);
 }
 
 bool testParse() {
