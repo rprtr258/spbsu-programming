@@ -16,3 +16,5 @@
 *.inc
 **/Makefile
 *.stackdump
+*.class
+
