@@ -1,8 +1,8 @@
 package com.rprtr258.util;
 
 public class ListNode {
-    ListNode prev, next;
-    int value;
+    private ListNode prev, next;
+    private int value;
 
     ListNode(int value) {
         this.prev = null;
