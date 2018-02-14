@@ -1,8 +1,8 @@
 package com.rprtr258.util;
 
 public class LinkedList {
-    ListNode head;
-    int size;
+    private ListNode head;
+    private int size;
 
     public LinkedList() {
         head = null;
