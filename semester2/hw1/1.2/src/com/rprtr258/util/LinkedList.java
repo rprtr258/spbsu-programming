@@ -1,8 +1,8 @@
 package com.rprtr258.util;
 
 public class LinkedList {
-    private ListNode head;
-    private int size;
+    private ListNode head = null;
+    private int size = 0;
 
     public LinkedList() {
         head = null;
@@ -39,7 +39,9 @@ public class LinkedList {
         if (size == 0) {
             System.out.print("There is no elements to remove!\n");
             return;
-        } else if (size == 1) {
+        }
+
+        if (size == 1) {
             head = null;
         } else {
             head = head.getNext();
