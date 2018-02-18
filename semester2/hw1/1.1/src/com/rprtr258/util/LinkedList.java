@@ -1,8 +1,9 @@
 package com.rprtr258.util;
 
 public class LinkedList {
-    private ListNode head, tail;
-    private int size;
+    private ListNode head = null;
+    private ListNode tail = null;
+    private int size = 0;
 
     public LinkedList() {
         head = null;
@@ -59,29 +60,35 @@ public class LinkedList {
     }
 
     public void deleteAtEnd() {
-        if (size == 0) {
+        if (size == 0)
             return;
-        } else if (size == 1) {
-            head = null;
-            tail = null;
+
+        if (size == 1) {
+            erase();
         } else {
             tail = tail.getPrev();
             tail.setNext(null);
+            size--;
         }
-        size--;
     }
 
     public void deleteAtBegin() {
-        if (size == 0) {
+        if (size == 0)
             return;
-        } else if (size == 1) {
-            head = null;
-            tail = null;
+
+        if (size == 1) {
+            erase();
         } else {
             head = head.getNext();
             head.setPrev(null);
+            size--;
         }
-        size--;
+    }
+
+    public void erase() {
+        head = null;
+        tail = null;
+        size = 0;
     }
 
     public void print() {

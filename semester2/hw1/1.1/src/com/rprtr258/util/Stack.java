@@ -1,7 +1,7 @@
 package com.rprtr258.util;
 
 public class Stack {
-    private LinkedList data;
+    private LinkedList data = null;
 
     public Stack() {
         data = new LinkedList();
