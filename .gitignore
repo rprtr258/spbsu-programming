@@ -4,9 +4,7 @@
 *.exe
 *.o
 *.bak
-*.un~
-*.h~
-*.cpp~
+*~
 *.gch
 *.swp
 *.out
@@ -20,4 +18,3 @@
 **/workspace.xml
 **/tasks.xml
 **/uiDesigner.xml
-
