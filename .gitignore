@@ -4,7 +4,9 @@
 *.exe
 *.o
 *.bak
-*~
+*.un~
+*.h~
+*.cpp~
 *.gch
 *.swp
 *.out
@@ -14,11 +16,3 @@
 *.inc
 **/Makefile
 *.stackdump
-*.class
-
-**/gradlew
-**/gradlew.bat
-**/build.gradle
-**/gradle/*
-**/.gradle/*
-**/.idea/*
