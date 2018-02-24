@@ -11,6 +11,15 @@ import static org.junit.Assert.*;
 
 public class MatrixTest {
     @Test
+    public void spiralTourOneTest() {
+        int[][] sampleMatrix = {{1}};
+        Matrix matrix = new Matrix(sampleMatrix);
+        ArrayList<Integer> tour = matrix.spiralTour();
+        List<Integer> expected = Arrays.asList(1);
+        assertEquals(expected, tour);
+    }
+
+    @Test
     public void spiralTourTest() {
         int[][] sampleMatrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
         Matrix matrix = new Matrix(sampleMatrix);

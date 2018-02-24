@@ -47,7 +47,7 @@ public class Matrix {
            dist -= 2;
        }
        // last element in center
-       result.add(data[i][j + 1]);
+       result.add(data[(size - 1) / 2][(size - 1) / 2]);
        Collections.reverse(result);
        return result;
    }
