@@ -3,14 +3,14 @@ package com.rprtr258;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
-public class StackOnArray<ElementType> implements Stack<ElementType> {
-    private ArrayList<ElementType> data = null;
+public class StackOnArray<T> implements Stack<T> {
+    private ArrayList<T> data = null;
 
     public StackOnArray() {
         data = new ArrayList<>();
     }
 
-    public void push(ElementType value) {
+    public void push(T value) {
         data.add(value);
     }
 
@@ -21,7 +21,7 @@ public class StackOnArray<ElementType> implements Stack<ElementType> {
             throw new EmptyStackException();
     }
 
-    public ElementType top() {
+    public T top() {
         if (!isEmpty())
             return data.get(data.size() - 1);
         else

@@ -2,8 +2,8 @@ package com.rprtr258;
 
 import java.util.EmptyStackException;
 
-public class StackOnLinkedList<ElementType> implements Stack<ElementType> {
-    private LinkedList<ElementType> data = null;
+public class StackOnLinkedList<T> implements Stack<T> {
+    private LinkedList<T> data = null;
 
     public StackOnLinkedList() {
         data = new LinkedList<>();
@@ -13,7 +13,7 @@ public class StackOnLinkedList<ElementType> implements Stack<ElementType> {
         return data.isEmpty();
     }
 
-    public void push(ElementType value) {
+    public void push(T value) {
         data.insert(value);
     }
 
@@ -24,7 +24,7 @@ public class StackOnLinkedList<ElementType> implements Stack<ElementType> {
             throw new EmptyStackException();
     }
 
-    public ElementType top() {
+    public T top() {
         if (!isEmpty())
             return data.peekEnd();
         else

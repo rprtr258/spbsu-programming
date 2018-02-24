@@ -1,8 +1,8 @@
 package com.rprtr258;
 
-public interface Stack<ElementType> {
-    void push(ElementType value);
+public interface Stack<T> {
+    void push(T value);
     void pop();
-    ElementType top();
+    T top();
     boolean isEmpty();
 }
