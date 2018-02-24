@@ -12,12 +12,12 @@ class SortStrategyTest {
         return true;
     }
 
-    boolean sortTest(int[] array, SortStrategy sorter) {
+    protected boolean sortTest(int[] array, SortStrategy sorter) {
         sorter.sort(array);
         return isSorted(array);
     }
 
-    boolean randomTest(SortStrategy sorter) {
+    protected boolean randomTest(SortStrategy sorter) {
         Random generator = new Random();
         int[] array = new int[10];
         for (int i = 0; i < 10; i++)
