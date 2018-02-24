@@ -8,4 +8,7 @@ public class ConsoleWriter implements IWriter {
     public void write(char symbol) {
         System.out.print(symbol);
     }
+
+    public void close() {
+    }
 }

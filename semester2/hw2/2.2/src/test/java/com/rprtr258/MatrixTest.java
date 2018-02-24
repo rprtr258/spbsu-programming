@@ -33,6 +33,7 @@ public class MatrixTest {
         Matrix matrix = new Matrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
         IWriter writer = new ConsoleWriter();
         matrix.writeTourTo(writer);
+        writer.close();
     }
 
     private String readFile(File file) {
@@ -58,6 +59,7 @@ public class MatrixTest {
             matrix.writeTourTo(writer);
             assertEquals("5 4 7 8 9 6 3 2 1", readFile(file));
             file.delete();
+            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

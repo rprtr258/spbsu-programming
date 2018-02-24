@@ -28,4 +28,12 @@ public class FileWriter implements IWriter {
             e.printStackTrace();
         }
     }
+
+    public void close() {
+        try {
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
