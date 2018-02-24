@@ -5,13 +5,11 @@ import java.util.Collections;
 
 public class Matrix {
     private int[][] data = null;
-    private int height = -1;
-    private int width = -1;
+    private int size = -1;
 
    public Matrix(int[][] data) {
        this.data = data.clone();
-       height = data.length;
-       width = data[0].length;
+       size = data[0].length;
    }
 
    public void writeTourTo(IWriter writer) {
@@ -25,7 +23,7 @@ public class Matrix {
 
    public ArrayList<Integer> spiralTour() {
        ArrayList<Integer> result = new ArrayList<>();
-       int dist = width - 1;
+       int dist = size - 1;
        int i = 0;
        int j = 0;
        while (dist > 0) {
