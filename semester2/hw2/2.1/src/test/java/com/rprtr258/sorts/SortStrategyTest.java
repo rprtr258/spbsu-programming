@@ -20,9 +20,34 @@ class SortStrategyTest {
     protected boolean randomTest(SortStrategy sorter) {
         Random generator = new Random();
         int[] array = new int[10];
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < array.length; i++)
             array[i] = generator.nextInt();
 
         return sortTest(array, sorter);
+    }
+
+    protected boolean equalsTest(SortStrategy sorter) {
+        Random generator = new Random();
+        int[] array = new int[20];
+        int value = generator.nextInt();
+        for (int i = 0; i < array.length; i++)
+            array[i] = value;
+        sorter.sort(array);
+        return isSorted(array);
+    }
+
+    protected boolean someEqualsTest(SortStrategy sorter) {
+        Random generator = new Random();
+        int[] array = new int[20];
+        int value = generator.nextInt();
+        array[0] = 5;
+        array[1] = 20;
+        array[2] = 5;
+        array[3] = 300;
+        array[4] = 20;
+        for (int i = 5; i < array.length; i++)
+            array[i] = value;
+        sorter.sort(array);
+        return isSorted(array);
     }
 }

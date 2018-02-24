@@ -36,4 +36,16 @@ public class BubbleSortTest extends SortStrategyTest {
         boolean result = randomTest(sorter);
         assertTrue(result);
     }
+
+    @Test
+    public void equalsTest() {
+        boolean result = equalsTest(sorter);
+        assertTrue(result);
+    }
+
+    @Test
+    public void someEqualsTest() {
+        boolean result = someEqualsTest(sorter);
+        assertTrue(result);
+    }
 }
