@@ -6,6 +6,14 @@ import java.util.Scanner;
 public class Main {
     private static Scanner in = new Scanner(System.in);
 
+    public static void main(String[] args) {
+        int matrixSize = inputMatrixSize();
+        Matrix matrix = inputMatrix(matrixSize);
+        in.nextLine();
+        IWriter writer = inputPrintType();
+        matrix.writeTourTo(writer);
+    }
+    
     private static int inputMatrixSize() {
         System.out.print("Write size of array:\n");
         int result = in.nextInt();
@@ -60,13 +68,5 @@ public class Main {
                 return null;
             }
         }
-    }
-
-    public static void main(String[] args) {
-        int matrixSize = inputMatrixSize();
-        Matrix matrix = inputMatrix(matrixSize);
-        in.nextLine();
-        IWriter writer = inputPrintType();
-        matrix.writeTourTo(writer);
     }
 }
