@@ -8,6 +8,11 @@ public class Main {
     public static void main(String[] args) {
         System.out.print("Write expression in prefix form to calc(e.g. +2 2)\n");
         String expr = in.nextLine();
+        int result = calcExpr(expr);
+        System.out.println("Result is: " + result);
+    }
+    
+    private static int calcExpr(String expr) {
         ArrayList<String> tokens = parseTokens(expr);
         Stack<String> stack = new StackOnLinkedList();
         for (int i = tokens.size() - 1; i >= 0; i--) {
@@ -36,7 +41,7 @@ public class Main {
                 stack.push(token);
             }
         }
-        System.out.println("Result is: " + stack.top());
+        return Integer.parseInt(stack.top());
     }
     
     private static ArrayList<String> parseTokens(String expr) {
