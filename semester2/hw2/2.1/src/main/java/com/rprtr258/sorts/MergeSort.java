@@ -16,16 +16,10 @@ public class MergeSort implements SortStrategy {
             }
             k++;
         }
-        while (i < first.length) {
-            result[k] = first[i];
-            i++;
-            k++;
-        }
-        while (j < second.length) {
-            result[k] = second[j];
-            j++;
-            k++;
-        }
+        if (i < first.length)
+            System.arraycopy(first, i, result, k, first.length - i);
+        else if (j < second.length)
+            System.arraycopy(second, j, result, k, second.length - j);
     }
 
     public void sort(int[] array) {
