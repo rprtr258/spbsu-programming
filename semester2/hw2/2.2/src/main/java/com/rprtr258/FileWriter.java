@@ -3,11 +3,9 @@ package com.rprtr258;
 import java.io.*;
 
 public class FileWriter implements IWriter {
-    private File file = null;
     private FileOutputStream fis = null;
 
     public FileWriter(File file) {
-        this.file = file;
         try {
             fis = new FileOutputStream(file);
         } catch (IOException e) {
