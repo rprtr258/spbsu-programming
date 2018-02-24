@@ -42,7 +42,7 @@ public class Main {
     private static IWriter inputPrintType() {
         System.out.print("Choose print type(console/file):\n");
         String printType = in.nextLine();
-        while (!printType.equals("console") && !printType.equals("file")) {
+        while (!"console".equals(printType) && !"file".equals(printType)) {
             System.out.print("Wrong print type.\n");
             System.out.print("Choose print type(console/file):\n");
             printType = in.nextLine();
