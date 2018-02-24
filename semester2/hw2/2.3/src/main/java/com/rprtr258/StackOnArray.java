@@ -14,11 +14,14 @@ public class StackOnArray<T> implements Stack<T> {
         data.add(value);
     }
 
-    public void pop() {
-        if (!isEmpty())
+    public T pop() {
+        if (!isEmpty()) {
+            T value = top();
             data.remove(data.size() - 1);
-        else
+            return value;
+        } else {
             throw new EmptyStackException();
+        }
     }
 
     public T top() {

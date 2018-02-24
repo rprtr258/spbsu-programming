@@ -17,11 +17,14 @@ public class StackOnLinkedList<T> implements Stack<T> {
         data.insert(value);
     }
 
-    public void pop() {
-        if (!isEmpty())
+    public T pop() {
+        if (!isEmpty()) {
+            T value = top();
             data.delete();
-        else
+            return value;
+        } else {
             throw new EmptyStackException();
+        }
     }
 
     public T top() {
