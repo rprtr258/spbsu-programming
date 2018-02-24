@@ -33,7 +33,6 @@ public class MatrixTest {
         Matrix matrix = new Matrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
         IWriter writer = new ConsoleWriter();
         matrix.writeTourTo(writer);
-        assertTrue(true);
     }
 
     private String readFile(File file) {
