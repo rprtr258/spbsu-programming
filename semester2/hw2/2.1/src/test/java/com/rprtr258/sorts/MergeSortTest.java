@@ -4,21 +4,36 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class MergeSortTest {
-    private boolean isSorted(int[] array) {
-        for (int i = 1; i < array.length; i++) {
-            if (array[i - 1] > array[i]) {
-                return false;
-            }
-        }
-        return true;
+public class MergeSortTest extends SortStrategyTest {
+    private static SortStrategy sorter = new MergeSort();
+
+    @Test
+    public void customArrayTest() {
+        boolean result = sortTest(new int[]{3, 1, 4, 2}, sorter);
+        assertTrue(result);
     }
 
     @Test
-    public void sortTest() {
-        int[] a = {3, 1, 4, 2};
-        SortStrategy ss = new MergeSort();
-        ss.sort(a);
-        assertTrue(isSorted(a));
+    public void emptyArrayTest() {
+        boolean result = sortTest(new int[]{}, sorter);
+        assertTrue(result);
+    }
+
+    @Test
+    public void sortedTest() {
+        boolean result = sortTest(new int[]{1, 2, 3, 4, 5, 6}, sorter);
+        assertTrue(result);
+    }
+
+    @Test
+    public void reversedTest() {
+        boolean result = sortTest(new int[]{6, 5, 4, 3, 2, 1}, sorter);
+        assertTrue(result);
+    }
+
+    @Test
+    public void randomTest() {
+        boolean result = randomTest(sorter);
+        assertTrue(result);
     }
 }

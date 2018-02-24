@@ -29,7 +29,7 @@ public class MergeSort implements SortStrategy {
     }
 
     public void sort(int[] array) {
-        if (array.length == 1)
+        if (array.length <= 1)
             return;
 
         int mid = array.length / 2;
