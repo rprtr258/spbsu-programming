@@ -1,6 +1,8 @@
 package com.rprtr258;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 public class Expression {
@@ -15,13 +17,13 @@ public class Expression {
         StringTokenizer stringTokenizer = new StringTokenizer(exprCopy, " ", false);
         while (stringTokenizer.hasMoreTokens())
             tokens.add(stringTokenizer.nextToken());
+        Collections.reverse(tokens);
     }
 
     public int eval() {
         if (!evaluated) {
             Stack<String> stack = new StackOnLinkedList<>();
-            for (int i = tokens.size() - 1; i >= 0; i--) {
-                String token = tokens.get(i);
+            for (String token : tokens) {
                 if (isOperator(token)) {
                     int arg1 = Integer.parseInt(stack.pop());
                     int arg2 = Integer.parseInt(stack.pop());
