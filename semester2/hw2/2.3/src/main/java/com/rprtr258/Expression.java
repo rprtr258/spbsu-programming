@@ -23,15 +23,7 @@ public class Expression {
             if (isOperator(token)) {
                 int arg1 = Integer.parseInt(stack.pop());
                 int arg2 = Integer.parseInt(stack.pop());
-                int res = 0;
-                if ("+".equals(token))
-                    res = arg1 + arg2;
-                else if ("-".equals(token))
-                    res = arg1 - arg2;
-                else if ("*".equals(token))
-                    res = arg1 * arg2;
-                else if ("/".equals(token))
-                    res = arg1 / arg2;
+                int res = applyOperator(token, arg1, arg2);
                 stack.push(Integer.toString(res));
             } else {
                 stack.push(token);
@@ -44,7 +36,15 @@ public class Expression {
         return ("+".equals(token) || "-".equals(token) || "*".equals(token) || "/".equals(token));
     }
 
-    private boolean isOperator(char symbol) {
-        return (symbol == '+' || symbol == '-' || symbol == '*' || symbol == '/');
+    private int applyOperator(String op, int arg1, int arg2) {
+        if ("+".equals(op))
+            return arg1 + arg2;
+        if ("-".equals(op))
+            return arg1 - arg2;
+        if ("*".equals(op))
+            return arg1 * arg2;
+        if ("/".equals(op))
+            return arg1 / arg2;
+        throw new IllegalArgumentException();
     }
 }
