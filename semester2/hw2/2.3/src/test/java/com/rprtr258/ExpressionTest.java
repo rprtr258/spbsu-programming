@@ -39,4 +39,11 @@ public class ExpressionTest {
         Expression expr = new Expression("* 3 / + 2 33 - 11 6");
         assertEquals(21, expr.eval());
     }
+
+    @Test(expected=IllegalArgumentException.class)
+    public void wrongOpTest() {
+        // 2 % 3
+        Expression expr = new Expression("% 2 3");
+        expr.eval();
+    }
 }
