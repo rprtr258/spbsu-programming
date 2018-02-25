@@ -12,8 +12,7 @@ public class Expression {
             exprCopy = exprCopy.replace(op, " " + op + " ");
         tokens = new ArrayList<>();
         StringTokenizer stringTokenizer = new StringTokenizer(exprCopy, " ", false);
-        int tokensCount = stringTokenizer.countTokens();
-        for (int i = 0; i < tokensCount; i++)
+        while (stringTokenizer.hasMoreTokens())
             tokens.add(stringTokenizer.nextToken());
     }
 
