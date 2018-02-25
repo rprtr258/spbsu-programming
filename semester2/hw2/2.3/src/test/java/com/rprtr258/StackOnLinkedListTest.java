@@ -62,4 +62,13 @@ public class StackOnLinkedListTest {
         }
         assertTrue(stack.isEmpty());
     }
+
+    @Test
+    public void elementCopyTest() {
+        Stack<Integer> stack = new StackOnLinkedList<>();
+        Integer sample = 10;
+        stack.push(sample);
+        sample = 3;
+        assertEquals(new Integer(10), stack.top());
+    }
 }
