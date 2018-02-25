@@ -7,10 +7,11 @@ public class Expression {
     private ArrayList<String> tokens;
 
     public Expression(String expr) {
+        String exprCopy = expr;
         for (String op : new String[]{"+", "-", "*", "/"})
-            expr = expr.replace(op, " " + op + " ");
+            exprCopy = exprCopy.replace(op, " " + op + " ");
         tokens = new ArrayList<>();
-        StringTokenizer stringTokenizer = new StringTokenizer(expr, " ", false);
+        StringTokenizer stringTokenizer = new StringTokenizer(exprCopy, " ", false);
         int tokensCount = stringTokenizer.countTokens();
         for (int i = 0; i < tokensCount; i++)
             tokens.add(stringTokenizer.nextToken());
