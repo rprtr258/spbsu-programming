@@ -39,6 +39,15 @@ public class Expression {
         return result;
     }
 
+    public boolean isCorrect() {
+        try {
+            eval();
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
+
     private boolean isOperator(String token) {
         return ("+".equals(token) || "-".equals(token) || "*".equals(token) || "/".equals(token));
     }

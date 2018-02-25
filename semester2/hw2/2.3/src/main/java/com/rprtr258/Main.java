@@ -13,15 +13,13 @@ public class Main {
     }
 
     private static Expression inputExpression() {
-        while (true) {
-            String str = in.nextLine();
-            Expression expr = new Expression(str);
-            try {
-                expr.eval();
-                return expr;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Incorrect operator found. Please retype:\n");
-            }
+        String str = in.nextLine();
+        Expression expr = new Expression(str);
+        while (!expr.isCorrect()) {
+            System.out.println("Incorrect operator found. Please retype:\n");
+            str = in.nextLine();
+            expr = new Expression(str);
         }
+        return expr;
     }
 }
