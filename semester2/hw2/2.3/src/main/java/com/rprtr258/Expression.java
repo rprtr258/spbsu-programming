@@ -7,11 +7,8 @@ public class Expression {
     private ArrayList<String> tokens;
 
     public Expression(String expr) {
-        // parser kostyl
-        expr = expr.replace("+", " + ");
-        expr = expr.replace("-", " - ");
-        expr = expr.replace("*", " * ");
-        expr = expr.replace("/", " / ");
+        for (String op : new String[]{"+", "-", "*", "/"})
+            expr = expr.replace(op, " " + op + " ");
         tokens = new ArrayList<>();
         StringTokenizer stringTokenizer = new StringTokenizer(expr, " ", false);
         int tokensCount = stringTokenizer.countTokens();
