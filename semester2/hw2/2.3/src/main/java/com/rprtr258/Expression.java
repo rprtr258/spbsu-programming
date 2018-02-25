@@ -1,32 +1,22 @@
 package com.rprtr258;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class Expression {
     private ArrayList<String> tokens;
 
     public Expression(String expr) {
+        // parser kostyl
+        expr = expr.replace("+", " + ");
+        expr = expr.replace("-", " - ");
+        expr = expr.replace("*", " * ");
+        expr = expr.replace("/", " / ");
         tokens = new ArrayList<>();
-        String token = "";
-        for (int i = 0; i < expr.length(); i++) {
-            char symbol = expr.charAt(i);
-            if (isOperator(symbol)) {
-                if (!"".equals(token)) {
-                    tokens.add(token);
-                    token = "";
-                }
-                tokens.add("" + symbol);
-            } else if (symbol == ' ') {
-                if (!"".equals(token)) {
-                    tokens.add(token);
-                    token = "";
-                }
-            } else {
-                token += symbol;
-            }
-        }
-        if (!"".equals(token))
-            tokens.add(token);
+        StringTokenizer stringTokenizer = new StringTokenizer(expr, " ", false);
+        int tokensCount = stringTokenizer.countTokens();
+        for (int i = 0; i < tokensCount; i++)
+            tokens.add(stringTokenizer.nextToken());
     }
 
     public int eval() {
