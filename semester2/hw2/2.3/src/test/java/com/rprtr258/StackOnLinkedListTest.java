@@ -44,6 +44,12 @@ public class StackOnLinkedListTest {
         stack.pop();
     }
 
+    @Test(expected = EmptyStackException.class)
+    public void emptyTopTest() {
+        Stack<Integer> stack = new StackOnLinkedList<>();
+        stack.top();
+    }
+
     @Test
     public void isEmptyTest() {
         Stack<Integer> stack = new StackOnLinkedList<>();

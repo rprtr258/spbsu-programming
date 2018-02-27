@@ -9,8 +9,8 @@ public class LinkedList<T> {
         size = 0;
     }
 
-    public boolean isEmpty() {
-        return (size == 0);
+    public int size() {
+        return size;
     }
 
     public T peekEnd() {

@@ -31,7 +31,7 @@ public class StackOnArray<T> implements Stack<T> {
             throw new EmptyStackException();
     }
 
-    public boolean isEmpty() {
-        return data.isEmpty();
+    public int size() {
+        return data.size();
     }
 }

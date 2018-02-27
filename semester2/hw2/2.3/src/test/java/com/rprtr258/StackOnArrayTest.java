@@ -44,6 +44,12 @@ public class StackOnArrayTest {
         stack.pop();
     }
 
+    @Test(expected = EmptyStackException.class)
+    public void emptyTopTest() {
+        Stack<Integer> stack = new StackOnArray<>();
+        stack.top();
+    }
+
     @Test
     public void isEmptyTest() {
         Stack<Integer> stack = new StackOnArray<>();

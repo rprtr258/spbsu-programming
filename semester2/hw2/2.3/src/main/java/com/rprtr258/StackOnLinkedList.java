@@ -9,8 +9,8 @@ public class StackOnLinkedList<T> implements Stack<T> {
         data = new LinkedList<>();
     }
 
-    public boolean isEmpty() {
-        return data.isEmpty();
+    public int size() {
+        return data.size();
     }
 
     public void push(T value) {
