@@ -21,6 +21,13 @@ public class OperatorNode extends TreeNode {
         throw new IllegalStateException();
     }
 
+    public String infixForm(boolean printBrackets) {
+        String result = left.infixForm(true) + " " + data + " " + right.infixForm(true);
+        if (printBrackets)
+            result = String.format("(%s)", result);
+        return result;
+    }
+
     public String toString() {
         return String.format("(%s %s %s)", data, left.toString(), right.toString());
     }

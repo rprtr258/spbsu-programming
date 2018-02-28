@@ -12,6 +12,10 @@ public class ExpressionTree {
         return root.toString();
     }
 
+    public String infixForm() {
+        return root.infixForm(false);
+    }
+
     public int calc() {
         return root.calc();
     }

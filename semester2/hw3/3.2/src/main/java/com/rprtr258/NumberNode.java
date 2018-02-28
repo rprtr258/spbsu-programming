@@ -9,6 +9,10 @@ public class NumberNode extends TreeNode {
         return Integer.parseInt(data);
     }
 
+    public String infixForm(boolean printBrackets) {
+        return data;
+    }
+
     public String toString() {
         return data;
     }

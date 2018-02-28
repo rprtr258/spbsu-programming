@@ -10,4 +10,5 @@ public abstract class TreeNode {
     }
 
     public abstract int calc();
+    public abstract String infixForm(boolean printBrackets);
 }
