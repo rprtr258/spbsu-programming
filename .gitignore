@@ -21,4 +21,5 @@
 **/gradle/*
 **/.gradle/*
 **/.idea/*
-
+**/L
+**/*.ipr
