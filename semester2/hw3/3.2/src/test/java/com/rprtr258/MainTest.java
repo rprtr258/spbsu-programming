@@ -97,6 +97,8 @@ public class MainTest {
     }
 
     private void resetStreams() throws IOException {
+        System.setIn(systemIn);
+        System.setOut(systemOut);
         myIn.close();
         myPSOut.close();
         myOut.close();
