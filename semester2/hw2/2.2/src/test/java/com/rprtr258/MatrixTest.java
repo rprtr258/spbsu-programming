@@ -36,32 +36,26 @@ public class MatrixTest {
         writer.close();
     }
 
-    private String readFile(File file) {
+    private String readFile(File file) throws IOException {
         String result = null;
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader br = new BufferedReader(isr);
-            result = br.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileInputStream fis = new FileInputStream(file);
+        InputStreamReader isr = new InputStreamReader(fis);
+        BufferedReader br = new BufferedReader(isr);
+        result = br.readLine();
+        fis.close();
+        isr.close();
+        br.close();
         return result;
     }
 
     @Test
-    public void printFileTest() {
+    public void printFileTest() throws IOException {
         Matrix matrix = new Matrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-        File file = null;
-        try {
-            file = File.createTempFile("matrix", "txt");
-            IWriter writer = new FileWriter(file);
-            matrix.writeTourTo(writer);
-            assertEquals("5 4 7 8 9 6 3 2 1", readFile(file));
-            file.delete();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File file = File.createTempFile("matrix", "txt");
+        IWriter writer = new FileWriter(file);
+        matrix.writeTourTo(writer);
+        assertEquals("5 4 7 8 9 6 3 2 1", readFile(file));
+        file.delete();
+        writer.close();
     }
 }
