@@ -36,6 +36,17 @@ public class MatrixTest {
         writer.close();
     }
 
+    @Test
+    public void printFileTest() throws IOException {
+        Matrix matrix = new Matrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
+        File file = File.createTempFile("matrix", "txt");
+        IWriter writer = new FileWriter(file);
+        matrix.writeTourTo(writer);
+        assertEquals("5 4 7 8 9 6 3 2 1", readFile(file));
+        file.delete();
+        writer.close();
+    }
+    
     private String readFile(File file) throws IOException {
         String result = null;
         FileInputStream fis = new FileInputStream(file);
@@ -46,16 +57,5 @@ public class MatrixTest {
         isr.close();
         br.close();
         return result;
-    }
-
-    @Test
-    public void printFileTest() throws IOException {
-        Matrix matrix = new Matrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}});
-        File file = File.createTempFile("matrix", "txt");
-        IWriter writer = new FileWriter(file);
-        matrix.writeTourTo(writer);
-        assertEquals("5 4 7 8 9 6 3 2 1", readFile(file));
-        file.delete();
-        writer.close();
     }
 }
