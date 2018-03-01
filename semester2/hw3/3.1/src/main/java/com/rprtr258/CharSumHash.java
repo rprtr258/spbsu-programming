@@ -8,6 +8,8 @@ public class CharSumHash implements HashStrategy {
     }
 
     public CharSumHash(int bound) {
+        if (bound <= 0)
+            throw new IllegalArgumentException();
         this.bound = bound;
     }
 

@@ -14,6 +14,7 @@ package com.rprtr258;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 enum CommandType {
@@ -66,7 +67,7 @@ public class Main {
                     String filename = in.nextLine();
                     System.out.print("Reset hashtable(y/n)):\n");
                     String choice = in.nextLine();
-                    if ("y".equals(choice))
+                    if ("n".equals(choice))
                         hashTable.erase();
                     FileReader fileReader = null;
                     try {
@@ -76,8 +77,11 @@ public class Main {
                             String value = fileScanner.next();
                             hashTable.insert(value);
                         }
+                        fileReader.close();
                     } catch (FileNotFoundException e) {
-                        System.out.printf("File %s was not found.\n", filename);
+                        System.out.printf("File \"%s\" was not found.\n", filename);
+                    } catch (IOException e) {
+                        System.out.printf("Couldn't close file \"%s\".\n", filename);
                     }
                     break;
                 }
@@ -92,7 +96,7 @@ public class Main {
                     break;
                 }
                 case help: {
-                    System.out.print("List of avaliable commands:\n");
+                    System.out.print("List of available commands:\n");
                     System.out.print("add - add value to hashtable\n");
                     System.out.print("remove - remove value to hashtable\n");
                     System.out.print("info - get statistics of hashtable\n");

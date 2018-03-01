@@ -9,9 +9,7 @@ public class HashTable {
 
     public HashTable(HashStrategy hashStrategy) {
         this.hashStrategy = hashStrategy;
-        data = new ArrayList<>(hashStrategy.maxHashValue() + 1);
-        for (int i = 0; i <= hashStrategy.maxHashValue(); i++)
-            data.add(new LinkedList<>());
+        data = createDataArray(hashStrategy);
     }
 
     public void insert(String string) {
@@ -62,12 +60,12 @@ public class HashTable {
     }
 
     public void erase() {
-        for (LinkedList<String> row : data)
-            row.clear();
+        data.forEach(LinkedList::clear);
     }
 
     public String toString() {
-        StringBuilder result = new StringBuilder(String.format("Hashtable of size %d:\n", data.size()));
+        StringBuilder result = new StringBuilder();
+        result.append(String.format("Hashtable of size %d:\n", data.size()));
         for (int i = 0; i < data.size(); i++) {
             LinkedList<String> row = data.get(i);
             if (row.size() == 0)
@@ -82,9 +80,7 @@ public class HashTable {
     }
 
     public void setHashStrategy(HashStrategy hashStrategy) {
-        ArrayList<LinkedList<String>> newData = new ArrayList<>(hashStrategy.maxHashValue() + 1);
-        for (int i = 0; i <= hashStrategy.maxHashValue(); i++)
-            newData.add(new LinkedList<>());
+        ArrayList<LinkedList<String>> newData = createDataArray(hashStrategy);
         for (LinkedList<String> row : data) {
             for (String value : row) {
                 int hash = hashStrategy.hash(value);
@@ -93,5 +89,12 @@ public class HashTable {
         }
         this.data = newData;
         this.hashStrategy = hashStrategy;
+    }
+
+    private ArrayList<LinkedList<String>> createDataArray(HashStrategy hashStrategy) {
+        ArrayList<LinkedList<String>> data = new ArrayList<>(hashStrategy.maxHashValue() + 1);
+        for (int i = 0; i <= hashStrategy.maxHashValue(); i++)
+            data.add(new LinkedList<>());
+        return data;
     }
 }
