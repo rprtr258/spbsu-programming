@@ -7,50 +7,45 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        InputReader.setInput(new Scanner(System.in));
+        InputReader.setIn(new Scanner(System.in));
+        Output.setOut(System.out);
         boolean isRunning = true;
         HashTable hashTable = new HashTable(new CharSumHash());
         while (isRunning) {
             CommandType command = InputReader.inputCommand();
             switch (command) {
-                case invalid: {
-                    System.out.print("Incorrect command. Write help to see list of commands.\n");
-                    break;
-                }
                 case addValue: {
-                    System.out.print("Write value to add:\n");
+                    Output.printString("Write value to add:");
                     String value = InputReader.inputValue();
                     hashTable.insert(value);
                     break;
                 }
                 case removeValue: {
-                    System.out.print("Write value to remove:\n");
+                    Output.printString("Write value to remove:");
                     String value = InputReader.inputValue();
                     hashTable.remove(value);
                     break;
                 }
                 case checkValue: {
-                    System.out.print("Write value to check:\n");
+                    Output.printString("Write value to check:");
                     String value = InputReader.inputValue();
                     boolean exists = hashTable.contains(value);
-                    if (exists)
-                        System.out.printf("\"%s\" is in hashtable\n", value);
-                    else
-                        System.out.printf("\"%s\" is not in hashtable\n", value);
+                    String result = (exists ? "in" : "not in");
+                    Output.printString(String.format("\"%s\" is %s hashtable", value, result));
                     break;
                 }
                 case showInfo: {
-                    System.out.print(hashTable.getStatisticsAsString() + "\n");
+                    Output.printString(hashTable.getStatisticsAsString());
                     break;
                 }
                 case print: {
-                    System.out.print(hashTable);
+                    Output.printString(hashTable.toString());
                     break;
                 }
                 case checkoutFile: {
-                    System.out.print("Write name of file to checkout:\n");
+                    Output.printString("Write name of file to checkout:");
                     String filename = InputReader.inputFilename();
-                    System.out.print("Erase hashtable?(y/n):\n");
+                    Output.printString("Erase hashtable?(y/n):");
                     if (InputReader.inputChoice())
                         hashTable.erase();
                     try {
@@ -62,14 +57,14 @@ public class Main {
                         }
                         fileReader.close();
                     } catch (FileNotFoundException e) {
-                        System.out.printf("File \"%s\" was not found.\n", filename);
+                        Output.printString(String.format("File \"%s\" was not found.", filename));
                     } catch (IOException e) {
-                        System.out.printf("Couldn't close file \"%s\".\n", filename);
+                        Output.printString(String.format("Couldn't close file \"%s\"", filename));
                     }
                     break;
                 }
                 case changeHash: {
-                    System.out.print("Write number of cells:\n");
+                    Output.printString("Write number of cells:");
                     HashStrategy hashStrategy = InputReader.inputHashStrategy();
                     hashTable.setHashStrategy(hashStrategy);
                     break;
@@ -79,16 +74,11 @@ public class Main {
                     break;
                 }
                 case help: {
-                    System.out.print("List of available commands:\n");
-                    System.out.print("add - add value to hashtable\n");
-                    System.out.print("remove - remove value to hashtable\n");
-                    System.out.print("info - get statistics of hashtable\n");
-                    System.out.print("print - print hashtable\n");
-                    System.out.print("fill - fill hashtable with values from file\n");
-                    System.out.print("hash - change hash function\n");
-                    System.out.print("quit - exit program\n");
-                    System.out.print("help - show this list\n");
+                    Output.printHelp();
                     break;
+                }
+                default: {
+                    Output.printString("Something went wrong\n");
                 }
             }
         }

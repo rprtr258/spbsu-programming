@@ -66,15 +66,15 @@ public class HashTable {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append(String.format("Hashtable of size %d:\n", data.size()));
+        ArrayList<String> rows = new ArrayList<>();
         for (int i = 0; i < data.size(); i++) {
             LinkedList<String> row = data.get(i);
             if (row.size() == 0)
                 continue;
-            result.append(i).append(": ");
-            result.append(String.join(", ", row));
-            if (i + 1 < data.size())
-                result.append("\n");
+            String curRow = String.format("%d: %s", i, String.join(", ", row));
+            rows.add(curRow);
         }
+        result.append(String.join("\n", rows));
         return result.toString();
     }
 

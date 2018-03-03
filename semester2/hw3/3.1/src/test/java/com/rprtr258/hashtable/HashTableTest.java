@@ -65,7 +65,7 @@ public class HashTableTest {
             "493: Kappa\n" +
             "500: Keepo\n" +
             "916: KappaRoss\n" +
-            "997: KappaClaus\n";
+            "997: KappaClaus";
         assertEquals(expected, hashTable.toString());
     }
 

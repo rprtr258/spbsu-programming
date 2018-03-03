@@ -59,7 +59,7 @@ public class InputReader {
         return new CharSumHash(newBound);
     }
 
-    public static void setInput(Scanner newIn) {
+    public static void setIn(Scanner newIn) {
         in = newIn;
     }
 }
