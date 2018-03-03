@@ -35,6 +35,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
         HashTable hashTable = new HashTable(new CharSumHash());
         while (isRunning) {
+            //System.out.print("> ");
             String command = in.nextLine();
             CommandType commandType = getCommandType(command);
             switch (commandType) {
@@ -59,7 +60,7 @@ public class Main {
                     break;
                 }
                 case print: {
-                    System.out.print(hashTable + "\n");
+                    System.out.print(hashTable);
                     break;
                 }
                 case checkoutFile: {

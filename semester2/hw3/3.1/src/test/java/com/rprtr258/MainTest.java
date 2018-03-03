@@ -24,11 +24,11 @@ public class MainTest {
             "print\n" +
             "quit\n";
         String expected = "Write value to add:\n" +
-                "Write value to add:\n" +
-                "Write value to add:\n" +
-                "Hashtable of size 10000:\n" +
-                "493: Kappa, \n" +
-                "500: Keepo, \n\n";
+            "Write value to add:\n" +
+            "Write value to add:\n" +
+            "Hashtable of size 10000:\n" +
+            "493: Kappa\n" +
+            "500: Keepo\n";
         inputOutputCheck(input, expected);
     }
 
@@ -58,13 +58,13 @@ public class MainTest {
             "print\n" +
             "quit\n";
         String expected = "Write value to add:\n" +
-                "Write value to add:\n" +
-                "Write value to add:\n" +
-                "Write number of cells:\n" +
-                "Hashtable of size 77:\n" +
-                "31: Kappa, \n" +
-                "38: Keepo, \n" +
-                "69: KappaRoss, \n\n";
+            "Write value to add:\n" +
+            "Write value to add:\n" +
+            "Write number of cells:\n" +
+            "Hashtable of size 77:\n" +
+            "31: Kappa\n" +
+            "38: Keepo\n" +
+            "69: KappaRoss\n";
         inputOutputCheck(input, expected);
     }
 
@@ -85,13 +85,13 @@ public class MainTest {
             "print\n" +
             "quit\n";
         String expected = "Write value to add:\n" +
-                "Write name of file to checkout:\n" +
-                "Reset hashtable(y/n)):\n" +
-                "Hashtable of size 10000:\n" +
-                "493: Kappa, \n" +
-                "500: Keepo, \n" +
-                "997: KappaClaus, \n" +
-                "1550: ResidentSleeper, \n\n";
+            "Write name of file to checkout:\n" +
+            "Reset hashtable(y/n)):\n" +
+            "Hashtable of size 10000:\n" +
+            "493: Kappa\n" +
+            "500: Keepo\n" +
+            "997: KappaClaus\n" +
+            "1550: ResidentSleeper\n";
         inputOutputCheck(input, expected);
         System.out.println(file.getAbsolutePath());
         file.delete();
@@ -100,12 +100,12 @@ public class MainTest {
     @Test
     public void fileNotFoundTest() throws IOException {
         String input = "fill\n" +
-                "fjaspdgbrladshgjk\n" +
-                "n\n" +
-                "quit\n";
+            "file.txt\n" +
+            "n\n" +
+            "quit\n";
         String expected = "Write name of file to checkout:\n" +
-                "Reset hashtable(y/n)):\n" +
-                "File \"fjaspdgbrladshgjk\" was not found.\n";
+            "Reset hashtable(y/n)):\n" +
+            "File \"file.txt\" was not found.\n";
         inputOutputCheck(input, expected);
     }
 
@@ -115,23 +115,23 @@ public class MainTest {
         file.createNewFile();
         FileWriter fileWriter = new FileWriter(file);
         fileWriter.write("Kappa\n" +
-                "Keepo\n" +
-                "KappaClaus");
+            "Keepo\n" +
+            "KappaClaus");
         fileWriter.close();
         String input = "add\n" +
-                "ResidentSleeper\n" +
-                "fill\n" +
-                "file.txt\n" +
-                "n\n" +
-                "print\n" +
-                "quit\n";
+            "ResidentSleeper\n" +
+            "fill\n" +
+            "file.txt\n" +
+            "n\n" +
+            "print\n" +
+            "quit\n";
         String expected = "Write value to add:\n" +
-                "Write name of file to checkout:\n" +
-                "Reset hashtable(y/n)):\n" +
-                "Hashtable of size 10000:\n" +
-                "493: Kappa, \n" +
-                "500: Keepo, \n" +
-                "997: KappaClaus, \n\n";
+            "Write name of file to checkout:\n" +
+            "Reset hashtable(y/n)):\n" +
+            "Hashtable of size 10000:\n" +
+            "493: Kappa\n" +
+            "500: Keepo\n" +
+            "997: KappaClaus\n";
         inputOutputCheck(input, expected);
         file.delete();
     }
@@ -152,9 +152,9 @@ public class MainTest {
     }
 
     @Test
-    public void invalidTest() throws IOException {
+    public void invalidCommandTest() throws IOException {
         String input = "lol\n" +
-                "quit\n";
+            "quit\n";
         String expected = "Incorrect command. Write help to see list of commands.\n";
         inputOutputCheck(input, expected);
     }
@@ -174,13 +174,13 @@ public class MainTest {
             "print\n" +
             "quit\n";
         String expected = "Write value to add:\n" +
-                "Write value to add:\n" +
-                "Write value to add:\n" +
-                "Write value to add:\n" +
-                "Write value to remove:\n" +
-                "Hashtable of size 10000:\n" +
-                "500: Keepo, \n" +
-                "916: KappaRoss, \n\n";
+            "Write value to add:\n" +
+            "Write value to add:\n" +
+            "Write value to add:\n" +
+            "Write value to remove:\n" +
+            "Hashtable of size 10000:\n" +
+            "500: Keepo\n" +
+            "916: KappaRoss\n";
         inputOutputCheck(input, expected);
     }
 
@@ -201,8 +201,7 @@ public class MainTest {
     }
 
     private static void resetStreams() throws IOException {
-        System.setIn(systemIn)
-        ;
+        System.setIn(systemIn);
         System.setOut(systemOut);
         myIn.close();
         myBAOS.close();

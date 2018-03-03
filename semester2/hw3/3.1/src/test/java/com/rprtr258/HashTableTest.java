@@ -62,10 +62,10 @@ public class HashTableTest {
         hashTable.insert("KappaClaus");
         hashTable.insert("Kappa");
         String expected = "Hashtable of size 10000:\n" +
-            "493: Kappa, \n" +
-            "500: Keepo, \n" +
-            "916: KappaRoss, \n" +
-            "997: KappaClaus, \n";
+            "493: Kappa\n" +
+            "500: Keepo\n" +
+            "916: KappaRoss\n" +
+            "997: KappaClaus\n";
         assertEquals(expected, hashTable.toString());
     }
 

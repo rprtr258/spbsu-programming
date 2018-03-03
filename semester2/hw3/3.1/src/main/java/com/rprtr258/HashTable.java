@@ -71,10 +71,9 @@ public class HashTable {
             if (row.size() == 0)
                 continue;
             result.append(i).append(": ");
-            for (String value : row) {
-                result.append(value).append(", ");
-            }
-            result.append("\n");
+            result.append(String.join(", ", row));
+            if (i + 1 < data.size())
+                result.append("\n");
         }
         return result.toString();
     }
