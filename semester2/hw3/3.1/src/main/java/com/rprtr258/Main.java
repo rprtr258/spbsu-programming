@@ -35,7 +35,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
         HashTable hashTable = new HashTable(new CharSumHash());
         while (isRunning) {
-            //System.out.print("> ");
+            System.out.print("> ");
             String command = in.nextLine();
             CommandType commandType = getCommandType(command);
             switch (commandType) {
@@ -45,12 +45,14 @@ public class Main {
                 }
                 case addValue: {
                     System.out.print("Write value to add:\n");
+                    System.out.print("> ");
                     String value = in.nextLine();
                     hashTable.insert(value);
                     break;
                 }
                 case removeValue: {
                     System.out.print("Write value to remove:\n");
+                    System.out.print("> ");
                     String value = in.nextLine();
                     hashTable.remove(value);
                     break;
@@ -65,8 +67,10 @@ public class Main {
                 }
                 case checkoutFile: {
                     System.out.print("Write name of file to checkout:\n");
+                    System.out.print("> ");
                     String filename = in.nextLine();
                     System.out.print("Reset hashtable(y/n)):\n");
+                    System.out.print("> ");
                     String choice = in.nextLine();
                     if ("n".equals(choice))
                         hashTable.erase();
@@ -88,6 +92,7 @@ public class Main {
                 }
                 case changeHash: {
                     System.out.print("Write number of cells:\n");
+                    System.out.print("> ");
                     int newBound = Integer.valueOf(in.nextLine());
                     hashTable.setHashStrategy(new CharSumHash(newBound));
                     break;

@@ -23,25 +23,27 @@ public class MainTest {
             "Kappa\n" +
             "print\n" +
             "quit\n";
-        String expected = "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Hashtable of size 10000:\n" +
+        String expected = "> Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Hashtable of size 10000:\n" +
             "493: Kappa\n" +
-            "500: Keepo\n";
+            "500: Keepo\n" +
+            "> ";
         inputOutputCheck(input, expected);
     }
 
     @Test
     public void infoTest() throws IOException {
         String input = "add\nKappa\nadd\nKeepo\nadd\nKappa\ninfo\nquit\n";
-        String expected = "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Cells: 2\n" +
+        String expected = "> Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Cells: 2\n" +
             "Load factor: 0,000200\n" +
             "Conflicts: 0\n" +
-            "Max chain length: 1\n";
+            "Max chain length: 1\n" +
+            "> ";
         inputOutputCheck(input, expected);
     }
 
@@ -57,14 +59,15 @@ public class MainTest {
             "77\n" +
             "print\n" +
             "quit\n";
-        String expected = "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Write number of cells:\n" +
-            "Hashtable of size 77:\n" +
+        String expected = "> Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Write number of cells:\n" +
+            "> > Hashtable of size 77:\n" +
             "31: Kappa\n" +
             "38: Keepo\n" +
-            "69: KappaRoss\n";
+            "69: KappaRoss\n" +
+            "> ";
         inputOutputCheck(input, expected);
     }
 
@@ -84,14 +87,15 @@ public class MainTest {
             "y\n" +
             "print\n" +
             "quit\n";
-        String expected = "Write value to add:\n" +
-            "Write name of file to checkout:\n" +
-            "Reset hashtable(y/n)):\n" +
-            "Hashtable of size 10000:\n" +
+        String expected = "> Write value to add:\n" +
+            "> > Write name of file to checkout:\n" +
+            "> Reset hashtable(y/n)):\n" +
+            "> > Hashtable of size 10000:\n" +
             "493: Kappa\n" +
             "500: Keepo\n" +
             "997: KappaClaus\n" +
-            "1550: ResidentSleeper\n";
+            "1550: ResidentSleeper\n" +
+            "> ";
         inputOutputCheck(input, expected);
         System.out.println(file.getAbsolutePath());
         file.delete();
@@ -103,9 +107,10 @@ public class MainTest {
             "file.txt\n" +
             "n\n" +
             "quit\n";
-        String expected = "Write name of file to checkout:\n" +
-            "Reset hashtable(y/n)):\n" +
-            "File \"file.txt\" was not found.\n";
+        String expected = "> Write name of file to checkout:\n" +
+            "> Reset hashtable(y/n)):\n" +
+            "> File \"file.txt\" was not found.\n" +
+            "> ";
         inputOutputCheck(input, expected);
     }
 
@@ -125,13 +130,14 @@ public class MainTest {
             "n\n" +
             "print\n" +
             "quit\n";
-        String expected = "Write value to add:\n" +
-            "Write name of file to checkout:\n" +
-            "Reset hashtable(y/n)):\n" +
-            "Hashtable of size 10000:\n" +
+        String expected = "> Write value to add:\n" +
+            "> > Write name of file to checkout:\n" +
+            "> Reset hashtable(y/n)):\n" +
+            "> > Hashtable of size 10000:\n" +
             "493: Kappa\n" +
             "500: Keepo\n" +
-            "997: KappaClaus\n";
+            "997: KappaClaus\n" +
+            "> ";
         inputOutputCheck(input, expected);
         file.delete();
     }
@@ -139,7 +145,7 @@ public class MainTest {
     @Test
     public void helpTest() throws IOException {
         String input = "help\nquit\n";
-        String expected = "List of available commands:\n" +
+        String expected = "> List of available commands:\n" +
             "add - add value to hashtable\n" +
             "remove - remove value to hashtable\n" +
             "info - get statistics of hashtable\n" +
@@ -147,7 +153,8 @@ public class MainTest {
             "fill - fill hashtable with values from file\n" +
             "hash - change hash function\n" +
             "quit - exit program\n" +
-            "help - show this list\n";
+            "help - show this list\n" +
+            "> ";
         inputOutputCheck(input, expected);
     }
 
@@ -155,7 +162,8 @@ public class MainTest {
     public void invalidCommandTest() throws IOException {
         String input = "lol\n" +
             "quit\n";
-        String expected = "Incorrect command. Write help to see list of commands.\n";
+        String expected = "> Incorrect command. Write help to see list of commands.\n" +
+            "> ";
         inputOutputCheck(input, expected);
     }
 
@@ -173,14 +181,15 @@ public class MainTest {
             "Kappa\n" +
             "print\n" +
             "quit\n";
-        String expected = "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Write value to add:\n" +
-            "Write value to remove:\n" +
-            "Hashtable of size 10000:\n" +
+        String expected = "> Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Write value to add:\n" +
+            "> > Write value to remove:\n" +
+            "> > Hashtable of size 10000:\n" +
             "500: Keepo\n" +
-            "916: KappaRoss\n";
+            "916: KappaRoss\n" +
+            "> ";
         inputOutputCheck(input, expected);
     }
 
