@@ -107,12 +107,11 @@ public class MainTest {
             "quit\n";
         String expected = "> Write value to add:\n" +
             "> > Write name of file to checkout:\n" +
-            "> Reset hashtable(y/n)):\n" +
+            "> Erase hashtable?(y/n):\n" +
             "> > Hashtable of size 10000:\n" +
             "493: Kappa\n" +
             "500: Keepo\n" +
             "997: KappaClaus\n" +
-            "1550: ResidentSleeper\n" +
             "> ";
         inputOutputCheck(input, expected);
         System.out.println(file.getAbsolutePath());
@@ -126,7 +125,7 @@ public class MainTest {
             "n\n" +
             "quit\n";
         String expected = "> Write name of file to checkout:\n" +
-            "> Reset hashtable(y/n)):\n" +
+            "> Erase hashtable?(y/n):\n" +
             "> File \"file.txt\" was not found.\n" +
             "> ";
         inputOutputCheck(input, expected);
@@ -150,11 +149,12 @@ public class MainTest {
             "quit\n";
         String expected = "> Write value to add:\n" +
             "> > Write name of file to checkout:\n" +
-            "> Reset hashtable(y/n)):\n" +
+            "> Erase hashtable?(y/n):\n" +
             "> > Hashtable of size 10000:\n" +
             "493: Kappa\n" +
             "500: Keepo\n" +
             "997: KappaClaus\n" +
+            "1550: ResidentSleeper\n" +
             "> ";
         inputOutputCheck(input, expected);
         file.delete();

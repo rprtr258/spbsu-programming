@@ -5,51 +5,33 @@ import com.rprtr258.hashtable.*;
 import java.io.*;
 import java.util.Scanner;
 
-enum CommandType {
-    invalid,
-    addValue,
-    removeValue,
-    checkValue,
-    showInfo,
-    print,
-    checkoutFile,
-    changeHash,
-    close,
-    help
-}
-
 public class Main {
     public static void main(String[] args) {
+        InputReader.setInput(new Scanner(System.in));
         boolean isRunning = true;
-        Scanner in = new Scanner(System.in);
         HashTable hashTable = new HashTable(new CharSumHash());
         while (isRunning) {
-            System.out.print("> ");
-            String command = in.nextLine();
-            CommandType commandType = getCommandType(command);
-            switch (commandType) {
+            CommandType command = InputReader.inputCommand();
+            switch (command) {
                 case invalid: {
                     System.out.print("Incorrect command. Write help to see list of commands.\n");
                     break;
                 }
                 case addValue: {
                     System.out.print("Write value to add:\n");
-                    System.out.print("> ");
-                    String value = in.nextLine();
+                    String value = InputReader.inputValue();
                     hashTable.insert(value);
                     break;
                 }
                 case removeValue: {
                     System.out.print("Write value to remove:\n");
-                    System.out.print("> ");
-                    String value = in.nextLine();
+                    String value = InputReader.inputValue();
                     hashTable.remove(value);
                     break;
                 }
                 case checkValue: {
                     System.out.print("Write value to check:\n");
-                    System.out.print("> ");
-                    String value = in.nextLine();
+                    String value = InputReader.inputValue();
                     boolean exists = hashTable.contains(value);
                     if (exists)
                         System.out.printf("\"%s\" is in hashtable\n", value);
@@ -67,12 +49,9 @@ public class Main {
                 }
                 case checkoutFile: {
                     System.out.print("Write name of file to checkout:\n");
-                    System.out.print("> ");
-                    String filename = in.nextLine();
-                    System.out.print("Reset hashtable(y/n)):\n");
-                    System.out.print("> ");
-                    String choice = in.nextLine();
-                    if ("n".equals(choice))
+                    String filename = InputReader.inputFilename();
+                    System.out.print("Erase hashtable?(y/n):\n");
+                    if (InputReader.inputChoice())
                         hashTable.erase();
                     try {
                         FileReader fileReader = new FileReader(filename);
@@ -91,9 +70,8 @@ public class Main {
                 }
                 case changeHash: {
                     System.out.print("Write number of cells:\n");
-                    System.out.print("> ");
-                    int newBound = Integer.valueOf(in.nextLine());
-                    hashTable.setHashStrategy(new CharSumHash(newBound));
+                    HashStrategy hashStrategy = InputReader.inputHashStrategy();
+                    hashTable.setHashStrategy(hashStrategy);
                     break;
                 }
                 case close: {
@@ -113,31 +91,6 @@ public class Main {
                     break;
                 }
             }
-        }
-    }
-
-    private static CommandType getCommandType(String command) {
-        switch (command) {
-            case "add":
-                return CommandType.addValue;
-            case "remove":
-                return CommandType.removeValue;
-            case "contains":
-                return CommandType.checkValue;
-            case "info":
-                return CommandType.showInfo;
-            case "print":
-                return CommandType.print;
-            case "fill":
-                return CommandType.checkoutFile;
-            case "hash":
-                return CommandType.changeHash;
-            case "quit":
-                return CommandType.close;
-            case "help":
-                return CommandType.help;
-            default:
-                return CommandType.invalid;
         }
     }
 }
