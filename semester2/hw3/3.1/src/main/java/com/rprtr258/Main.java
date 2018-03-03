@@ -21,6 +21,7 @@ enum CommandType {
     invalid,
     addValue,
     removeValue,
+    checkValue,
     showInfo,
     print,
     checkoutFile,
@@ -55,6 +56,17 @@ public class Main {
                     System.out.print("> ");
                     String value = in.nextLine();
                     hashTable.remove(value);
+                    break;
+                }
+                case checkValue: {
+                    System.out.print("Write value to check:\n");
+                    System.out.print("> ");
+                    String value = in.nextLine();
+                    boolean exists = hashTable.contains(value);
+                    if (exists)
+                        System.out.printf("\"%s\" is in hashtable\n", value);
+                    else
+                        System.out.printf("\"%s\" is not in hashtable\n", value);
                     break;
                 }
                 case showInfo: {
@@ -118,22 +130,27 @@ public class Main {
     }
 
     private static CommandType getCommandType(String command) {
-        if ("add".equals(command))
-            return CommandType.addValue;
-        if ("remove".equals(command))
-            return CommandType.removeValue;
-        if ("info".equals(command))
-            return CommandType.showInfo;
-        if ("print".equals(command))
-            return CommandType.print;
-        if ("fill".equals(command))
-            return CommandType.checkoutFile;
-        if ("hash".equals(command))
-            return CommandType.changeHash;
-        if ("quit".equals(command))
-            return CommandType.close;
-        if ("help".equals(command))
-            return CommandType.help;
-        return CommandType.invalid;
+        switch (command) {
+            case "add":
+                return CommandType.addValue;
+            case "remove":
+                return CommandType.removeValue;
+            case "contains":
+                return CommandType.checkValue;
+            case "info":
+                return CommandType.showInfo;
+            case "print":
+                return CommandType.print;
+            case "fill":
+                return CommandType.checkoutFile;
+            case "hash":
+                return CommandType.changeHash;
+            case "quit":
+                return CommandType.close;
+            case "help":
+                return CommandType.help;
+            default:
+                return CommandType.invalid;
+        }
     }
 }

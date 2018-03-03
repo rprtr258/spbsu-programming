@@ -34,6 +34,24 @@ public class MainTest {
     }
 
     @Test
+    public void containsTest() throws IOException {
+        String input = "add\n" +
+            "Kappa\n" +
+            "contains\n" +
+            "Keepo\n" +
+            "contains\n" +
+            "Kappa\n" +
+            "quit\n";
+        String expected = "> Write value to add:\n" +
+            "> > Write value to check:\n" +
+            "> \"Keepo\" is not in hashtable\n" +
+            "> Write value to check:\n" +
+            "> \"Kappa\" is in hashtable\n" +
+            "> ";
+        inputOutputCheck(input, expected);
+    }
+
+    @Test
     public void infoTest() throws IOException {
         String input = "add\nKappa\nadd\nKeepo\nadd\nKappa\ninfo\nquit\n";
         String expected = "> Write value to add:\n" +
