@@ -1,20 +1,8 @@
 package com.rprtr258;
 
-/*
-* Реализовать класс для работы с хеш-таблицей (на списках).
-* Общение с пользователем должно происходит в интерактивном режиме:
-* добавить значение в хеш-таблицу, удалить значение из хеш-таблицы,
-* поиск значения в хеш-таблице, показать статистику по хеш-таблице
-* (общее число ячеек, load factor, число конфликтов, максимальная длина
-* списка в конфликтных ячейках и т.п.), заполнить хеш-таблицу содержимым файла,
-* выбрать хеш-функцию для подсчета хеша (из заранее заданных в коде).
-* Смена хэш-функции должна происходить во время работы программы,
-* в класс используемая хеш-функция должна передаваться из клиентского кода.
-* */
+import com.rprtr258.hashtable.*;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 enum CommandType {
@@ -86,9 +74,8 @@ public class Main {
                     String choice = in.nextLine();
                     if ("n".equals(choice))
                         hashTable.erase();
-                    FileReader fileReader = null;
                     try {
-                        fileReader = new FileReader(filename);
+                        FileReader fileReader = new FileReader(filename);
                         Scanner fileScanner = new Scanner(fileReader);
                         while (fileScanner.hasNext()) {
                             String value = fileScanner.next();

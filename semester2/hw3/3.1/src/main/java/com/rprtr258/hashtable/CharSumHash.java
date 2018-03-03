@@ -1,4 +1,4 @@
-package com.rprtr258;
+package com.rprtr258.hashtable;
 
 public class CharSumHash implements HashStrategy {
     private int bound;
