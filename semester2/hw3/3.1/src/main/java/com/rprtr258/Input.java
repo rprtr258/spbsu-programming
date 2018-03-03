@@ -4,12 +4,12 @@ import com.rprtr258.hashtable.*;
 
 import java.util.Scanner;
 
-public class InputReader {
+public class Input {
     static private Scanner in = new Scanner(System.in);
 
     public static CommandType inputCommand() {
         while (true) {
-            System.out.print("> ");
+            Output.printString("> ");
             String command = in.nextLine();
             switch (command) {
                 case "add":
@@ -31,30 +31,34 @@ public class InputReader {
                 case "help":
                     return CommandType.help;
                 default:
-                    System.out.print("Incorrect command. Write help to see list of commands.\n");
+                    Output.printString("Incorrect command. Write help to see list of commands.\n");
             }
         }
     }
 
     public static String inputValue() {
-        System.out.print("> ");
+        Output.printString("> ");
         return in.nextLine();
     }
 
     public static String inputFilename() {
-        System.out.print("> ");
+        Output.printString("> ");
         String filename = in.nextLine();
+        while (!filename.matches("\\w+(\\.\\w*)*")) {
+            Output.printlnString("Incorrect filename");
+            filename = in.nextLine();
+        }
         return filename;
     }
 
     public static boolean inputChoice() {
-        System.out.print("> ");
+        Output.printString("> ");
         String choice = in.nextLine();
         return "y".equals(choice);
     }
 
     public static HashStrategy inputHashStrategy() {
-        System.out.print("> ");
+        Output.printString("> ");
         int newBound = Integer.valueOf(in.nextLine());
         return new CharSumHash(newBound);
     }

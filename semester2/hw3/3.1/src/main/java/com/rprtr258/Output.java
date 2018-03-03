@@ -7,6 +7,10 @@ public class Output {
 
     public static void printString(String string) {
         out.print(string);
+    }
+
+    public static void printlnString(String string) {
+        printString(string);
         out.print("\n");
     }
 
