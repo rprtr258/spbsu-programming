@@ -11,6 +11,7 @@ public class PolynomialHash implements HashStrategy {
         mod = modulo;
     }
 
+    @Override
     public int hash(String string) {
         int result = 0;
         for (int i = 0; i < string.length(); i++)
@@ -18,6 +19,7 @@ public class PolynomialHash implements HashStrategy {
         return result;
     }
 
+    @Override
     public int maxHashValue() {
         return mod - 1;
     }

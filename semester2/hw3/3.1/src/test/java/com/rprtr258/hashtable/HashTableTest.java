@@ -78,13 +78,4 @@ public class HashTableTest {
         hashTable.setHashStrategy(new CharSumHash(1));
         hashTable.setHashStrategy(new CharSumHash(23662));
     }
-
-    // TODO: move in CharSumHash tests
-    @Test(expected = IllegalArgumentException.class)
-    public void incorrectHashTest() {
-        HashTable hashTable = new HashTable(new CharSumHash());
-        for (int i = 0; i < 30000; i++)
-            hashTable.insert(Integer.toString(i));
-        hashTable.setHashStrategy(new CharSumHash(-1));
-    }
 }

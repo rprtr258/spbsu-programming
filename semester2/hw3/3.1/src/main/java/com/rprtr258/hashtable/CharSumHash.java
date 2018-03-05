@@ -13,6 +13,7 @@ public class CharSumHash implements HashStrategy {
         this.bound = bound;
     }
 
+    @Override
     public int hash(String string) {
         int result = 0;
         for (int i = 0; i < string.length(); i++)
@@ -20,6 +21,7 @@ public class CharSumHash implements HashStrategy {
         return result % bound;
     }
 
+    @Override
     public int maxHashValue() {
         return bound - 1;
     }
