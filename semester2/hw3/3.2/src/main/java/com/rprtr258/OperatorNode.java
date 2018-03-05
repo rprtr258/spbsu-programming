@@ -10,15 +10,18 @@ public class OperatorNode extends TreeNode {
     public int calc() {
         int leftValue = left.calc();
         int rightValue = right.calc();
-        if ("+".equals(data))
-            return leftValue + rightValue;
-        if ("-".equals(data))
-            return leftValue - rightValue;
-        if ("*".equals(data))
-            return leftValue * rightValue;
-        if ("/".equals(data))
-            return leftValue / rightValue;
-        throw new IllegalStateException();
+        switch (data) {
+            case "+":
+                return leftValue + rightValue;
+            case "-":
+                return leftValue - rightValue;
+            case "*":
+                return leftValue * rightValue;
+            case "/":
+                return leftValue / rightValue;
+            default:
+                throw new IllegalStateException();
+        }
     }
 
     public String infixForm(boolean printBrackets) {
