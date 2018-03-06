@@ -77,5 +77,8 @@ public class HashTableTest {
         hashTable.setHashStrategy(new CharSumHash(10));
         hashTable.setHashStrategy(new CharSumHash(1));
         hashTable.setHashStrategy(new CharSumHash(23662));
+        hashTable.setHashStrategy(new PolynomialHash(7, 23662));
+        hashTable.setHashStrategy(new PolynomialHash(3, 1));
+        hashTable.setHashStrategy(new PolynomialHash(13, 1000301));
     }
 }
