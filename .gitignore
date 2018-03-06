@@ -22,4 +22,7 @@
 **/.gradle/*
 **/.idea/*
 **/L
-**/*.ipr
+*.ipr
+*.iml
+*.iws
+*.xml
