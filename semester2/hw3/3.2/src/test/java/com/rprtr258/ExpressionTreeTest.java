@@ -16,11 +16,6 @@ public class ExpressionTreeTest {
     }
 
     @Test
-    public void creationTest() {
-        ExpressionTree tree = new ExpressionTree("(+ (- (* (/ 1 2) 3) 4) 5)");
-    }
-
-    @Test
     public void toStringTest() {
         ExpressionTree tree = new ExpressionTree("(+ (- (* (/ 1 2) 3) 4) 5)");
         String treeString = tree.toString();
