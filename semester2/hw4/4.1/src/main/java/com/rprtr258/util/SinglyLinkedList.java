@@ -6,46 +6,6 @@ package com.rprtr258.util;
  * @param <T> Type of values stored in list.
  */
 public class SinglyLinkedList<T> {
-    /**
-     * @param <E> Type of value stored in each node.
-     */
-    private class ListNode<E> {
-        private ListNode<E> next = null;
-        private E value = null;
-
-        private ListNode(E value) {
-            this.next = null;
-            this.value = value;
-        }
-
-        /**
-         * Sets neighbour node that goes after.
-         *
-         * @param node New next node.
-         */
-        private void setNext(ListNode<E> node) {
-            next = node;
-        }
-
-        /**
-         * Returns node that goes after this node.
-         *
-         * @return Next node of this node, null if it isn't set.
-         */
-        private ListNode<E> getNext() {
-            return next;
-        }
-
-        /**
-         * Getter for stored value.
-         *
-         * @return Value stored in node.
-         */
-        private E getValue() {
-            return value;
-        }
-    }
-
     private ListNode<T> head = null;
     private int size = 0;
 
@@ -147,5 +107,45 @@ public class SinglyLinkedList<T> {
         }
         result.append("]");
         return result.toString();
+    }
+    
+    /**
+     * @param <E> Type of value stored in each node.
+     */
+    private class ListNode<E> {
+        private ListNode<E> next = null;
+        private E value = null;
+
+        private ListNode(E value) {
+            this.next = null;
+            this.value = value;
+        }
+
+        /**
+         * Sets neighbour node that goes after.
+         *
+         * @param node New next node.
+         */
+        private void setNext(ListNode<E> node) {
+            next = node;
+        }
+
+        /**
+         * Returns node that goes after this node.
+         *
+         * @return Next node of this node, null if it isn't set.
+         */
+        private ListNode<E> getNext() {
+            return next;
+        }
+
+        /**
+         * Getter for stored value.
+         *
+         * @return Value stored in node.
+         */
+        private E getValue() {
+            return value;
+        }
     }
 }
