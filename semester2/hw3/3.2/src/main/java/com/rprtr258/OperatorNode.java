@@ -7,6 +7,7 @@ public class OperatorNode extends TreeNode {
         this.right = right;
     }
 
+    @Override
     public int calc() {
         int leftValue = left.calc();
         int rightValue = right.calc();
@@ -24,6 +25,7 @@ public class OperatorNode extends TreeNode {
         }
     }
 
+    @Override
     public String infixForm(boolean printBrackets) {
         String result = left.infixForm(true) + " " + data + " " + right.infixForm(true);
         if (printBrackets)
@@ -31,6 +33,7 @@ public class OperatorNode extends TreeNode {
         return result;
     }
 
+    @Override
     public String toString() {
         return String.format("(%s %s %s)", data, left.toString(), right.toString());
     }
