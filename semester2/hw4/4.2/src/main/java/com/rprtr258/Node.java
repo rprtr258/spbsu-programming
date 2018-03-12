@@ -1,5 +1,7 @@
 package com.rprtr258;
 
+import java.util.ArrayList;
+
 import static java.lang.Math.max;
 
 public class Node<E extends Comparable<E>> {
@@ -34,27 +36,17 @@ public class Node<E extends Comparable<E>> {
         this.parent = parent;
     }
 
-    @Override
-    public String toString() {
-        String result = String.format("(%s[%d] ", value, quantity);
-        if (l == null && r == null)
-            result += "null null)";
-        else if (l == null)
-            result += String.format("null %s)", r.toString());
-        else if (r == null)
-            result += String.format("%s null)", l.toString());
-        else
-            result += String.format("%s %s)", l.toString(), r.toString());
-        return result;
-    }
-
-    public boolean findNode(E value) {
-        if (this.value.equals(value))
+    public boolean contains(E value) {
+        if (this.value.compareTo(value) == 0)
             return true;
-        if (this.value.compareTo(value) < 0)
-            return l.findNode(value);
-        else
-            return r.findNode(value);
+        if (this.value.compareTo(value) > 0) {
+            if (l != null)
+                return l.contains(value);
+        } else {
+            if (r != null)
+                return r.contains(value);
+        }
+        return false;
     }
 
     public static <E extends Comparable<E>> void add(Node<E> node, E value) {
@@ -76,6 +68,70 @@ public class Node<E extends Comparable<E>> {
                 add(node.r, value);
         }
         node.balance();
+    }
+
+    public static <E extends Comparable<E>> void remove(Node<E> node, E value) {
+        if (node.value.compareTo(value) == 0) {
+            if (node.quantity > 1) {
+                node.quantity--;
+                return;
+            } else if (node.l != null && node.r != null) {
+                Node<E> tmp = node.l;
+                while (tmp.r != null)
+                    tmp = tmp.r;
+                E tempValue = tmp.value;
+                remove(node, tmp.value);
+                node.value = tempValue;
+                node.balance();
+            } else if (node.l != null) {
+                node = node.l;
+                node.balance();
+            } else if (node.r != null) {
+                node = node.r;
+                node.balance();
+            }
+            return;
+        }
+        if (value.compareTo(node.value) < 0) {
+            if (node.l.value.equals(value))
+                if (node.l.quantity > 1)
+                    node.l.quantity--;
+                else
+                    node.l = null;
+            else
+                remove(node.l, value);
+        } else {
+            if (node.r.value.equals(value))
+                if (node.r.quantity > 1)
+                    node.r.quantity--;
+                else
+                    node.r = null;
+            else
+                remove(node.r, value);
+        }
+        node.balance();
+    }
+
+    @Override
+    public String toString() {
+        String result = String.format("(%s[%d] ", value, quantity);
+        if (l == null && r == null)
+            result += "null null)";
+        else if (l == null)
+            result += String.format("null %s)", r.toString());
+        else if (r == null)
+            result += String.format("%s null)", l.toString());
+        else
+            result += String.format("%s %s)", l.toString(), r.toString());
+        return result;
+    }
+
+    public <T> void pushAll(ArrayList<T> list) {
+        if (l != null)
+            l.pushAll(list);
+        list.add((T)value);
+        if (r != null)
+            r.pushAll(list);
     }
 
     private static <E extends Comparable<E>> int getHeight(Node<E> node) {
@@ -120,46 +176,5 @@ public class Node<E extends Comparable<E>> {
         }
     }
 
-    public static <E extends Comparable<E>> void remove(Node<E> node, E value) {
-        if (node.value.equals(value)) {
-            if (node.quantity > 1) {
-                node.quantity--;
-                return;
-            } else if (node.l != null && node.r != null) {
-                Node<E> tmp = node.l;
-                while (tmp.r != null)
-                    tmp = tmp.r;
-                E tempValue = tmp.value;
-                remove(node, tmp.value);
-                node.value = tempValue;
-                node.balance();
-            } else if (node.l != null) {
-                node = node.l;
-                node.balance();
-            } else if (node.r != null) {
-                node = node.r;
-                node.balance();
-            }
-            return;
-        }
-        if (value.compareTo(node.value) < 0) {
-            if (node.l.value.equals(value))
-                if (node.l.quantity > 1)
-                    node.l.quantity--;
-                else
-                    node.l = null;
-            else
-                remove(node.l, value);
-        } else {
-            if (node.r.value.equals(value))
-                if (node.r.quantity > 1)
-                    node.r.quantity--;
-                else
-                    node.r = null;
-            else
-                remove(node.r, value);
-        }
-        node.balance();
-    }
 }
 
