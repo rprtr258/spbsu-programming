@@ -149,28 +149,4 @@ public class AVLTreeTest {
         assertEquals("c", array[3]);
         assertArrayEquals(new Object[]{"a", "b", "b", "c"}, array);
     }
-
-    @Test
-    public void remove() {
-    }
-
-    @Test
-    public void removeAll() {
-    }
-
-    @Test
-    public void retainAll() {
-    }
-
-    @Test
-    public void size() {
-    }
-
-    @Test
-    public void isEmpty() {
-    }
-
-    @Test
-    public void clear() {
-    }
 }
