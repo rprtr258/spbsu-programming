@@ -46,7 +46,9 @@ public class Node<E extends Comparable<E>> {
     }
 
     public static <E extends Comparable<E>> void add(NodeWrapper<E> node, E value) {
-        if (node.node.value.compareTo(value) == 0) {
+        if (node.node == null) {
+            node.node = new Node<>(value);
+        } else if (node.node.value.compareTo(value) == 0) {
             node.node.quantity++;
         } else if (value.compareTo(node.node.value) < 0) {
             if (node.node.l.node == null) {
@@ -64,43 +66,63 @@ public class Node<E extends Comparable<E>> {
         node.node = balance(node);
     }
 
+    private static <E extends Comparable<E>> void removeFully(NodeWrapper<E> node, E value) {
+        if (node.node.value.compareTo(value) == 0) {
+            if (node.node.l.node != null) {
+                node.node.l.node.parent = node;
+                node.node = node.node.l.node;
+            } else {
+                node.node = null;
+            }
+        } else {
+            removeFully(node.node.r, value);
+        }
+        if (node.node != null)
+            node.node = balance(node);
+    }
     public static <E extends Comparable<E>> void remove(NodeWrapper<E> node, E value) {
         if (node.node.value.compareTo(value) == 0) {
             if (node.node.quantity > 1) {
                 node.node.quantity--;
-                return;
             } else if (node.node.l.node != null && node.node.r.node != null) {
                 NodeWrapper<E> tmp = node.node.l;
                 while (tmp.node.r.node != null)
                     tmp = tmp.node.r;
                 E tempValue = tmp.node.value;
-                remove(node, tmp.node.value);
+                int tempQuantity = tmp.node.quantity;
+                removeFully(node.node.l, tempValue);
                 node.node.value = tempValue;
+                node.node.quantity = tempQuantity;
             } else if (node.node.l.node != null) {
                     node.node.l.node.parent = node;
                 node.node = node.node.l.node;
             } else if (node.node.r.node != null) {
                     node.node.r.node.parent = node;
                 node.node = node.node.r.node;
+            } else {
+                node.node = null;
             }
         } else if (value.compareTo(node.node.value) < 0) {
-            if (node.node.l.node.value.equals(value))
-                if (node.node.l.node.quantity > 1)
-                    node.node.l.node.quantity--;
-                else
-                    node.node.l.node = null;
-            else
-                remove(node.node.l, value);
+            remove(node.node.l, value);
+            //if (node.node.l.node.value.compareTo(value) == 0)
+            //    if (node.node.l.node.quantity > 1)
+            //        node.node.l.node.quantity--;
+            //    else
+            //        node.node.l.node = null;
+            //else
+            //    remove(node.node.l, value);
         } else {
-            if (node.node.r.node.value.equals(value))
-                if (node.node.r.node.quantity > 1)
-                    node.node.r.node.quantity--;
-                else
-                    node.node.r.node = null;
-            else
-                remove(node.node.r, value);
+            remove(node.node.r, value);
+            //if (node.node.r.node.value.compareTo(value) == 0)
+            //    if (node.node.r.node.quantity > 1)
+            //        node.node.r.node.quantity--;
+            //    else
+            //        node.node.r.node = null;
+            //else
+            //    remove(node.node.r, value);
         }
-        node.node = balance(node);
+        if (node.node != null)
+            node.node = balance(node);
     }
 
     @Override
