@@ -5,30 +5,31 @@ import java.util.Collection;
 import java.util.Iterator;
 
 class AVLTree<T extends Comparable<T>> implements Collection<T> {
-    private Node<T> root = null;
+    private NodeWrapper<T> root = new NodeWrapper<>(null);
     private int size = 0;
 
     public boolean add(T value) {
-        if (size == 0) {
-            root = new Node<>(value);
-            root.setParent(null);
-        } else
+        if (size == 0)
+            root.node = new Node<>(value);
+        else
             Node.add(root, value);
         size++;
+        System.out.printf("%s: ", value.toString());
+        System.out.println(root);
         return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends T> collection) {
         boolean result = true;
-        for (Object element : collection)
-            result &= add((T)element);
+        for (T element : collection)
+            result &= add(element);
         return result;
     }
 
     @Override
     public boolean contains(Object value) {
-        return root.contains((T)value);
+        return root.node.contains((T)value);
     }
 
     @Override
@@ -41,30 +42,34 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
 
     @Override
     public Iterator<T> iterator() {
-        Node<T> tmp = root;
-        while (tmp.getL() != null)
-            tmp = tmp.getL();
+        NodeWrapper<T> tmp = root;
+        while (tmp.node.getL().node != null)
+            tmp = tmp.node.getL();
         return new TreeIterator<>(tmp);
     }
 
     @Override
     public Object[] toArray() {
         ArrayList<T> result = new ArrayList<>();
-        root.pushAll(result);
+        root.node.pushAll(result);
         return result.toArray();
     }
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
         ArrayList<T1> result = new ArrayList<>();
-        root.pushAll(result);
+        root.node.pushAll(result);
         return result.toArray(a);
     }
 
     @Override
     public boolean remove(Object value) {
         if (contains(value)) {
-            Node.remove(root, (T) value);
+            if (size > 1)
+                Node.remove(root, (T) value);
+            else
+                root = null;
+            size--;
             return true;
         } else {
             return false;

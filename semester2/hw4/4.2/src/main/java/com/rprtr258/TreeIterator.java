@@ -3,36 +3,36 @@ package com.rprtr258;
 import java.util.Iterator;
 
 public class TreeIterator<E extends Comparable<E>> implements Iterator<E> {
-    private Node<E> node = null;
+    private NodeWrapper<E> node = null;
 
-    public TreeIterator(Node<E> node) {
+    public TreeIterator(NodeWrapper<E> node) {
         this.node = node;
     }
 
     @Override
     public boolean hasNext() {
-        Node<E> nextNode = node;
-        if (node == null)
+        NodeWrapper<E> nextNode = node;
+        if (node.node == null)
             return false;
-        if (node.getR() != null)
+        if (node.node.getR().node != null)
             return true;
-        while (nextNode != null && nextNode.getParent() != null && nextNode.getParent().getValue().compareTo(nextNode.getValue()) < 0)
-            nextNode = nextNode.getParent();
-        return (nextNode != null);
+        while (nextNode.node != null && nextNode.node.getParent().node != null && nextNode.node.getParent().node.getValue().compareTo(nextNode.node.getValue()) < 0)
+            nextNode = nextNode.node.getParent();
+        return (nextNode.node != null);
     }
 
     @Override
     public E next() {
-        E value = node.getValue();
-        Node<E> nextNode = node;
-        if (nextNode.getR() != null) {
-            nextNode = nextNode.getR();
-            while (nextNode.getL() != null)
-                nextNode = nextNode.getL();
+        E value = node.node.getValue();
+        NodeWrapper<E> nextNode = node;
+        if (nextNode.node.getR().node != null) {
+            nextNode = nextNode.node.getR();
+            while (nextNode.node.getL().node != null)
+                nextNode = nextNode.node.getL();
         } else {
-            while (nextNode.getParent() != null && nextNode.getParent().getValue().compareTo(nextNode.getValue()) < 0)
-                nextNode = nextNode.getParent();
-            nextNode = nextNode.getParent();
+            while (nextNode.node.getParent().node != null && nextNode.node.getParent().node.getValue().compareTo(nextNode.node.getValue()) < 0)
+                nextNode = nextNode.node.getParent();
+            nextNode = nextNode.node.getParent();
         }
         node = nextNode;
         return value;

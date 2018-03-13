@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import static java.lang.Math.max;
 
 public class Node<E extends Comparable<E>> {
-    private Node<E> l = null;
-    private Node<E> r = null;
-    private Node<E> parent = null;
+    private NodeWrapper<E> l = new NodeWrapper<>(null);
+    private NodeWrapper<E> r = new NodeWrapper<>(null);
+    private NodeWrapper<E> parent = new NodeWrapper<>(null);
     private E value = null;
     private int height = 1;
     private int quantity = 1;
@@ -16,11 +16,11 @@ public class Node<E extends Comparable<E>> {
         this.value = value;
     }
 
-    public Node<E> getL() {
+    public NodeWrapper<E> getL() {
         return l;
     }
 
-    public Node<E> getR() {
+    public NodeWrapper<E> getR() {
         return r;
     }
 
@@ -28,88 +28,79 @@ public class Node<E extends Comparable<E>> {
         return value;
     }
 
-    public Node<E> getParent() {
+    public NodeWrapper<E> getParent() {
         return parent;
-    }
-
-    public void setParent(Node<E> parent) {
-        this.parent = parent;
     }
 
     public boolean contains(E value) {
         if (this.value.compareTo(value) == 0)
             return true;
         if (this.value.compareTo(value) > 0) {
-            if (l != null)
-                return l.contains(value);
+            if (l.node != null)
+                return l.node.contains(value);
         } else {
-            if (r != null)
-                return r.contains(value);
+            if (r.node != null)
+                return r.node.contains(value);
         }
         return false;
     }
 
-    public static <E extends Comparable<E>> void add(Node<E> node, E value) {
-        if (node.value == value) {
-            node.quantity++;
-            return;
-        }
-        if (value.compareTo(node.value) < 0) {
-            if (node.l == null) {
-                node.l = new Node<>(value);
-                node.l.setParent(node);
+    public static <E extends Comparable<E>> void add(NodeWrapper<E> node, E value) {
+        if (node.node.value.compareTo(value) == 0) {
+            node.node.quantity++;
+        } else if (value.compareTo(node.node.value) < 0) {
+            if (node.node.l.node == null) {
+                node.node.l.node = new Node<>(value);
+                node.node.l.node.parent.node = node.node;
             } else
-                add(node.l, value);
+                add(node.node.l, value);
         } else {
-            if (node.r == null) {
-                node.r = new Node<>(value);
-                node.r.setParent(node);
+            if (node.node.r.node == null) {
+                node.node.r.node = new Node<>(value);
+                node.node.r.node.parent.node = node.node;
             } else
-                add(node.r, value);
+                add(node.node.r, value);
         }
-        node.balance();
+        node.node = balance(node);
     }
 
-    public static <E extends Comparable<E>> void remove(Node<E> node, E value) {
-        if (node.value.compareTo(value) == 0) {
-            if (node.quantity > 1) {
-                node.quantity--;
+    public static <E extends Comparable<E>> void remove(NodeWrapper<E> node, E value) {
+        if (node.node.value.compareTo(value) == 0) {
+            if (node.node.quantity > 1) {
+                node.node.quantity--;
                 return;
-            } else if (node.l != null && node.r != null) {
-                Node<E> tmp = node.l;
-                while (tmp.r != null)
-                    tmp = tmp.r;
-                E tempValue = tmp.value;
-                remove(node, tmp.value);
-                node.value = tempValue;
-                node.balance();
-            } else if (node.l != null) {
-                node = node.l;
-                node.balance();
-            } else if (node.r != null) {
-                node = node.r;
-                node.balance();
+            } else if (node.node.l.node != null && node.node.r.node != null) {
+                NodeWrapper<E> tmp = node.node.l;
+                while (tmp.node.r.node != null)
+                    tmp = tmp.node.r;
+                E tempValue = tmp.node.value;
+                remove(node, tmp.node.value);
+                node.node.value = tempValue;
+            } else if (node.node.l.node != null) {
+                    node.node.l.node.parent = node;
+                node.node = node.node.l.node;
+            } else if (node.node.r.node != null) {
+                    node.node.r.node.parent = node;
+                node.node = node.node.r.node;
             }
-            return;
-        }
-        if (value.compareTo(node.value) < 0) {
-            if (node.l.value.equals(value))
-                if (node.l.quantity > 1)
-                    node.l.quantity--;
+        } else if (value.compareTo(node.node.value) < 0) {
+            if (node.node.l.node.value.equals(value))
+                if (node.node.l.node.quantity > 1)
+                    node.node.l.node.quantity--;
                 else
-                    node.l = null;
+                    node.node.l.node = null;
             else
-                remove(node.l, value);
+                remove(node.node.l, value);
         } else {
-            if (node.r.value.equals(value))
-                if (node.r.quantity > 1)
-                    node.r.quantity--;
+            if (node.node.r.node.value.equals(value))
+                if (node.node.r.node.quantity > 1)
+                    node.node.r.node.quantity--;
                 else
-                    node.r = null;
+                    node.node.r.node = null;
             else
-                remove(node.r, value);
+                remove(node.node.r, value);
         }
-        node.balance();
+        node.node = balance(node);
     }
 
     @Override
@@ -127,11 +118,12 @@ public class Node<E extends Comparable<E>> {
     }
 
     public <T> void pushAll(ArrayList<T> list) {
-        if (l != null)
-            l.pushAll(list);
-        list.add((T)value);
-        if (r != null)
-            r.pushAll(list);
+        if (l.node != null)
+            l.node.pushAll(list);
+        for (int i = 0; i < quantity; i++)
+            list.add((T)value);
+        if (r.node != null)
+            r.node.pushAll(list);
     }
 
     private static <E extends Comparable<E>> int getHeight(Node<E> node) {
@@ -139,42 +131,56 @@ public class Node<E extends Comparable<E>> {
     }
 
     private void fixHeight() {
-        height = max(getHeight(l), getHeight(r)) + 1;
+        height = max(getHeight(l.node), getHeight(r.node)) + 1;
     }
 
-    private static <E extends Comparable<E>> Node<E> rotateRight(Node<E> p) {
-        Node<E> q = p.l;
-        p.l = q.r;
-        q.r = p;
-        p.fixHeight();
-        q.fixHeight();
-        return q;
+    private static <E extends Comparable<E>> Node<E> rotateRight(NodeWrapper<E> p) {
+        Node<E> pl = p.node.l.node;
+        if (pl.r.node != null)
+            p.node.l.node.r.node.parent.node = p.node;
+        p.node.l.node = pl.r.node;
+
+        p.node.parent.node = pl;
+        pl.r.node = p.node;
+
+        p.node.fixHeight();
+        pl.fixHeight();
+        return pl;
     }
 
-    private static <E extends Comparable<E>> Node<E> rotateLeft(Node<E> p) {
-        Node<E> q = p.r;
-        p.r = q.l;
-        q.l = p;
-        p.fixHeight();
-        q.fixHeight();
-        return q;
+    private static <E extends Comparable<E>> Node<E> rotateLeft(NodeWrapper<E> p) {
+        Node<E> pr = p.node.r.node;
+        if (pr.l.node != null)
+            pr.l.node.parent.node = p.node;
+        p.node.r.node = pr.l.node;
+
+        p.node.parent.node = pr;
+        pr.l.node = p.node;
+
+        p.node.fixHeight();
+        pr.fixHeight();
+        return pr;
     }
 
     private int bFactor() {
-        return getHeight(r) - getHeight(l);
+        return getHeight(r.node) - getHeight(l.node);
     }
 
-    private void balance() {
-        fixHeight();
-        int balanceFactor = bFactor();
+    private static <E extends Comparable<E>> Node<E> balance(NodeWrapper<E> node) {
+        node.node.fixHeight();
+        int balanceFactor = node.node.bFactor();
         if (balanceFactor == 2) {
-            if (r.bFactor() < 0)
-                r = rotateRight(r);
+            if (node.node.r.node.bFactor() < 0) {
+                node.node.r.node = rotateRight(node.node.r);
+            }
+            return rotateLeft(node);
         } else if (balanceFactor == -2) {
-            if (l.bFactor() > 0)
-                l = rotateLeft(l);
+            if (node.node.l.node.bFactor() > 0) {
+                node.node.l.node = rotateLeft(node.node.l);
+            }
+            return rotateRight(node);
         }
+        return node.node;
     }
-
 }
 

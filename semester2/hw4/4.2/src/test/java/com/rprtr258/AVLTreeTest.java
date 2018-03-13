@@ -24,7 +24,9 @@ public class AVLTreeTest {
         tree.addAll(Arrays.asList("b", "c", "a"));
         assertEquals("(b[1] (a[1] null null) (c[1] null null))", tree.toString());
         List<String> array = Arrays.asList("abcdefghijk".split(""));
+        System.out.println(tree);
         tree.addAll(array);
+        System.out.println(tree);
         Collections.reverse(array);
         assertTrue(tree.containsAll(array));
         tree.addAll(array);
@@ -67,7 +69,6 @@ public class AVLTreeTest {
         tree.removeAll(Arrays.asList("a", "c"));
         assertEquals("(b[1] null null)", tree.toString());
         List<String> array = Arrays.asList("dfhgushdfpguahrt0e7mzagt8p9oy".split(""));
-        System.out.println(array);
         tree.addAll(array);
         tree.addAll(array);
         tree.removeAll(array);
@@ -117,9 +118,7 @@ public class AVLTreeTest {
     @Test
     public void containsAll() {
         AVLTree<String> tree = new AVLTree<>();
-        tree.add("b");
-        tree.add("c");
-        tree.add("a");
+        tree.addAll(Arrays.asList("abc".split("")));
         assertTrue(tree.containsAll(Arrays.asList("a", "c")));
         assertFalse(tree.containsAll(Arrays.asList("a", "g")));
     }
@@ -127,9 +126,7 @@ public class AVLTreeTest {
     @Test
     public void toObjectsArray() {
         AVLTree<String> tree = new AVLTree<>();
-        tree.add("b");
-        tree.add("c");
-        tree.add("a");
+        tree.addAll(Arrays.asList("abc".split("")));
         String[] array = new String[tree.size()];
         tree.toArray(array);
         assertArrayEquals(new String[]{"a", "b", "c"}, array);
@@ -138,14 +135,19 @@ public class AVLTreeTest {
     @Test
     public void toArray() {
         AVLTree<String> tree = new AVLTree<>();
-        tree.add("b");
-        tree.add("c");
-        tree.add("a");
+        tree.addAll(Arrays.asList("acb".split("")));
         Object[] array = tree.toArray();
         assertEquals("a", array[0]);
         assertEquals("b", array[1]);
         assertEquals("c", array[2]);
         assertArrayEquals(new Object[]{"a", "b", "c"}, array);
+        tree.add("b");
+        array = tree.toArray();
+        assertEquals("a", array[0]);
+        assertEquals("b", array[1]);
+        assertEquals("b", array[2]);
+        assertEquals("c", array[3]);
+        assertArrayEquals(new Object[]{"a", "b", "b", "c"}, array);
     }
 
     @Test
