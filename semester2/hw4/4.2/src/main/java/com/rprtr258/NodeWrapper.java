@@ -105,10 +105,14 @@ public class NodeWrapper<E extends Comparable<E>> {
         return node.getR().getHeight() - node.getL().getHeight();
     }
 
+    private void setParent(NodeWrapper<E> parent) {
+        if (isNotNull())
+            node.setParent(parent);
+    }
+
     private Node<E> rotateRight() {
         Node<E> pl = node.getL().node;
-        if (pl.getR().isNotNull())
-            pl.getR().node.setParent(this);
+        pl.getR().setParent(this);
         node.getL().node = pl.getR().node;
 
         node.getParent().node = pl;
@@ -121,8 +125,7 @@ public class NodeWrapper<E extends Comparable<E>> {
 
     private Node<E> rotateLeft() {
         Node<E> pr = node.getR().node;
-        if (pr.getL().isNotNull())
-            pr.getL().node.setParent(this);
+        pr.getL().setParent(this);
         node.getR().node = pr.getL().node;
 
         node.getParent().node = pr;
