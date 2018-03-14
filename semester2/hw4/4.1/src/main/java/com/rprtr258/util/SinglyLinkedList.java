@@ -10,11 +10,6 @@ public class SinglyLinkedList<T> {
     private int size = 0;
 
     /**
-     * Constructs empty list.
-     */
-    public SinglyLinkedList() {}
-
-    /**
      * Returns size of linked list(number of nodes in it).
      *
      * @return Size of list.
