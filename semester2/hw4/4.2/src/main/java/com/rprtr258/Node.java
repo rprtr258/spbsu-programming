@@ -24,6 +24,10 @@ public class Node<E extends Comparable<E>> {
         this.quantity = quantity;
     }
 
+    public void changeQuantity(int delta) {
+        this.quantity += delta;
+    }
+
     public NodeWrapper<E> getL() {
         return l;
     }
@@ -48,8 +52,12 @@ public class Node<E extends Comparable<E>> {
         this.parent = parent;
     }
 
-    public void incQuantity() {
-        quantity++;
+    public int getHeight() {
+        return height;
+    }
+
+    public int compareValues(E value) {
+        return this.value.compareTo(value);
     }
 
     @Override
@@ -75,16 +83,8 @@ public class Node<E extends Comparable<E>> {
             r.node.pushAll(list);
     }
 
-    private static <E extends Comparable<E>> int getHeight(Node<E> node) {
-        return (node == null ? 0 : node.height);
-    }
-
-    public int bFactor() {
-        return getHeight(r.node) - getHeight(l.node);
-    }
-
     public void fixHeight() {
-        height = max(getHeight(l.node), getHeight(r.node)) + 1;
+        height = max(l.getHeight(), r.getHeight()) + 1;
     }
 }
 

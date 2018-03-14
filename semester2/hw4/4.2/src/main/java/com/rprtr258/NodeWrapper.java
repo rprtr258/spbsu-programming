@@ -7,6 +7,10 @@ public class NodeWrapper<E extends Comparable<E>> {
         this.node = node;
     }
 
+    public int compareValues(E value) {
+        return node.compareValues(value);
+    }
+
     public boolean isNotNull() {
         return (node != null);
     }
@@ -14,9 +18,9 @@ public class NodeWrapper<E extends Comparable<E>> {
     public void add(E value) {
         if (node == null) {
             node = new Node<>(value);
-        } else if (node.getValue().compareTo(value) == 0) {
-            node.incQuantity();
-        } else if (value.compareTo(node.getValue()) < 0) {
+        } else if (compareValues(value) == 0) {
+            node.changeQuantity(1);
+        } else if (compareValues(value) > 0) {
             if (node.getL().isNotNull()) {
                 node.getL().add(value);
             } else {
@@ -68,7 +72,7 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     private void removeFully(E value) {
-        if (node.getValue().compareTo(value) == 0) {
+        if (compareValues(value) == 0) {
             if (node.getL().isNotNull()) {
                 node.getL().node.setParent(this);
                 node = node.getL().node;
@@ -83,9 +87,9 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     public void remove(E value) {
-        if (node.getValue().compareTo(value) == 0) {
+        if (compareValues(value) == 0) {
             if (node.getQuantity() > 1) {
-                node.setQuantity(node.getQuantity() - 1);
+                node.changeQuantity(-1);
             } else if (node.getL().isNotNull() && node.getR().isNotNull()) {
                 NodeWrapper<E> tmp = node.getL();
                 while (tmp.node.getR().isNotNull())
@@ -104,7 +108,7 @@ public class NodeWrapper<E extends Comparable<E>> {
             } else {
                 node = null;
             }
-        } else if (value.compareTo(node.getValue()) < 0) {
+        } else if (compareValues(value) > 0) {
             node.getL().remove(value);
         } else {
             node.getR().remove(value);
@@ -114,25 +118,33 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     public boolean contains(E value) {
-        if (node.getValue().compareTo(value) == 0)
+        if (compareValues(value) == 0)
             return true;
-        if ((node.getValue().compareTo(value) > 0) && node.getL().isNotNull())
+        if ((compareValues(value) > 0) && node.getL().isNotNull())
             return node.getL().contains(value);
-        else if ((node.getValue().compareTo(value) < 0) && node.getR().isNotNull())
+        else if ((compareValues(value) < 0) && node.getR().isNotNull())
             return node.getR().contains(value);
         return false;
     }
 
+    public int getHeight() {
+        return (node == null ? 0 : node.getHeight());
+    }
+
+    public int bFactor() {
+        return node.getR().getHeight() - node.getL().getHeight();
+    }
+
     public Node<E> balance() {
         node.fixHeight();
-        int balanceFactor = node.bFactor();
+        int balanceFactor = bFactor();
         if (balanceFactor == 2) {
-            if (node.getR().node.bFactor() < 0) {
+            if (node.getR().bFactor() < 0) {
                 node.getR().node = node.getR().rotateRight();
             }
             return rotateLeft();
         } else if (balanceFactor == -2) {
-            if (node.getL().node.bFactor() > 0) {
+            if (node.getL().bFactor() > 0) {
                 node.getL().node = node.getL().rotateLeft();
             }
             return rotateRight();
