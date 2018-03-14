@@ -16,6 +16,14 @@ public class Node<E extends Comparable<E>> {
         this.value = value;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public NodeWrapper<E> getL() {
         return l;
     }
@@ -28,8 +36,16 @@ public class Node<E extends Comparable<E>> {
         return value;
     }
 
+    public void setValue(E value) {
+        this.value = value;
+    }
+
     public NodeWrapper<E> getParent() {
         return parent;
+    }
+
+    public void setParent(NodeWrapper<E> parent) {
+        this.parent = parent;
     }
 
     public void incQuantity() {
@@ -44,74 +60,6 @@ public class Node<E extends Comparable<E>> {
         else if ((this.value.compareTo(value) < 0) && r.isNotNull())
             return r.node.contains(value);
         return false;
-    }
-
-    public static <E extends Comparable<E>> void add(NodeWrapper<E> node, E value) {
-        if (node.node == null) {
-            node.node = new Node<>(value);
-        } else if (node.node.value.compareTo(value) == 0) {
-            node.node.quantity++;
-        } else if (value.compareTo(node.node.value) < 0) {
-            if (node.node.l.isNotNull()) {
-                add(node.node.l, value);
-            } else {
-                node.node.l.node = new Node<>(value);
-                node.node.l.node.parent.node = node.node;
-            }
-        } else {
-            if (node.node.r.isNotNull()) {
-                add(node.node.r, value);
-            } else {
-                node.node.r.node = new Node<>(value);
-                node.node.r.node.parent.node = node.node;
-            }
-        }
-        node.node = node.balance();
-    }
-
-    private static <E extends Comparable<E>> void removeFully(NodeWrapper<E> node, E value) {
-        if (node.node.value.compareTo(value) == 0) {
-            if (node.node.l.isNotNull()) {
-                node.node.l.node.parent = node;
-                node.node = node.node.l.node;
-            } else {
-                node.node = null;
-            }
-        } else {
-            removeFully(node.node.r, value);
-        }
-        if (node.isNotNull())
-            node.node = node.balance();
-    }
-    public static <E extends Comparable<E>> void remove(NodeWrapper<E> node, E value) {
-        if (node.node.value.compareTo(value) == 0) {
-            if (node.node.quantity > 1) {
-                node.node.quantity--;
-            } else if (node.node.l.isNotNull() && node.node.r.isNotNull()) {
-                NodeWrapper<E> tmp = node.node.l;
-                while (tmp.node.r.isNotNull())
-                    tmp = tmp.node.r;
-                E tempValue = tmp.node.value;
-                int tempQuantity = tmp.node.quantity;
-                removeFully(node.node.l, tempValue);
-                node.node.value = tempValue;
-                node.node.quantity = tempQuantity;
-            } else if (node.node.l.isNotNull()) {
-                    node.node.l.node.parent = node;
-                node.node = node.node.l.node;
-            } else if (node.node.r.isNotNull()) {
-                    node.node.r.node.parent = node;
-                node.node = node.node.r.node;
-            } else {
-                node.node = null;
-            }
-        } else if (value.compareTo(node.node.value) < 0) {
-            remove(node.node.l, value);
-        } else {
-            remove(node.node.r, value);
-        }
-        if (node.node != null)
-            node.node = node.balance();
     }
 
     @Override

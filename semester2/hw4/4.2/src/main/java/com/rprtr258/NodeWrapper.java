@@ -67,6 +67,52 @@ public class NodeWrapper<E extends Comparable<E>> {
         return pr;
     }
 
+    private void removeFully(E value) {
+        if (node.getValue().compareTo(value) == 0) {
+            if (node.getL().isNotNull()) {
+                node.getL().node.setParent(this);
+                node = node.getL().node;
+            } else {
+                node = null;
+            }
+        } else {
+            node.getR().removeFully(value);
+        }
+        if (isNotNull())
+            node = balance();
+    }
+
+    public void remove(E value) {
+        if (node.getValue().compareTo(value) == 0) {
+            if (node.getQuantity() > 1) {
+                node.setQuantity(node.getQuantity() - 1);
+            } else if (node.getL().isNotNull() && node.getR().isNotNull()) {
+                NodeWrapper<E> tmp = node.getL();
+                while (tmp.node.getR().isNotNull())
+                    tmp = tmp.node.getR();
+                E tempValue = tmp.node.getValue();
+                int tempQuantity = tmp.node.getQuantity();
+                node.getL().removeFully(tempValue);
+                node.setValue(tempValue);
+                node.setQuantity(tempQuantity);
+            } else if (node.getL().isNotNull()) {
+                node.getL().node.setParent(this);
+                node = node.getL().node;
+            } else if (node.getR().isNotNull()) {
+                node.getR().node.setParent(this);
+                node = node.getR().node;
+            } else {
+                node = null;
+            }
+        } else if (value.compareTo(node.getValue()) < 0) {
+            node.getL().remove(value);
+        } else {
+            node.getR().remove(value);
+        }
+        if (isNotNull())
+            node = balance();
+    }
+
     public Node<E> balance() {
         node.fixHeight();
         int balanceFactor = node.bFactor();

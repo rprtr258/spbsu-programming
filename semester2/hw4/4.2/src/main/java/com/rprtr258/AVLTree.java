@@ -10,10 +10,6 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
 
     public boolean add(T value) {
         root.add(value);
-        //if (size == 0)
-        //    root.node = new Node<>(value);
-        //else
-        //    Node.add(root, value);
         size++;
         return true;
     }
@@ -64,10 +60,7 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
     @Override
     public boolean remove(Object value) {
         if (contains(value)) {
-            if (size > 1)
-                Node.remove(root, (T) value);
-            else
-                root = null;
+            root.remove((T)value);
             size--;
             return true;
         } else {
