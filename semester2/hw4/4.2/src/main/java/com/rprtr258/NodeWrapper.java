@@ -113,6 +113,16 @@ public class NodeWrapper<E extends Comparable<E>> {
             node = balance();
     }
 
+    public boolean contains(E value) {
+        if (node.getValue().compareTo(value) == 0)
+            return true;
+        if ((node.getValue().compareTo(value) > 0) && node.getL().isNotNull())
+            return node.getL().contains(value);
+        else if ((node.getValue().compareTo(value) < 0) && node.getR().isNotNull())
+            return node.getR().contains(value);
+        return false;
+    }
+
     public Node<E> balance() {
         node.fixHeight();
         int balanceFactor = node.bFactor();

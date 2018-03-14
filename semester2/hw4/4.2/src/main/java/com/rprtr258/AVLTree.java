@@ -24,7 +24,7 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
 
     @Override
     public boolean contains(Object value) {
-        return (root.node != null && root.node.contains((T) value));
+        return root.contains((T)value);
     }
 
     @Override

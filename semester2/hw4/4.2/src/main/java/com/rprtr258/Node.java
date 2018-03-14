@@ -52,16 +52,6 @@ public class Node<E extends Comparable<E>> {
         quantity++;
     }
 
-    public boolean contains(E value) {
-        if (this.value.compareTo(value) == 0)
-            return true;
-        if ((this.value.compareTo(value) > 0) && l.isNotNull())
-            return l.node.contains(value);
-        else if ((this.value.compareTo(value) < 0) && r.isNotNull())
-            return r.node.contains(value);
-        return false;
-    }
-
     @Override
     public String toString() {
         String result = String.format("(%s[%d] ", value, quantity);
