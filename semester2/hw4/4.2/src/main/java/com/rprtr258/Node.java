@@ -35,13 +35,10 @@ public class Node<E extends Comparable<E>> {
     public boolean contains(E value) {
         if (this.value.compareTo(value) == 0)
             return true;
-        if (this.value.compareTo(value) > 0) {
-            if (l.node != null)
-                return l.node.contains(value);
-        } else {
-            if (r.node != null)
-                return r.node.contains(value);
-        }
+        if ((this.value.compareTo(value) > 0) && l.isNotNull())
+            return l.node.contains(value);
+        else if ((this.value.compareTo(value) < 0) && r.isNotNull())
+            return r.node.contains(value);
         return false;
     }
 
@@ -51,24 +48,26 @@ public class Node<E extends Comparable<E>> {
         } else if (node.node.value.compareTo(value) == 0) {
             node.node.quantity++;
         } else if (value.compareTo(node.node.value) < 0) {
-            if (node.node.l.node == null) {
+            if (node.node.l.isNotNull()) {
+                add(node.node.l, value);
+            } else {
                 node.node.l.node = new Node<>(value);
                 node.node.l.node.parent.node = node.node;
-            } else
-                add(node.node.l, value);
+            }
         } else {
-            if (node.node.r.node == null) {
+            if (node.node.r.isNotNull()) {
+                add(node.node.r, value);
+            } else {
                 node.node.r.node = new Node<>(value);
                 node.node.r.node.parent.node = node.node;
-            } else
-                add(node.node.r, value);
+            }
         }
         node.node = balance(node);
     }
 
     private static <E extends Comparable<E>> void removeFully(NodeWrapper<E> node, E value) {
         if (node.node.value.compareTo(value) == 0) {
-            if (node.node.l.node != null) {
+            if (node.node.l.isNotNull()) {
                 node.node.l.node.parent = node;
                 node.node = node.node.l.node;
             } else {
@@ -77,26 +76,26 @@ public class Node<E extends Comparable<E>> {
         } else {
             removeFully(node.node.r, value);
         }
-        if (node.node != null)
+        if (node.isNotNull())
             node.node = balance(node);
     }
     public static <E extends Comparable<E>> void remove(NodeWrapper<E> node, E value) {
         if (node.node.value.compareTo(value) == 0) {
             if (node.node.quantity > 1) {
                 node.node.quantity--;
-            } else if (node.node.l.node != null && node.node.r.node != null) {
+            } else if (node.node.l.isNotNull() && node.node.r.isNotNull()) {
                 NodeWrapper<E> tmp = node.node.l;
-                while (tmp.node.r.node != null)
+                while (tmp.node.r.isNotNull())
                     tmp = tmp.node.r;
                 E tempValue = tmp.node.value;
                 int tempQuantity = tmp.node.quantity;
                 removeFully(node.node.l, tempValue);
                 node.node.value = tempValue;
                 node.node.quantity = tempQuantity;
-            } else if (node.node.l.node != null) {
+            } else if (node.node.l.isNotNull()) {
                     node.node.l.node.parent = node;
                 node.node = node.node.l.node;
-            } else if (node.node.r.node != null) {
+            } else if (node.node.r.isNotNull()) {
                     node.node.r.node.parent = node;
                 node.node = node.node.r.node;
             } else {
@@ -104,22 +103,8 @@ public class Node<E extends Comparable<E>> {
             }
         } else if (value.compareTo(node.node.value) < 0) {
             remove(node.node.l, value);
-            //if (node.node.l.node.value.compareTo(value) == 0)
-            //    if (node.node.l.node.quantity > 1)
-            //        node.node.l.node.quantity--;
-            //    else
-            //        node.node.l.node = null;
-            //else
-            //    remove(node.node.l, value);
         } else {
             remove(node.node.r, value);
-            //if (node.node.r.node.value.compareTo(value) == 0)
-            //    if (node.node.r.node.quantity > 1)
-            //        node.node.r.node.quantity--;
-            //    else
-            //        node.node.r.node = null;
-            //else
-            //    remove(node.node.r, value);
         }
         if (node.node != null)
             node.node = balance(node);
@@ -128,23 +113,23 @@ public class Node<E extends Comparable<E>> {
     @Override
     public String toString() {
         String result = String.format("(%s[%d] ", value, quantity);
-        if (l == null && r == null)
-            result += "null null)";
-        else if (l == null)
-            result += String.format("null %s)", r.toString());
-        else if (r == null)
-            result += String.format("%s null)", l.toString());
-        else
+        if (l.isNotNull() && r.isNotNull())
             result += String.format("%s %s)", l.toString(), r.toString());
+        else if (l.isNotNull())
+            result += String.format("%s null)", l.toString());
+        else if (r.isNotNull())
+            result += String.format("null %s)", r.toString());
+        else
+            result += "null null)";
         return result;
     }
 
     public <T> void pushAll(ArrayList<T> list) {
-        if (l.node != null)
+        if (l.isNotNull())
             l.node.pushAll(list);
         for (int i = 0; i < quantity; i++)
             list.add((T)value);
-        if (r.node != null)
+        if (r.isNotNull())
             r.node.pushAll(list);
     }
 
@@ -158,7 +143,7 @@ public class Node<E extends Comparable<E>> {
 
     private static <E extends Comparable<E>> Node<E> rotateRight(NodeWrapper<E> p) {
         Node<E> pl = p.node.l.node;
-        if (pl.r.node != null)
+        if (pl.r.isNotNull())
             p.node.l.node.r.node.parent.node = p.node;
         p.node.l.node = pl.r.node;
 
@@ -172,7 +157,7 @@ public class Node<E extends Comparable<E>> {
 
     private static <E extends Comparable<E>> Node<E> rotateLeft(NodeWrapper<E> p) {
         Node<E> pr = p.node.r.node;
-        if (pr.l.node != null)
+        if (pr.l.isNotNull())
             pr.l.node.parent.node = p.node;
         p.node.r.node = pr.l.node;
 

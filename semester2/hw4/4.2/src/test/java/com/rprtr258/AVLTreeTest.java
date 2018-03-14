@@ -24,9 +24,7 @@ public class AVLTreeTest {
         tree.addAll(Arrays.asList("b", "c", "a"));
         assertEquals("(b[1] (a[1] null null) (c[1] null null))", tree.toString());
         List<String> array = Arrays.asList("abcdefghijk".split(""));
-        System.out.println(tree);
         tree.addAll(array);
-        System.out.println(tree);
         Collections.reverse(array);
         assertTrue(tree.containsAll(array));
         tree.addAll(array);

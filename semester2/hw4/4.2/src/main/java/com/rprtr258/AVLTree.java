@@ -14,8 +14,6 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
         else
             Node.add(root, value);
         size++;
-        System.out.printf("%s: ", value.toString());
-        System.out.println(root);
         return true;
     }
 

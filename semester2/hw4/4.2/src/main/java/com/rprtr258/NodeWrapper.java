@@ -7,6 +7,10 @@ public class NodeWrapper<E extends Comparable<E>> {
         this.node = node;
     }
 
+    public boolean isNotNull() {
+        return (node != null);
+    }
+
     @Override
     public String toString() {
         return (node == null ? "null" : node.toString());
