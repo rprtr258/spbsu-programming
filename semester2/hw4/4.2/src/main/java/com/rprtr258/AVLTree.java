@@ -9,10 +9,11 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
     private int size = 0;
 
     public boolean add(T value) {
-        if (size == 0)
-            root.node = new Node<>(value);
-        else
-            Node.add(root, value);
+        root.add(value);
+        //if (size == 0)
+        //    root.node = new Node<>(value);
+        //else
+        //    Node.add(root, value);
         size++;
         return true;
     }

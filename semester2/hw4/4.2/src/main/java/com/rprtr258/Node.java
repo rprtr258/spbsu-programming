@@ -32,6 +32,10 @@ public class Node<E extends Comparable<E>> {
         return parent;
     }
 
+    public void incQuantity() {
+        quantity++;
+    }
+
     public boolean contains(E value) {
         if (this.value.compareTo(value) == 0)
             return true;
@@ -62,7 +66,7 @@ public class Node<E extends Comparable<E>> {
                 node.node.r.node.parent.node = node.node;
             }
         }
-        node.node = balance(node);
+        node.node = node.balance();
     }
 
     private static <E extends Comparable<E>> void removeFully(NodeWrapper<E> node, E value) {
@@ -77,7 +81,7 @@ public class Node<E extends Comparable<E>> {
             removeFully(node.node.r, value);
         }
         if (node.isNotNull())
-            node.node = balance(node);
+            node.node = node.balance();
     }
     public static <E extends Comparable<E>> void remove(NodeWrapper<E> node, E value) {
         if (node.node.value.compareTo(value) == 0) {
@@ -107,7 +111,7 @@ public class Node<E extends Comparable<E>> {
             remove(node.node.r, value);
         }
         if (node.node != null)
-            node.node = balance(node);
+            node.node = node.balance();
     }
 
     @Override
@@ -137,57 +141,12 @@ public class Node<E extends Comparable<E>> {
         return (node == null ? 0 : node.height);
     }
 
-    private void fixHeight() {
-        height = max(getHeight(l.node), getHeight(r.node)) + 1;
-    }
-
-    private static <E extends Comparable<E>> Node<E> rotateRight(NodeWrapper<E> p) {
-        Node<E> pl = p.node.l.node;
-        if (pl.r.isNotNull())
-            p.node.l.node.r.node.parent.node = p.node;
-        p.node.l.node = pl.r.node;
-
-        p.node.parent.node = pl;
-        pl.r.node = p.node;
-
-        p.node.fixHeight();
-        pl.fixHeight();
-        return pl;
-    }
-
-    private static <E extends Comparable<E>> Node<E> rotateLeft(NodeWrapper<E> p) {
-        Node<E> pr = p.node.r.node;
-        if (pr.l.isNotNull())
-            pr.l.node.parent.node = p.node;
-        p.node.r.node = pr.l.node;
-
-        p.node.parent.node = pr;
-        pr.l.node = p.node;
-
-        p.node.fixHeight();
-        pr.fixHeight();
-        return pr;
-    }
-
-    private int bFactor() {
+    public int bFactor() {
         return getHeight(r.node) - getHeight(l.node);
     }
 
-    private static <E extends Comparable<E>> Node<E> balance(NodeWrapper<E> node) {
-        node.node.fixHeight();
-        int balanceFactor = node.node.bFactor();
-        if (balanceFactor == 2) {
-            if (node.node.r.node.bFactor() < 0) {
-                node.node.r.node = rotateRight(node.node.r);
-            }
-            return rotateLeft(node);
-        } else if (balanceFactor == -2) {
-            if (node.node.l.node.bFactor() > 0) {
-                node.node.l.node = rotateLeft(node.node.l);
-            }
-            return rotateRight(node);
-        }
-        return node.node;
+    public void fixHeight() {
+        height = max(getHeight(l.node), getHeight(r.node)) + 1;
     }
 }
 
