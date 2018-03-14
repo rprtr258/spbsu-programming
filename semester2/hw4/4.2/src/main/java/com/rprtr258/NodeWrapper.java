@@ -35,40 +35,12 @@ public class NodeWrapper<E extends Comparable<E>> {
                 node.getR().node.getParent().node = node;
             }
         }
-        node = balance();
+        balance();
     }
 
     @Override
     public String toString() {
         return (node == null ? "null" : node.toString());
-    }
-
-    private Node<E> rotateRight() {
-        Node<E> pl = node.getL().node;
-        if (pl.getR().isNotNull())
-            node.getL().node.getR().node.getParent().node = node;
-        node.getL().node = pl.getR().node;
-
-        node.getParent().node = pl;
-        pl.getR().node = node;
-
-        node.fixHeight();
-        pl.fixHeight();
-        return pl;
-    }
-
-    private Node<E> rotateLeft() {
-        Node<E> pr = node.getR().node;
-        if (pr.getL().isNotNull())
-            pr.getL().node.getParent().node = node;
-        node.getR().node = pr.getL().node;
-
-        node.getParent().node = pr;
-        pr.getL().node = node;
-
-        node.fixHeight();
-        pr.fixHeight();
-        return pr;
     }
 
     private void removeFully(E value) {
@@ -82,8 +54,7 @@ public class NodeWrapper<E extends Comparable<E>> {
         } else {
             node.getR().removeFully(value);
         }
-        if (isNotNull())
-            node = balance();
+        balance();
     }
 
     public void remove(E value) {
@@ -113,8 +84,7 @@ public class NodeWrapper<E extends Comparable<E>> {
         } else {
             node.getR().remove(value);
         }
-        if (isNotNull())
-            node = balance();
+        balance();
     }
 
     public boolean contains(E value) {
@@ -135,20 +105,49 @@ public class NodeWrapper<E extends Comparable<E>> {
         return node.getR().getHeight() - node.getL().getHeight();
     }
 
-    public Node<E> balance() {
+    private Node<E> rotateRight() {
+        Node<E> pl = node.getL().node;
+        if (pl.getR().isNotNull())
+            pl.getR().node.setParent(this);
+        node.getL().node = pl.getR().node;
+
+        node.getParent().node = pl;
+        pl.getR().node = node;
+
+        node.fixHeight();
+        pl.fixHeight();
+        return pl;
+    }
+
+    private Node<E> rotateLeft() {
+        Node<E> pr = node.getR().node;
+        if (pr.getL().isNotNull())
+            pr.getL().node.setParent(this);
+        node.getR().node = pr.getL().node;
+
+        node.getParent().node = pr;
+        pr.getL().node = node;
+
+        node.fixHeight();
+        pr.fixHeight();
+        return pr;
+    }
+
+    public void balance() {
+        if (node == null)
+            return;
         node.fixHeight();
         int balanceFactor = bFactor();
         if (balanceFactor == 2) {
             if (node.getR().bFactor() < 0) {
                 node.getR().node = node.getR().rotateRight();
             }
-            return rotateLeft();
+            node = rotateLeft();
         } else if (balanceFactor == -2) {
             if (node.getL().bFactor() > 0) {
                 node.getL().node = node.getL().rotateLeft();
             }
-            return rotateRight();
+            node = rotateRight();
         }
-        return node;
     }
 }
