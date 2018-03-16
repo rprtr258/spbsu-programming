@@ -15,26 +15,27 @@ public class NodeWrapper<E extends Comparable<E>> {
         return (node != null);
     }
 
+    private void add(E value, Node<E> parent) {
+        if (isNotNull()) {
+            add(value);
+        } else {
+            node = new Node<>(value);
+            node.getParent().node = parent;
+        }
+    }
+
     public void add(E value) {
         if (node == null) {
             node = new Node<>(value);
-        } else if (compareValues(value) == 0) {
-            node.changeQuantity(1);
-        } else if (compareValues(value) > 0) {
-            if (node.getL().isNotNull()) {
-                node.getL().add(value);
-            } else {
-                node.getL().node = new Node<>(value);
-                node.getL().node.getParent().node = node;
-            }
-        } else {
-            if (node.getR().isNotNull()) {
-                node.getR().add(value);
-            } else {
-                node.getR().node = new Node<>(value);
-                node.getR().node.getParent().node = node;
-            }
+            return;
         }
+        int cmp = compareValues(value);
+        if (cmp == 0)
+            node.changeQuantity(1);
+        else if (cmp > 0)
+            node.getL().add(value, node);
+        else
+            node.getR().add(value, node);
         balance();
     }
 
@@ -43,11 +44,15 @@ public class NodeWrapper<E extends Comparable<E>> {
         return (node == null ? "null" : node.toString());
     }
 
-    public NodeWrapper<E> getMaxNode() {
+    private NodeWrapper<E> getMaxNode() {
         NodeWrapper<E> result = node.getL();
         while (result.node.getR().isNotNull())
             result = result.node.getR();
         return result;
+    }
+
+    private void copyNode(NodeWrapper<E> nodeWrapper) {
+        node = nodeWrapper.node;
     }
 
     public void remove(E value) {
@@ -64,29 +69,30 @@ public class NodeWrapper<E extends Comparable<E>> {
                 node.getL().remove(tempValue);
             } else if (node.getL().isNotNull()) {
                 node.getL().setParent(this);
-                node = node.getL().node;
+                copyNode(node.getL());
             } else if (node.getR().isNotNull()) {
                 node.getR().setParent(this);
-                node = node.getR().node;
+                copyNode(node.getR());
             } else {
                 node = null;
             }
-        } else if (cmp > 0) {
+        } else if (cmp > 0)
             node.getL().remove(value);
-        } else {
+        else
             node.getR().remove(value);
-        }
         balance();
     }
 
     public boolean contains(E value) {
-        if (compareValues(value) == 0)
+        if (node == null)
+            return false;
+        int cmp = compareValues(value);
+        if (cmp == 0)
             return true;
-        if ((compareValues(value) > 0) && node.getL().isNotNull())
+        if (cmp > 0)
             return node.getL().contains(value);
-        else if ((compareValues(value) < 0) && node.getR().isNotNull())
+        else
             return node.getR().contains(value);
-        return false;
     }
 
     public int getHeight() {
