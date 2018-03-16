@@ -7,6 +7,14 @@ public class NodeWrapper<E extends Comparable<E>> {
         this.node = node;
     }
 
+    public NodeWrapper<E> getL() {
+        return node.getL();
+    }
+
+    public NodeWrapper<E> getR() {
+        return node.getR();
+    }
+
     public int compareValues(E value) {
         return node.compareValues(value);
     }
@@ -33,9 +41,9 @@ public class NodeWrapper<E extends Comparable<E>> {
         if (cmp == 0)
             node.changeQuantity(1);
         else if (cmp > 0)
-            node.getL().add(value, node);
+            getL().add(value, node);
         else
-            node.getR().add(value, node);
+            getR().add(value, node);
         balance();
     }
 
@@ -45,9 +53,9 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     private NodeWrapper<E> getMaxNode() {
-        NodeWrapper<E> result = node.getL();
-        while (result.node.getR().isNotNull())
-            result = result.node.getR();
+        NodeWrapper<E> result = getL();
+        while (result.getR().isNotNull())
+            result = result.getR();
         return result;
     }
 
@@ -62,24 +70,24 @@ public class NodeWrapper<E extends Comparable<E>> {
         if (cmp == 0) {
             if (node.getQuantity() > 1) {
                 node.changeQuantity(-1);
-            } else if (node.getL().isNotNull() && node.getR().isNotNull()) {
+            } else if (getL().isNotNull() && getR().isNotNull()) {
                 NodeWrapper<E> tmp = getMaxNode();
                 E tempValue = tmp.node.getValue();
                 node.copyData(tmp.node);
-                node.getL().remove(tempValue);
-            } else if (node.getL().isNotNull()) {
-                node.getL().setParent(this);
-                copyNode(node.getL());
-            } else if (node.getR().isNotNull()) {
-                node.getR().setParent(this);
-                copyNode(node.getR());
+                getL().remove(tempValue);
+            } else if (getL().isNotNull()) {
+                getL().setParent(this);
+                copyNode(getL());
+            } else if (getR().isNotNull()) {
+                getR().setParent(this);
+                copyNode(getR());
             } else {
                 node = null;
             }
         } else if (cmp > 0)
-            node.getL().remove(value);
+            getL().remove(value);
         else
-            node.getR().remove(value);
+            getR().remove(value);
         balance();
     }
 
@@ -90,9 +98,9 @@ public class NodeWrapper<E extends Comparable<E>> {
         if (cmp == 0)
             return true;
         if (cmp > 0)
-            return node.getL().contains(value);
+            return getL().contains(value);
         else
-            return node.getR().contains(value);
+            return getR().contains(value);
     }
 
     public int getHeight() {
@@ -100,7 +108,7 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     public int bFactor() {
-        return node.getR().getHeight() - node.getL().getHeight();
+        return getR().getHeight() - getL().getHeight();
     }
 
     private void setParent(NodeWrapper<E> parent) {
@@ -109,9 +117,9 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     private Node<E> rotateRight() {
-        Node<E> pl = node.getL().node;
+        Node<E> pl = getL().node;
         pl.getR().setParent(this);
-        node.getL().node = pl.getR().node;
+        getL().node = pl.getR().node;
 
         node.getParent().node = pl;
         pl.getR().node = node;
@@ -122,9 +130,9 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     private Node<E> rotateLeft() {
-        Node<E> pr = node.getR().node;
+        Node<E> pr = getR().node;
         pr.getL().setParent(this);
-        node.getR().node = pr.getL().node;
+        getR().node = pr.getL().node;
 
         node.getParent().node = pr;
         pr.getL().node = node;
@@ -140,13 +148,13 @@ public class NodeWrapper<E extends Comparable<E>> {
         node.fixHeight();
         int balanceFactor = bFactor();
         if (balanceFactor == 2) {
-            if (node.getR().bFactor() < 0) {
-                node.getR().node = node.getR().rotateRight();
+            if (getR().bFactor() < 0) {
+                getR().node = getR().rotateRight();
             }
             node = rotateLeft();
         } else if (balanceFactor == -2) {
-            if (node.getL().bFactor() > 0) {
-                node.getL().node = node.getL().rotateLeft();
+            if (getL().bFactor() > 0) {
+                getL().node = getL().rotateLeft();
             }
             node = rotateRight();
         }
