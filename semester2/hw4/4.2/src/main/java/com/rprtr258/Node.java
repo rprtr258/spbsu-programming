@@ -59,16 +59,7 @@ public class Node<E extends Comparable<E>> {
 
     @Override
     public String toString() {
-        String result = String.format("(%s[%d] ", value, quantity);
-        if (l.isNotNull() && r.isNotNull())
-            result += String.format("%s %s)", l.toString(), r.toString());
-        else if (l.isNotNull())
-            result += String.format("%s null)", l.toString());
-        else if (r.isNotNull())
-            result += String.format("null %s)", r.toString());
-        else
-            result += "null null)";
-        return result;
+        return String.format("(%s[%d] %s %s)", value, quantity, l.toString(), r.toString());
     }
 
     public <T> void pushAll(ArrayList<T> list) {
