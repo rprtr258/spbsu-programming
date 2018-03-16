@@ -7,6 +7,14 @@ public class NodeWrapper<E extends Comparable<E>> {
         this.node = node;
     }
 
+    public int getQuantity() {
+        return node.getQuantity();
+    }
+
+    public NodeWrapper<E> getParent() {
+        return node.getParent();
+    }
+
     public NodeWrapper<E> getL() {
         return node.getL();
     }
@@ -28,7 +36,7 @@ public class NodeWrapper<E extends Comparable<E>> {
             add(value);
         } else {
             node = new Node<>(value);
-            node.getParent().node = parent;
+            getParent().node = parent;
         }
     }
 
@@ -68,17 +76,19 @@ public class NodeWrapper<E extends Comparable<E>> {
             return;
         int cmp = compareValues(value);
         if (cmp == 0) {
-            if (node.getQuantity() > 1) {
+            boolean isLNotNull = getL().isNotNull();
+            boolean isRNotNull = getR().isNotNull();
+            if (getQuantity() > 1) {
                 node.changeQuantity(-1);
-            } else if (getL().isNotNull() && getR().isNotNull()) {
+            } else if (isLNotNull && isRNotNull) {
                 NodeWrapper<E> tmp = getMaxNode();
                 E tempValue = tmp.node.getValue();
                 node.copyData(tmp.node);
                 getL().remove(tempValue);
-            } else if (getL().isNotNull()) {
+            } else if (isLNotNull) {
                 getL().setParent(this);
                 copyNode(getL());
-            } else if (getR().isNotNull()) {
+            } else if (isRNotNull) {
                 getR().setParent(this);
                 copyNode(getR());
             } else {
@@ -121,7 +131,7 @@ public class NodeWrapper<E extends Comparable<E>> {
         pl.getR().setParent(this);
         getL().node = pl.getR().node;
 
-        node.getParent().node = pl;
+        getParent().node = pl;
         pl.getR().node = node;
 
         node.fixHeight();
@@ -134,7 +144,7 @@ public class NodeWrapper<E extends Comparable<E>> {
         pr.getL().setParent(this);
         getR().node = pr.getL().node;
 
-        node.getParent().node = pr;
+        getParent().node = pr;
         pr.getL().node = node;
 
         node.fixHeight();
