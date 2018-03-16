@@ -12,18 +12,20 @@ public class TreeIterator<E extends Comparable<E>> implements Iterator<E> {
     @Override
     public boolean hasNext() {
         NodeWrapper<E> nextNode = node;
-        if (node.node == null)
+        /*if (node.node == null)
             return false;
         if (node.node.getR().node != null)
             return true;
         while (nextNode.node != null && nextNode.node.getParent().node != null && nextNode.node.getParent().node.getValue().compareTo(nextNode.node.getValue()) < 0)
             nextNode = nextNode.node.getParent();
         return (nextNode.node != null);
+        */
+        return false;
     }
 
     @Override
     public E next() {
-        E value = node.node.getValue();
+        /*E value = node.node.getValue();
         NodeWrapper<E> nextNode = node;
         if (nextNode.node.getR().node != null) {
             nextNode = nextNode.node.getR();
@@ -36,5 +38,7 @@ public class TreeIterator<E extends Comparable<E>> implements Iterator<E> {
         }
         node = nextNode;
         return value;
+        */
+        return null;
     }
 }
