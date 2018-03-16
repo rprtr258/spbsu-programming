@@ -12,33 +12,29 @@ public class TreeIterator<E extends Comparable<E>> implements Iterator<E> {
     @Override
     public boolean hasNext() {
         NodeWrapper<E> nextNode = node;
-        /*if (node.node == null)
+        if (!node.isNotNull())
             return false;
-        if (node.node.getR().node != null)
+        if (node.getR().isNotNull())
             return true;
-        while (nextNode.node != null && nextNode.node.getParent().node != null && nextNode.node.getParent().node.getValue().compareTo(nextNode.node.getValue()) < 0)
-            nextNode = nextNode.node.getParent();
-        return (nextNode.node != null);
-        */
-        return false;
+        while (nextNode.isNotNull() && nextNode.getParent().isNotNull() && nextNode.getParent().compareValues(nextNode.getValue()) < 0)
+            nextNode = nextNode.getParent();
+        return nextNode.isNotNull();
     }
 
     @Override
     public E next() {
-        /*E value = node.node.getValue();
+        E value = node.getValue();
         NodeWrapper<E> nextNode = node;
-        if (nextNode.node.getR().node != null) {
-            nextNode = nextNode.node.getR();
-            while (nextNode.node.getL().node != null)
-                nextNode = nextNode.node.getL();
+        if (nextNode.getR().isNotNull()) {
+            nextNode = nextNode.getR();
+            while (nextNode.getL().isNotNull())
+                nextNode = nextNode.getL();
         } else {
-            while (nextNode.node.getParent().node != null && nextNode.node.getParent().node.getValue().compareTo(nextNode.node.getValue()) < 0)
-                nextNode = nextNode.node.getParent();
-            nextNode = nextNode.node.getParent();
+            while (nextNode.getParent().isNotNull() && nextNode.getParent().compareValues(nextNode.getValue()) < 0)
+                nextNode = nextNode.getParent();
+            nextNode = nextNode.getParent();
         }
         node = nextNode;
         return value;
-        */
-        return null;
     }
 }

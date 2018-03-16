@@ -70,12 +70,15 @@ public class AVLTreeTest {
         tree.addAll(array);
         tree.addAll(array);
         tree.removeAll(array);
-        tree.removeAll(array);
         Collections.reverse(array);
+        tree.removeAll(array);
         tree.addAll(array);
         tree.addAll(array);
         tree.removeAll(array);
         tree.removeAll(array);
+        tree.remove("b");
+        System.out.println(tree);
+        assertTrue(tree.isEmpty());
     }
 
     @Test

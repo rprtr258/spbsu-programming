@@ -1,7 +1,6 @@
 package com.rprtr258;
 
 import java.util.ArrayList;
-import static java.lang.Math.max;
 
 /**
  * Public class that holds AVLTree nodes.
@@ -59,7 +58,7 @@ public class NodeWrapper<E extends Comparable<E>> {
      *         0 if equal,
      *         positive if larger
      */
-    private int compareValues(E value) {
+    public int compareValues(E value) {
         return node.value.compareTo(value);
     }
 
@@ -67,7 +66,7 @@ public class NodeWrapper<E extends Comparable<E>> {
      * Checks if node held is null(not present).
      * @return true if some node held, false otherwise.
      */
-    private boolean isNotNull() {
+    public boolean isNotNull() {
         return (node != null);
     }
 
@@ -117,7 +116,7 @@ public class NodeWrapper<E extends Comparable<E>> {
             if (getQuantity() > 1) {
                 node.quantity--;
             } else if (isLNotNull && isRNotNull) {
-                NodeWrapper<E> tmp = getMaxNode();
+                NodeWrapper<E> tmp = getL().getMaxNode();
                 E tempValue = tmp.getValue();
                 node.copyData(tmp.node);
                 getL().remove(tempValue);
@@ -177,6 +176,21 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     /**
+     * Erases node.
+     */
+    public void erase() {
+        node = null;
+    }
+
+    /**
+     * Getter for node parent.
+     * @return node parent.
+     */
+    public NodeWrapper<E> getParent() {
+        return node.parent;
+    }
+
+    /**
      * Returns node with maximum value in that node subtree.
      * @return node with maximum value.
      */
@@ -204,20 +218,12 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     /**
-     * Getter for node parent.
-     * @return node parent.
-     */
-    private NodeWrapper<E> getParent() {
-        return node.parent;
-    }
-
-    /**
      * Setter for parent.
      * @param parent new parent.
      */
     private void setParent(NodeWrapper<E> parent) {
         if (isNotNull())
-            node.parent = parent;
+            node.parent.copyNode(parent);
     }
 
     /**
@@ -227,7 +233,7 @@ public class NodeWrapper<E extends Comparable<E>> {
     private Node<E> rotateRight() {
         Node<E> pl = getL().node;
         pl.getR().setParent(this);
-        getL().node = pl.getR().node;
+        getL().copyNode(pl.getR());
 
         getParent().node = pl;
         pl.getR().node = node;
@@ -244,7 +250,7 @@ public class NodeWrapper<E extends Comparable<E>> {
     private Node<E> rotateLeft() {
         Node<E> pr = getR().node;
         pr.getL().setParent(this);
-        getR().node = pr.getL().node;
+        getR().copyNode(pr.getL());
 
         getParent().node = pr;
         pr.getL().node = node;
@@ -263,16 +269,14 @@ public class NodeWrapper<E extends Comparable<E>> {
         node.fixHeight();
         int balanceFactor = bFactor();
         if (balanceFactor == 2) {
-            if (getR().bFactor() < 0) {
+            if (getR().bFactor() < 0)
                 getR().node = getR().rotateRight();
-            }
             node = rotateLeft();
-        } else if (balanceFactor == -2) {
-            if (getL().bFactor() > 0) {
+        } /*else if (balanceFactor == -2) {
+            if (getL().bFactor() > 0)
                 getL().node = getL().rotateLeft();
-            }
             node = rotateRight();
-        }
+        }*/
     }
 
     /**
@@ -287,13 +291,6 @@ public class NodeWrapper<E extends Comparable<E>> {
             node = new Node<>(value);
             getParent().node = parent;
         }
-    }
-
-    /**
-     * Erases node.
-     */
-    public void erase() {
-        node = null;
     }
 
     /**
@@ -338,7 +335,7 @@ public class NodeWrapper<E extends Comparable<E>> {
          * Copies value data from another node.
          * @param node other node.
          */
-        public void copyData(Node<T> node) {
+        private void copyData(Node<T> node) {
             this.value = node.value;
             this.quantity = node.quantity;
         }
@@ -347,7 +344,7 @@ public class NodeWrapper<E extends Comparable<E>> {
          * Getter for left children.
          * @return left children.
          */
-        public NodeWrapper<T> getL() {
+        private NodeWrapper<T> getL() {
             return l;
         }
 
@@ -355,15 +352,15 @@ public class NodeWrapper<E extends Comparable<E>> {
          * Getter for right children.
          * @return left children.
          */
-        public NodeWrapper<T> getR() {
+        private NodeWrapper<T> getR() {
             return r;
         }
 
         /**
          * Fixes height of node based on height of child.
          */
-        public void fixHeight() {
-            height = max(l.getHeight(), r.getHeight()) + 1;
+        private void fixHeight() {
+            height = Math.max(l.getHeight(), r.getHeight()) + 1;
         }
     }
 

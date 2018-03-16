@@ -73,8 +73,8 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
     @Override
     public Iterator<T> iterator() {
         NodeWrapper<T> tmp = root;
-        //while (tmp.node.getL().node != null)
-        //    tmp = tmp.node.getL();
+        while (tmp.getL().isNotNull())
+            tmp = tmp.getL();
         return new TreeIterator<>(tmp);
     }
 
@@ -145,7 +145,7 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
         for(T value : this)
             if (!collection.contains(value))
                 excluded.add(value);
-        for (Object value : collection)
+        for (Object value : excluded)
             result |= remove(value);
         return result;
     }
