@@ -1,6 +1,7 @@
 package com.rprtr258;
 
 import java.util.ArrayList;
+import static java.lang.Math.max;
 
 public class NodeWrapper<E extends Comparable<E>> {
     public Node<E> node;
@@ -10,40 +11,31 @@ public class NodeWrapper<E extends Comparable<E>> {
     }
 
     public E getValue() {
-        return node.getValue();
+        return node.value;
     }
 
     public int getQuantity() {
-        return node.getQuantity();
+        return node.quantity;
     }
 
     public NodeWrapper<E> getParent() {
-        return node.getParent();
+        return node.parent;
     }
 
     public NodeWrapper<E> getL() {
-        return node.getL();
+        return node.l;
     }
 
     public NodeWrapper<E> getR() {
-        return node.getR();
+        return node.r;
     }
 
     public int compareValues(E value) {
-        return node.compareValues(value);
+        return node.value.compareTo(value);
     }
 
     public boolean isNotNull() {
         return (node != null);
-    }
-
-    private void add(E value, Node<E> parent) {
-        if (isNotNull()) {
-            add(value);
-        } else {
-            node = new Node<>(value);
-            getParent().node = parent;
-        }
     }
 
     public void add(E value) {
@@ -53,7 +45,7 @@ public class NodeWrapper<E extends Comparable<E>> {
         }
         int cmp = compareValues(value);
         if (cmp == 0)
-            node.changeQuantity(1);
+            node.quantity++;
         else if (cmp > 0)
             getL().add(value, node);
         else
@@ -61,14 +53,13 @@ public class NodeWrapper<E extends Comparable<E>> {
         balance();
     }
 
-    @Override
-    public String toString() {
+    public void pushAll(ArrayList<E> list) {
         if (node == null)
-            return "null";
-        String valueString = getValue().toString();
-        String lString = getL().toString();
-        String rString = getR().toString();
-        return String.format("(%s[%d] %s %s)", valueString, getQuantity(), lString, rString);
+            return;
+        getL().pushAll(list);
+        for (int i = 0; i < getQuantity(); i++)
+            list.add(getValue());
+        getR().pushAll(list);
     }
 
     private NodeWrapper<E> getMaxNode() {
@@ -90,7 +81,7 @@ public class NodeWrapper<E extends Comparable<E>> {
             boolean isLNotNull = getL().isNotNull();
             boolean isRNotNull = getR().isNotNull();
             if (getQuantity() > 1) {
-                node.changeQuantity(-1);
+                node.quantity--;
             } else if (isLNotNull && isRNotNull) {
                 NodeWrapper<E> tmp = getMaxNode();
                 E tempValue = tmp.getValue();
@@ -124,8 +115,18 @@ public class NodeWrapper<E extends Comparable<E>> {
             return getR().contains(value);
     }
 
-    public int getHeight() {
-        return (node == null ? 0 : node.getHeight());
+    private int getHeight() {
+        return (node == null ? 0 : node.height);
+    }
+
+    @Override
+    public String toString() {
+        if (node == null)
+            return "null";
+        String valueString = getValue().toString();
+        String lString = getL().toString();
+        String rString = getR().toString();
+        return String.format("(%s[%d] %s %s)", valueString, getQuantity(), lString, rString);
     }
 
     private int bFactor() {
@@ -134,7 +135,7 @@ public class NodeWrapper<E extends Comparable<E>> {
 
     private void setParent(NodeWrapper<E> parent) {
         if (isNotNull())
-            node.setParent(parent);
+            node.parent = parent;
     }
 
     private Node<E> rotateRight() {
@@ -181,12 +182,52 @@ public class NodeWrapper<E extends Comparable<E>> {
         }
     }
 
-    public void pushAll(ArrayList<E> list) {
-        if (node == null)
-            return;
-        getL().pushAll(list);
-        for (int i = 0; i < getQuantity(); i++)
-            list.add(getValue());
-        getR().pushAll(list);
+    private void add(E value, Node<E> parent) {
+        if (isNotNull()) {
+            add(value);
+        } else {
+            node = new Node<>(value);
+            getParent().node = parent;
+        }
     }
+
+    class Node<T extends Comparable<T>> {
+        private NodeWrapper<T> l = new NodeWrapper<>(null);
+        private NodeWrapper<T> r = new NodeWrapper<>(null);
+        private NodeWrapper<T> parent = new NodeWrapper<>(null);
+        private T value = null;
+        private int height = 1;
+        private int quantity = 1;
+
+        public Node(T value) {
+            this.value = value;
+        }
+
+        public void copyData(Node<T> node) {
+            this.value = node.value;
+            this.quantity = node.quantity;
+        }
+
+        public NodeWrapper<T> getL() {
+            return l;
+        }
+
+        public NodeWrapper<T> getR() {
+            return r;
+        }
+
+        public T getValue() {
+            return value;
+        }
+
+        public NodeWrapper<T> getParent() {
+            return parent;
+        }
+
+        public void fixHeight() {
+            height = max(l.getHeight(), r.getHeight()) + 1;
+        }
+    }
+
 }
+
