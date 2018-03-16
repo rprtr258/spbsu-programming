@@ -57,11 +57,6 @@ public class Node<E extends Comparable<E>> {
         return this.value.compareTo(value);
     }
 
-    @Override
-    public String toString() {
-        return String.format("(%s[%d] %s %s)", value, quantity, l.toString(), r.toString());
-    }
-
     public void pushAll(ArrayList<E> list) {
         l.pushAll(list);
         for (int i = 0; i < quantity; i++)

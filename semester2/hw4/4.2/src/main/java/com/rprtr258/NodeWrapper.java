@@ -63,7 +63,12 @@ public class NodeWrapper<E extends Comparable<E>> {
 
     @Override
     public String toString() {
-        return (node == null ? "null" : node.toString());
+        if (node == null)
+            return "null";
+        String valueString = getValue().toString();
+        String lString = getL().toString();
+        String rString = getR().toString();
+        return String.format("(%s[%d] %s %s)", valueString, getQuantity(), lString, rString);
     }
 
     private NodeWrapper<E> getMaxNode() {
@@ -123,7 +128,7 @@ public class NodeWrapper<E extends Comparable<E>> {
         return (node == null ? 0 : node.getHeight());
     }
 
-    public int bFactor() {
+    private int bFactor() {
         return getR().getHeight() - getL().getHeight();
     }
 
@@ -158,7 +163,7 @@ public class NodeWrapper<E extends Comparable<E>> {
         return pr;
     }
 
-    public void balance() {
+    private void balance() {
         if (node == null)
             return;
         node.fixHeight();
