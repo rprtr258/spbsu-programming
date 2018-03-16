@@ -20,8 +20,9 @@ public class Node<E extends Comparable<E>> {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void copyData(Node<E> node) {
+        this.value = node.value;
+        this.quantity = node.quantity;
     }
 
     public void changeQuantity(int delta) {
@@ -38,10 +39,6 @@ public class Node<E extends Comparable<E>> {
 
     public E getValue() {
         return value;
-    }
-
-    public void setValue(E value) {
-        this.value = value;
     }
 
     public NodeWrapper<E> getParent() {
