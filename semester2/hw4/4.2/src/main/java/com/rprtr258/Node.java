@@ -62,13 +62,11 @@ public class Node<E extends Comparable<E>> {
         return String.format("(%s[%d] %s %s)", value, quantity, l.toString(), r.toString());
     }
 
-    public <T> void pushAll(ArrayList<T> list) {
-        if (l.isNotNull())
-            l.node.pushAll(list);
+    public void pushAll(ArrayList<E> list) {
+        l.pushAll(list);
         for (int i = 0; i < quantity; i++)
-            list.add((T)value);
-        if (r.isNotNull())
-            r.node.pushAll(list);
+            list.add(value);
+        r.pushAll(list);
     }
 
     public void fixHeight() {

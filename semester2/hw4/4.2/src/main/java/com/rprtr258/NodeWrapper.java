@@ -1,10 +1,16 @@
 package com.rprtr258;
 
+import java.util.ArrayList;
+
 public class NodeWrapper<E extends Comparable<E>> {
     public Node<E> node;
 
     public NodeWrapper(Node<E> node) {
         this.node = node;
+    }
+
+    public E getValue() {
+        return node.getValue();
     }
 
     public int getQuantity() {
@@ -82,7 +88,7 @@ public class NodeWrapper<E extends Comparable<E>> {
                 node.changeQuantity(-1);
             } else if (isLNotNull && isRNotNull) {
                 NodeWrapper<E> tmp = getMaxNode();
-                E tempValue = tmp.node.getValue();
+                E tempValue = tmp.getValue();
                 node.copyData(tmp.node);
                 getL().remove(tempValue);
             } else if (isLNotNull) {
@@ -168,5 +174,14 @@ public class NodeWrapper<E extends Comparable<E>> {
             }
             node = rotateRight();
         }
+    }
+
+    public void pushAll(ArrayList<E> list) {
+        if (node == null)
+            return;
+        getL().pushAll(list);
+        for (int i = 0; i < getQuantity(); i++)
+            list.add(getValue());
+        getR().pushAll(list);
     }
 }

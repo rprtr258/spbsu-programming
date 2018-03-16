@@ -46,14 +46,17 @@ class AVLTree<T extends Comparable<T>> implements Collection<T> {
     @Override
     public Object[] toArray() {
         ArrayList<T> result = new ArrayList<>();
-        root.node.pushAll(result);
+        root.pushAll(result);
         return result.toArray();
     }
 
     @Override
     public <T1> T1[] toArray(T1[] a) {
         ArrayList<T1> result = new ArrayList<>();
-        root.node.pushAll(result);
+        ArrayList<T> data = new ArrayList<>();
+        root.pushAll(data);
+        for (T value : data)
+            result.add((T1)value);
         return result.toArray(a);
     }
 
