@@ -25,13 +25,7 @@ public class Heap<T> {
      */
     public void enqueue(T value, int priority) {
         data.add(new Note<>(value, priority));
-        int i = data.size() - 1;
-        while (i > 0 && priority > data.get(i - 1).priority) {
-            Note<T> temp = data.get(i);
-            data.set(i, data.get(i - 1));
-            data.set(i - 1, temp);
-            i--;
-        }
+        siftUp(size() - 1);
     }
 
     /**
@@ -40,10 +34,15 @@ public class Heap<T> {
      * @throws EmptyHeapException if heap is empty.
      */
     public T dequeue() throws EmptyHeapException {
-        if (data.isEmpty())
+        if (isEmpty())
             throw new EmptyHeapException();
+
         T result = data.get(0).value;
-        data.remove(0);
+        swap(0, size() - 1);
+        data.remove(size() - 1);
+        if (!isEmpty())
+            siftDown(0);
+
         return result;
     }
 
@@ -73,6 +72,69 @@ public class Heap<T> {
         for (Note<T> note : data)
             dataStrings.add(note.value.toString());
         return dataStrings.toString();
+    }
+
+    private int parent(int pos) {
+        return (pos - 1) / 2;
+    }
+
+    private int leftChild(int pos) {
+        return pos * 2 + 1;
+    }
+
+    private int rightChild(int pos) {
+        return pos * 2 + 2;
+    }
+
+    private boolean isInHeap(int pos) {
+        return (pos < size());
+    }
+
+    private void swap(int i, int j) {
+        Note<T> temp = data.get(i);
+        data.set(i, data.get(j));
+        data.set(j, temp);
+    }
+
+    private void siftUp(int pos) {
+        int i = pos;
+        while (i > 0 && data.get(parent(i)).priority < data.get(i).priority) {
+            swap(i, parent(i));
+            i = parent(i);
+        }
+    }
+
+    private void siftDown(int pos) {
+        int i = pos;
+        while (true) {
+            int left = leftChild(i);
+            int right = rightChild(i);
+            int curPrior = data.get(i).priority;
+
+            if (isInHeap(left) && isInHeap(right)) {
+                int leftPrior = data.get(left).priority;
+                int rightPrior = data.get(right).priority;
+                if (leftPrior >= rightPrior && leftPrior > curPrior) {
+                    swap(i, left);
+                    i = left;
+                } else if (rightPrior >= leftPrior && rightPrior > curPrior) {
+                    swap(i, right);
+                    i = right;
+                } else {
+                    break;
+                }
+            } else if (isInHeap(left)) {
+                int leftPrior = data.get(left).priority;
+                if (leftPrior > curPrior) {
+                    swap(i, left);
+                    i = left;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
     }
 
     /**
