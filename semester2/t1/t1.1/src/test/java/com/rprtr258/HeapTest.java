@@ -32,6 +32,15 @@ public class HeapTest {
         assertTrue(heap.isEmpty());
     }
 
+    @Test(expected = EmptyHeapException.class)
+    public void emptyHeapExceptionTest() throws EmptyHeapException {
+        Heap<String> heap = makeHeap();
+        int heapSize = heap.size();
+        for (int i = 0; i < heapSize; i++)
+            heap.dequeue();
+        heap.dequeue();
+    }
+
     private Heap<String> makeHeap() {
         Heap<String> heap = new Heap<>();
         heap.enqueue("GOD", -12);
