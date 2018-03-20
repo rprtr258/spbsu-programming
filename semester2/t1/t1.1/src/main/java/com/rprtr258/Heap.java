@@ -40,7 +40,7 @@ public class Heap<T> {
      * @throws EmptyHeapException if heap is empty.
      */
     public T dequeue() throws EmptyHeapException {
-        if (data.isEmpty())
+        if (isEmpty())
             throw new EmptyHeapException();
         T result = data.get(0).value;
         data.remove(0);
