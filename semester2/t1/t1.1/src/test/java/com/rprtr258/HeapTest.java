@@ -21,6 +21,17 @@ public class HeapTest {
         assertEquals("[HE, IS, THE, GOD]", heap.toString());
     }
 
+    @Test
+    public void isEmptyTest() throws EmptyHeapException {
+        Heap<String> heap = makeHeap();
+        int heapSize = heap.size();
+        for (int i = 0; i < heapSize; i++) {
+            assertFalse(heap.isEmpty());
+            heap.dequeue();
+        }
+        assertTrue(heap.isEmpty());
+    }
+
     private Heap<String> makeHeap() {
         Heap<String> heap = new Heap<>();
         heap.enqueue("GOD", -12);

@@ -25,7 +25,13 @@ public class Heap<T> {
      */
     public void enqueue(T value, int priority) {
         data.add(new Note<>(value, priority));
-        data.sort((Note<T> first, Note<T> second) -> second.priority - first.priority);
+        int i = data.size() - 1;
+        while (i > 0 && priority > data.get(i - 1).priority) {
+            Note<T> temp = data.get(i);
+            data.set(i, data.get(i - 1));
+            data.set(i - 1, temp);
+            i--;
+        }
     }
 
     /**
@@ -39,6 +45,22 @@ public class Heap<T> {
         T result = data.get(0).value;
         data.remove(0);
         return result;
+    }
+
+    /**
+     * Checks if heap is empty.
+     * @return true if heap is empty.
+     */
+    public boolean isEmpty() {
+        return data.isEmpty();
+    }
+
+    /**
+     * Returns number of values pushed to heap.
+     * @return number of elements in heap.
+     */
+    public int size() {
+        return data.size();
     }
 
     /**
