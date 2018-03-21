@@ -7,10 +7,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
+    /**
+     * Launches JavaFX application.
+     * @param args command line arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Starts main stage. Required by JavaFX.
+     * @param primaryStage stage that will be started.
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
