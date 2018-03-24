@@ -77,6 +77,6 @@ public class Controller {
                 break;
             }
         }
-        return result.toString();
+        return String.format("%.11f", result);
     }
 }
