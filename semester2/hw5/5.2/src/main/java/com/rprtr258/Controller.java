@@ -24,9 +24,9 @@ public class Controller {
      * Sets default values to all objects.
      */
     private void initializeObjects() {
-        firstOperandSpinner.setValueFactory(new IntegerSpinnerValueFactory());
+        firstOperandSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
         firstOperandSpinner.getValueFactory().setValue(0);
-        secondOperandSpinner.setValueFactory(new IntegerSpinnerValueFactory());
+        secondOperandSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1));
         secondOperandSpinner.getValueFactory().setValue(0);
         operatorChoice.getItems().addAll("+", "-", "*", "/");
     }
