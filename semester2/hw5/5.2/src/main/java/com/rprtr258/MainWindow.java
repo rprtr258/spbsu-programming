@@ -29,6 +29,7 @@ public class MainWindow extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
             primaryStage.setScene(new Scene(root));
+            primaryStage.setTitle("Simple calculator");
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
