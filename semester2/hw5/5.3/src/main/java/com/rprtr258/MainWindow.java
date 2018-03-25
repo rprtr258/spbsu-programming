@@ -4,11 +4,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class MainWindow {
+    public Button button0;
     public Button button1;
     public Button button2;
     public Button button3;
@@ -18,12 +17,19 @@ public class MainWindow {
     public Button button7;
     public Button button8;
     public Button button9;
-    public Button buttonClearDisplay;
-    public Button buttonEvaluate;
+
+    public Button buttonComma;
+
     public Button buttonDivide;
     public Button buttonMultiply;
     public Button buttonMinus;
     public Button buttonPlus;
+
+    public Button buttonEvaluate;
+
+    public Button buttonDelete;
+    public Button buttonClearDisplay;
+
     public TextArea display;
     public Label statusLabel;
 
@@ -34,10 +40,8 @@ public class MainWindow {
         setEvaluateListener();
     }
 
-    // TODO: add 0
-    // TODO: add ,
-    // TODO: add Del
     private void setDigitsListeners() {
+        button0.setOnAction((actionEvent) -> appendSymbol('0'));
         button1.setOnAction((actionEvent) -> appendSymbol('1'));
         button2.setOnAction((actionEvent) -> appendSymbol('2'));
         button3.setOnAction((actionEvent) -> appendSymbol('3'));
@@ -47,10 +51,12 @@ public class MainWindow {
         button7.setOnAction((actionEvent) -> appendSymbol('7'));
         button8.setOnAction((actionEvent) -> appendSymbol('8'));
         button9.setOnAction((actionEvent) -> appendSymbol('9'));
+        buttonComma.setOnAction((actionEvent) -> appendSymbol(','));
     }
 
     private void setClearDisplayListener() {
         buttonClearDisplay.setOnAction((actionEvent) -> clearDisplay());
+        buttonDelete.setOnAction((actionEvent) -> deleteLastSymbol());
     }
 
     private void setOperatorsListeners() {
@@ -131,5 +137,11 @@ public class MainWindow {
 
     private void clearDisplay() {
         display.setText("");
+    }
+
+    private void deleteLastSymbol() {
+        String displayText = display.getText();
+        if (!"".equals(displayText))
+            display.setText(displayText.substring(0, displayText.length() - 1));
     }
 }

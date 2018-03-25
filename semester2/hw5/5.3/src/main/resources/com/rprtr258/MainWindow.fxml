@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="189.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rprtr258.MainWindow">
+<VBox prefHeight="235.0" prefWidth="288.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rprtr258.MainWindow">
    <TextArea fx:id="display" editable="false" prefHeight="37.0" prefWidth="250.0" promptText="0">
       <font>
          <Font name="Arial Bold Italic" size="24.0" />
@@ -24,13 +24,18 @@
       <Button fx:id="button7" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="7" GridPane.rowIndex="3" />
       <Button fx:id="button8" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="8" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Button fx:id="button9" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="9" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <Button fx:id="buttonPlus" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="+" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-      <Button fx:id="buttonMinus" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="-" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-      <Button fx:id="buttonMultiply" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="*" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-      <Button fx:id="buttonDivide" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="/" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-      <Button fx:id="buttonEvaluate" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="=" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+      <Button fx:id="buttonPlus" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="+" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+      <Button fx:id="buttonMinus" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="-" GridPane.columnIndex="6" GridPane.rowIndex="1" />
+      <Button fx:id="buttonMultiply" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="*" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+      <Button fx:id="buttonDivide" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="/" GridPane.columnIndex="6" GridPane.rowIndex="2" />
+      <Button fx:id="buttonEvaluate" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="=" GridPane.columnIndex="6" GridPane.rowIndex="3" />
       <Button fx:id="buttonClearDisplay" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="C" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+      <Button fx:id="button0" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+      <Button fx:id="buttonComma" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="," GridPane.columnIndex="3" GridPane.rowIndex="2" />
+      <Button fx:id="buttonDelete" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" text="Del" GridPane.columnIndex="3" GridPane.rowIndex="3" />
       <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
          <ColumnConstraints />
          <ColumnConstraints />
          <ColumnConstraints />
