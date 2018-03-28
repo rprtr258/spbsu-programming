@@ -2,7 +2,15 @@ package com.rprtr258;
 
 import java.util.StringTokenizer;
 
+/**
+ * Static class which can check expression for correctness and evaluate correct expression.
+ */
 public class Expression {
+    /**
+     * Checks if given expression is correct and can be evaluated.
+     * @param expression expression to check.
+     * @return true if expression can be evaluated.
+     */
     public static boolean checkCorrectness(String expression) {
         if ("".equals(expression)) {
             return true;
@@ -12,6 +20,12 @@ public class Expression {
         return expression.matches(String.format("(-%s%s)?(%s%s)*%s", numberRegexp, operatorRegexp, numberRegexp, operatorRegexp, numberRegexp));
     }
 
+    /**
+     * Evaluates given expression.
+     * @param expression expression to calculate.
+     * @return result of given expression.
+     * @throws InvalidExpressionException if given expression is incorrect.
+     */
     public static double evaluate(String expression) throws InvalidExpressionException {
         if (!checkCorrectness(expression))
             throw new InvalidExpressionException();
@@ -20,15 +34,15 @@ public class Expression {
             return 0.0;
 
         String formattedExpression = expression.replace(',', '.');
-        boolean minus = false;
-        if (expression.charAt(0) == '-') {
-            minus = true;
-            formattedExpression = expression.substring(1);
-        }
         StringTokenizer stringTokenizer = new StringTokenizer(formattedExpression, "+-", true);
-        double result = evaluateMultiplication(stringTokenizer.nextToken());
-        if (minus)
+        double result = 0.0;
+        if (expression.charAt(0) == '-') {
+            stringTokenizer.nextToken();
+            result = evaluateMultiplication(stringTokenizer.nextToken());
             result *= -1;
+        } else {
+            result = evaluateMultiplication(stringTokenizer.nextToken());
+        }
         double sign = 0.0;
         while (stringTokenizer.hasMoreTokens()) {
             String token = stringTokenizer.nextToken();
@@ -44,8 +58,13 @@ public class Expression {
         return result;
     }
 
-    private static double evaluateMultiplication(String expression) {
-        StringTokenizer stringTokenizer = new StringTokenizer(expression, "*/", true);
+    /**
+     * Evaluates token which does not contain '+' and '-'.
+     * @param expressionToken token with only divisions and multiplications.
+     * @return result of calculation given token.
+     */
+    private static double evaluateMultiplication(String expressionToken) {
+        StringTokenizer stringTokenizer = new StringTokenizer(expressionToken, "*/", true);
         double result = Double.parseDouble(stringTokenizer.nextToken());
         boolean multiply = false;
         while (stringTokenizer.hasMoreTokens()) {

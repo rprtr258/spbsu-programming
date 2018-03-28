@@ -4,6 +4,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
+/**
+ * Main window elements' controller.
+ */
 public class MainWindow {
     public Button button0;
     public Button button1;
@@ -33,6 +36,9 @@ public class MainWindow {
 
     private Display display = null;
 
+    /**
+     * Sets listeners to all elements.
+     */
     public void initialize() {
         display = new Display(displayTextArea, statusLabel);
         setDigitsAndCommaButtonsListeners();
@@ -41,6 +47,9 @@ public class MainWindow {
         setEvaluateButtonListener();
     }
 
+    /**
+     * Sets listeners to digits('0'-'9') and comma(',') button.
+     */
     private void setDigitsAndCommaButtonsListeners() {
         button0.setOnAction((actionEvent) -> display.append('0'));
         button1.setOnAction((actionEvent) -> display.append('1'));
@@ -55,11 +64,17 @@ public class MainWindow {
         buttonComma.setOnAction((actionEvent) -> display.append(','));
     }
 
+    /**
+     * Sets listeners to erasers('Del', 'C') buttons.
+     */
     private void setClearButtonsListeners() {
         buttonClearDisplay.setOnAction((actionEvent) -> display.clearDisplay());
         buttonDelete.setOnAction((actionEvent) -> display.deleteSymbol());
     }
 
+    /**
+     * Sets listeners to operators('+', '-', '/', '*') buttons.
+     */
     private void setOperatorButtonsListeners() {
         buttonPlus.setOnAction((actionEvent) -> display.append('+'));
         buttonMinus.setOnAction((actionEvent) -> display.append('-'));
@@ -67,6 +82,9 @@ public class MainWindow {
         buttonDivide.setOnAction((actionEvent) -> display.append('/'));
     }
 
+    /**
+     * Sets listener to button '=';
+     */
     private void setEvaluateButtonListener() {
         buttonEvaluate.setOnAction((actionEvent) -> display.showResult());
     }
