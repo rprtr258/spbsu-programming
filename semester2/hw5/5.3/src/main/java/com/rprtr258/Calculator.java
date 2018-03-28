@@ -19,6 +19,7 @@ public class Calculator extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("Calculator");
+            primaryStage.setResizable(false);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();

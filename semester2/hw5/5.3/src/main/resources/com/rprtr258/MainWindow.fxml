@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox prefHeight="235.0" prefWidth="288.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rprtr258.MainWindow">
-   <TextArea fx:id="display" editable="false" prefHeight="37.0" prefWidth="250.0" promptText="0">
+   <TextArea fx:id="displayTextArea" editable="false" focusTraversable="false" prefHeight="37.0" prefWidth="250.0" promptText="0">
       <font>
          <Font name="Arial Bold Italic" size="24.0" />
       </font></TextArea>

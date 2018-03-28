@@ -4,8 +4,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
-import java.util.StringTokenizer;
-
 public class MainWindow {
     public Button button0;
     public Button button1;
@@ -30,118 +28,46 @@ public class MainWindow {
     public Button buttonDelete;
     public Button buttonClearDisplay;
 
-    public TextArea display;
+    public TextArea displayTextArea;
     public Label statusLabel;
 
+    private Display display = null;
+
     public void initialize() {
-        setDigitsListeners();
-        setOperatorsListeners();
-        setClearDisplayListener();
-        setEvaluateListener();
+        display = new Display(displayTextArea, statusLabel);
+        setDigitsAndCommaButtonsListeners();
+        setOperatorButtonsListeners();
+        setClearButtonsListeners();
+        setEvaluateButtonListener();
     }
 
-    private void setDigitsListeners() {
-        button0.setOnAction((actionEvent) -> appendSymbol('0'));
-        button1.setOnAction((actionEvent) -> appendSymbol('1'));
-        button2.setOnAction((actionEvent) -> appendSymbol('2'));
-        button3.setOnAction((actionEvent) -> appendSymbol('3'));
-        button4.setOnAction((actionEvent) -> appendSymbol('4'));
-        button5.setOnAction((actionEvent) -> appendSymbol('5'));
-        button6.setOnAction((actionEvent) -> appendSymbol('6'));
-        button7.setOnAction((actionEvent) -> appendSymbol('7'));
-        button8.setOnAction((actionEvent) -> appendSymbol('8'));
-        button9.setOnAction((actionEvent) -> appendSymbol('9'));
-        buttonComma.setOnAction((actionEvent) -> appendSymbol(','));
+    private void setDigitsAndCommaButtonsListeners() {
+        button0.setOnAction((actionEvent) -> display.append('0'));
+        button1.setOnAction((actionEvent) -> display.append('1'));
+        button2.setOnAction((actionEvent) -> display.append('2'));
+        button3.setOnAction((actionEvent) -> display.append('3'));
+        button4.setOnAction((actionEvent) -> display.append('4'));
+        button5.setOnAction((actionEvent) -> display.append('5'));
+        button6.setOnAction((actionEvent) -> display.append('6'));
+        button7.setOnAction((actionEvent) -> display.append('7'));
+        button8.setOnAction((actionEvent) -> display.append('8'));
+        button9.setOnAction((actionEvent) -> display.append('9'));
+        buttonComma.setOnAction((actionEvent) -> display.append(','));
     }
 
-    private void setClearDisplayListener() {
-        buttonClearDisplay.setOnAction((actionEvent) -> clearDisplay());
-        buttonDelete.setOnAction((actionEvent) -> deleteLastSymbol());
+    private void setClearButtonsListeners() {
+        buttonClearDisplay.setOnAction((actionEvent) -> display.clearDisplay());
+        buttonDelete.setOnAction((actionEvent) -> display.deleteSymbol());
     }
 
-    private void setOperatorsListeners() {
-        buttonPlus.setOnAction((actionEvent) -> appendSymbol('+'));
-        buttonMinus.setOnAction((actionEvent) -> appendSymbol('-'));
-        buttonMultiply.setOnAction((actionEvent) -> appendSymbol('*'));
-        buttonDivide.setOnAction((actionEvent) -> appendSymbol('/'));
+    private void setOperatorButtonsListeners() {
+        buttonPlus.setOnAction((actionEvent) -> display.append('+'));
+        buttonMinus.setOnAction((actionEvent) -> display.append('-'));
+        buttonMultiply.setOnAction((actionEvent) -> display.append('*'));
+        buttonDivide.setOnAction((actionEvent) -> display.append('/'));
     }
 
-    private void appendSymbol(char symbol) {
-        display.setText(display.getText() + symbol);
-    }
-
-    private void setEvaluateListener() {
-        buttonEvaluate.setOnAction((actionEvent) -> displayResult());
-    }
-
-    private void displayResult() {
-        String expression = display.getText();
-        if ("".equals(expression)) {
-            display.setText("0");
-            return;
-        }
-        String numberRegexp = "([1-9]\\d*|0)(,\\d*)?";
-        String operatorRegexp = "[+\\-*/]";
-        if (expression.matches(String.format("(-%s%s)?(%s%s)*%s", numberRegexp, operatorRegexp, numberRegexp, operatorRegexp, numberRegexp))) {
-            double value = evaluate(expression);
-            display.setText(String.format("%.6f", value));
-            statusLabel.setText("");
-            return;
-        }
-        statusLabel.setText("Incorrect expression.");
-    }
-
-    private double evaluate(String expression) {
-        expression = expression.replace(',', '.');
-        boolean minus = false;
-        if (expression.charAt(0) == '-') {
-            minus = true;
-            expression = expression.substring(1);
-        }
-        StringTokenizer stringTokenizer = new StringTokenizer(expression, "+-", true);
-        double result = evaluateMultiplication(stringTokenizer.nextToken());
-        if (minus)
-            result *= -1;
-        double sign = 0.0;
-        while (stringTokenizer.hasMoreTokens()) {
-            String token = stringTokenizer.nextToken();
-            if ("+".equals(token)) {
-                sign = 1;
-            } else if ("-".equals(token)) {
-                sign = -1;
-            } else if (!"".equals(token)) {
-                double accumulator = evaluateMultiplication(token);
-                result += sign * accumulator;
-            }
-        }
-        return result;
-    }
-
-    private double evaluateMultiplication(String expression) {
-        StringTokenizer stringTokenizer = new StringTokenizer(expression, "*/", true);
-        double result = Double.parseDouble(stringTokenizer.nextToken());
-        boolean multiply = false;
-        while (stringTokenizer.hasMoreTokens()) {
-            String token = stringTokenizer.nextToken();
-            if ("*".equals(token)) {
-                multiply = true;
-            } else if ("/".equals(token)) {
-                multiply = false;
-            } else if (!"".equals(token)) {
-                double accumulator = Double.parseDouble(token);
-                result = (multiply ? result * accumulator : result / accumulator);
-            }
-        }
-        return result;
-    }
-
-    private void clearDisplay() {
-        display.setText("");
-    }
-
-    private void deleteLastSymbol() {
-        String displayText = display.getText();
-        if (!"".equals(displayText))
-            display.setText(displayText.substring(0, displayText.length() - 1));
+    private void setEvaluateButtonListener() {
+        buttonEvaluate.setOnAction((actionEvent) -> display.showResult());
     }
 }
