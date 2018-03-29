@@ -6,6 +6,9 @@ import java.util.StringTokenizer;
  * Static class which can check expression for correctness and evaluate correct expression.
  */
 public class Expression {
+    private String expression = null;
+    private StringTokenizer tokens = null;
+
     /**
      * Checks if given expression is correct and can be evaluated.
      * @param expression expression to check.
@@ -17,7 +20,8 @@ public class Expression {
         }
         String numberRegexp = "([1-9]\\d*|0)(\\.\\d*)?";
         String operatorRegexp = "[+\\-*/]";
-        return expression.matches(String.format("(-%s%s)?(%s%s)*%s", numberRegexp, operatorRegexp, numberRegexp, operatorRegexp, numberRegexp));
+        String expressionPattern = String.format("(-%s%s)?(%s%s)*%s", numberRegexp, operatorRegexp, numberRegexp, operatorRegexp, numberRegexp);
+        return expression.matches(expressionPattern);
     }
 
     /**
@@ -33,19 +37,51 @@ public class Expression {
         if ("".equals(expression))
             return 0.0;
 
-        String formattedExpression = expression.replace(',', '.');
-        StringTokenizer stringTokenizer = new StringTokenizer(formattedExpression, "+-", true);
-        double result = 0.0;
+        Expression tempExpression = new Expression(expression);
+        return tempExpression.evaluate();
+    }
+
+    /**
+     * Private constructor.
+     * @param expression string containing expression.
+     */
+    private Expression(String expression) {
+        this.expression = expression.replace(',', '.');
+        tokens = new StringTokenizer(expression, "+-", true);
+    }
+
+    /**
+     * Returns result of calculation of inner expression.
+     * @return evaluated result.
+     */
+    private double evaluate() {
+        double firstNumber = extractFirstNumberAndRemoveIt();
+        return calculateResult(firstNumber);
+    }
+
+    /**
+     * Extracts first number from inner expression and removes it from tokens.
+     * @return first number in expression.
+     */
+    private double extractFirstNumberAndRemoveIt() {
         if (expression.charAt(0) == '-') {
-            stringTokenizer.nextToken();
-            result = evaluateMultiplication(stringTokenizer.nextToken());
-            result *= -1;
+            tokens.nextToken();
+            return (-1) * evaluateMultiplication(tokens.nextToken());
         } else {
-            result = evaluateMultiplication(stringTokenizer.nextToken());
+            return evaluateMultiplication(tokens.nextToken());
         }
+    }
+
+    /**
+     * Calculates result of remaining expression.
+     * @param firstValue first number in expression.
+     * @return result of calculation.
+     */
+    private double calculateResult(double firstValue) {
+        double result = firstValue;
         double sign = 0.0;
-        while (stringTokenizer.hasMoreTokens()) {
-            String token = stringTokenizer.nextToken();
+        while (tokens.hasMoreTokens()) {
+            String token = tokens.nextToken();
             switch (token) {
                 case "+": {
                     sign = 1;
