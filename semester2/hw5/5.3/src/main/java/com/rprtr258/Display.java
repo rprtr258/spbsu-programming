@@ -49,6 +49,7 @@ public class Display {
                 displayArea.setText(String.format("%.6f", result));
                 statusLabel.setText("");
             } catch (InvalidExpressionException e) {
+                // Can't happen because expression correctness checked.
                 e.printStackTrace();
             }
         } else {
