@@ -46,13 +46,20 @@ public class Expression {
         double sign = 0.0;
         while (stringTokenizer.hasMoreTokens()) {
             String token = stringTokenizer.nextToken();
-            if ("+".equals(token)) {
-                sign = 1;
-            } else if ("-".equals(token)) {
-                sign = -1;
-            } else if (!"".equals(token)) {
-                double accumulator = evaluateMultiplication(token);
-                result += sign * accumulator;
+            switch (token) {
+                case "+": {
+                    sign = 1;
+                    break;
+                }
+                case "-": {
+                    sign = -1;
+                    break;
+                }
+                default: {
+                    double accumulator = evaluateMultiplication(token);
+                    result += sign * accumulator;
+                    break;
+                }
             }
         }
         return result;
@@ -69,13 +76,20 @@ public class Expression {
         boolean multiply = false;
         while (stringTokenizer.hasMoreTokens()) {
             String token = stringTokenizer.nextToken();
-            if ("*".equals(token)) {
-                multiply = true;
-            } else if ("/".equals(token)) {
-                multiply = false;
-            } else if (!"".equals(token)) {
-                double accumulator = Double.parseDouble(token);
-                result = (multiply ? result * accumulator : result / accumulator);
+            switch (token) {
+                case "*": {
+                    multiply = true;
+                    break;
+                }
+                case "/": {
+                    multiply = false;
+                    break;
+                }
+                default: {
+                    double accumulator = Double.parseDouble(token);
+                    result = (multiply ? result * accumulator : result / accumulator);
+                    break;
+                }
             }
         }
         return result;
