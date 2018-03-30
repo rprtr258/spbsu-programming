@@ -43,17 +43,15 @@ public class Display {
      */
     public void showResult() {
         String expression = displayArea.getText();
-        if (Expression.checkCorrectness(expression)) {
-            try {
-                double result = Expression.evaluate(expression);
-                displayArea.setText(String.format("%.6f", result));
-                statusLabel.setText("");
-            } catch (InvalidExpressionException e) {
-                // Can't happen because expression correctness checked.
-                e.printStackTrace();
-            }
-        } else {
+        if (!Expression.checkCorrectness(expression)) {
             statusLabel.setText("Incorrect expression.");
+            return;
+        }
+        try {
+            tryShowResult(expression);
+        } catch (InvalidExpressionException e) {
+            // Can't happen because expression correctness checked.
+            e.printStackTrace();
         }
     }
 
@@ -69,5 +67,16 @@ public class Display {
         } else {
             statusLabel.setText("Display is already empty.");
         }
+    }
+
+    /**
+     * Tries to show result of expression.
+     * @param expression expression that will be evaluated.
+     * @throws InvalidExpressionException if expression is incorrect.
+     */
+    private void tryShowResult(String expression) throws InvalidExpressionException {
+        double result = Expression.evaluate(expression);
+        displayArea.setText(String.format("%.6f", result));
+        statusLabel.setText("");
     }
 }
