@@ -13,7 +13,7 @@ public class UniqueList<T> extends SinglyLinkedList<T> {
      * @throws UniquenessException When value is already in list.
      */
     @Override
-    public void append(T value) {
+    public void append(T value) throws ListAppendException {
         if (contains(value))
             throw new UniquenessException();
         super.append(value);

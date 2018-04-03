@@ -27,7 +27,7 @@ public class SinglyLinkedListTest {
     }
 
     @Test
-    public void containsTest() {
+    public void containsTest() throws ListAppendException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.append("I");
         myList.append("Am");
@@ -37,7 +37,7 @@ public class SinglyLinkedListTest {
     }
 
     @Test
-    public void appendTest() {
+    public void appendTest() throws ListAppendException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.append("I");
         myList.append("Am");
@@ -49,7 +49,7 @@ public class SinglyLinkedListTest {
     }
 
     @Test
-    public void removeLastTest() {
+    public void removeLastTest() throws ListAppendException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.append("I");
         myList.append("Am");
@@ -67,7 +67,7 @@ public class SinglyLinkedListTest {
     }
 
     @Test
-    public void peekTest() {
+    public void peekTest() throws ListAppendException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.append("I");
         assertEquals("I", myList.peek());

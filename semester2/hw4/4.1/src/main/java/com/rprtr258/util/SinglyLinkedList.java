@@ -63,7 +63,7 @@ public class SinglyLinkedList<T> {
      *
      * @param value Value to be added.
      */
-    public void append(T value) {
+    public void append(T value) throws ListAppendException {
         if (size == 0) {
             head = new ListNode<>(value);
         } else {
