@@ -13,7 +13,8 @@ public class SecondPartTasksTest {
 
     @Test
     public void testPiDividedBy4() {
-        fail();
+        double approximatePi = piDividedBy4() * 4;
+        assertEquals(Math.PI, approximatePi, 1e-3);
     }
 
     @Test
