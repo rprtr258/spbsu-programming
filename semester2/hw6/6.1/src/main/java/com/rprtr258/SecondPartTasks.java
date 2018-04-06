@@ -1,14 +1,8 @@
 package com.rprtr258;
 
-import com.sun.java.swing.plaf.windows.WindowsTreeUI;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 public final class SecondPartTasks {
