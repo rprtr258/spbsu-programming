@@ -17,6 +17,7 @@ public class TicTacToe {
     private final int EMPTY_MARK = 0;
     private final int CROSS_MARK = 1;
     private final int ZERO_MARK = -1;
+    @SuppressWarnings("CanBeFinal")
     private int[][] field = new int[3][3];
     private final int CROSS_PLAYER = CROSS_MARK;
     private final int ZERO_PLAYER = ZERO_MARK;
