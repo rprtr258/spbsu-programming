@@ -2,6 +2,9 @@ package com.rprtr258;
 
 import javafx.scene.control.Button;
 
+/**
+ * Controller class.
+ */
 public class Controller {
     public Button button00;
     public Button button01;
@@ -14,6 +17,9 @@ public class Controller {
     public Button button22;
     private TicTacToe game = null;
 
+    /**
+     * Initializes buttons with listeners.
+     */
     public void initialize() {
         game = new TicTacToe();
         button00.setOnAction((actionEvent) -> buttonAction(actionEvent.getSource(), 0, 0));
@@ -27,6 +33,12 @@ public class Controller {
         button22.setOnAction((actionEvent) -> buttonAction(actionEvent.getSource(), 2, 2));
     }
 
+    /**
+     * Action that will happen when button with given coordinates is clicked.
+     * @param source action event source.
+     * @param i row of button.
+     * @param j column of button.
+     */
     private void buttonAction(Object source, int i, int j) {
         boolean madeTurn = game.makeTurn(i, j);
         if (madeTurn) {

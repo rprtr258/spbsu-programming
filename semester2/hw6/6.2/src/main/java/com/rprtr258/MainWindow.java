@@ -8,12 +8,22 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Main class.
+ */
 public class MainWindow extends Application {
-
+    /**
+     * Entry point.
+     * @param args command line arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * JavaFX application loader method.
+     * @param primaryStage stage that will be used.
+     */
     @Override
     public void start(Stage primaryStage) {
         try {
