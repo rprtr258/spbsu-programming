@@ -119,9 +119,9 @@ public class Trie {
     }
 
     private class Node {
-        Node[] child = new Node[26];
-        int leaves = 0;
-        boolean isTerminal = false;
+        private Node[] child = new Node[26];
+        private int leaves = 0;
+        private boolean isTerminal = false;
 
         private String asString() {
             StringBuilder result = new StringBuilder();
