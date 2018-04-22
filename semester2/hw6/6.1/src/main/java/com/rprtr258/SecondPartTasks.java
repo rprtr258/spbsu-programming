@@ -1,15 +1,17 @@
 package com.rprtr258;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public final class SecondPartTasks {
     // Найти строки из переданных файлов, в которых встречается указанная подстрока.
     public static List<String> findQuotes(List<String> paths, CharSequence sequence) {
-        return paths.stream().filter(filename -> fileContainsString(filename, sequence))
-                .collect(Collectors.toList());
+        return paths.stream().map(filename -> fileContainsString(filename, sequence))
+                             .flatMap(List::stream)
+                             .collect(Collectors.toList());
     }
 
     // В квадрат с длиной стороны 1 вписана мишень.
@@ -18,11 +20,12 @@ public final class SecondPartTasks {
     public static double piDividedBy4() {
         Random rand = new Random();
         final int ATTEMPTS = 10000000;
+        final double RADIUS = 0.5;
         int hit = 0;
         for (int i = 0; i < ATTEMPTS; i++) {
-            double x = rand.nextDouble() % 1 - 0.5;
-            double y = rand.nextDouble() % 1 - 0.5;
-            if (x * x + y * y <= 0.5 * 0.5)
+            double x = rand.nextDouble() % 1 - RADIUS;
+            double y = rand.nextDouble() % 1 - RADIUS;
+            if (x * x + y * y <= RADIUS * RADIUS)
                 hit++;
         }
         return (double)hit / ATTEMPTS;
@@ -34,7 +37,7 @@ public final class SecondPartTasks {
         List<Note> notes = new ArrayList<>();
         for (String author : compositions.keySet())
             notes.add(new Note(author, compositions.get(author)));
-        Note result = notes.stream().max(Comparator.comparingInt(Note::getSummaryLength)).orElse(new Note("Yurii", null));
+        Note result = notes.stream().max(Comparator.comparingInt(Note::getSummaryLength)).orElse(new Note("Yurii", Collections.emptyList()));
         return result.author;
     }
 
@@ -44,21 +47,22 @@ public final class SecondPartTasks {
         Map<String, Integer> result = new TreeMap<>();
         for (Map<String, Integer> order : orders)
             for (String product : order.keySet())
+                result.put(product, 0);
+        for (Map<String, Integer> order : orders)
+            for (String product : order.keySet())
                 result.put(product, result.get(product) + order.get(product));
         return result;
     }
 
     private SecondPartTasks() {}
 
-    private static boolean fileContainsString(String filename, CharSequence sequence) {
+    private static List<String> fileContainsString(String filename, CharSequence sequence) {
         try {
-            FileInputStream fileStream = new FileInputStream(filename);
-            Scanner fileScanner = new Scanner(fileStream);
-            // TODO: check correctness
-            fileScanner.next(String.valueOf(sequence));
-            return true;
-        } catch (FileNotFoundException e) {
-            return false;
+            List<String> lines = Files.readAllLines(Paths.get(filename));
+            return lines.stream().filter(s -> s.contains(sequence))
+                                 .collect(Collectors.toList());
+        } catch (IOException e) {
+            return Collections.emptyList();
         }
     }
 
