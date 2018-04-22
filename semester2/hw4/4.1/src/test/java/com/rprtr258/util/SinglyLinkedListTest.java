@@ -6,13 +6,13 @@ import static org.junit.Assert.*;
 
 public class SinglyLinkedListTest {
     @Test(expected = EmptyListException.class)
-    public void emptyListExceptionRemoveTest() {
+    public void emptyListExceptionRemoveTest() throws EmptyListException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.removeLast();
     }
 
     @Test(expected = EmptyListException.class)
-    public void emptyListExceptionPeekTest() {
+    public void emptyListExceptionPeekTest() throws EmptyListException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.peek();
     }
@@ -49,7 +49,7 @@ public class SinglyLinkedListTest {
     }
 
     @Test
-    public void removeLastTest() throws ListAppendException {
+    public void removeLastTest() throws EmptyListException, ListAppendException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.append("I");
         myList.append("Am");
@@ -67,7 +67,7 @@ public class SinglyLinkedListTest {
     }
 
     @Test
-    public void peekTest() throws ListAppendException {
+    public void peekTest() throws ListAppendException, EmptyListException {
         SinglyLinkedList<String> myList = new SinglyLinkedList<>();
         myList.append("I");
         assertEquals("I", myList.peek());
