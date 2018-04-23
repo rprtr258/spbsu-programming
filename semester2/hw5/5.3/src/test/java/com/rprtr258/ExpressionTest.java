@@ -10,10 +10,10 @@ public class ExpressionTest {
         assertTrue(Expression.checkCorrectness(""));
         assertTrue(Expression.checkCorrectness("-2+2/7-8*452.5"));
         assertTrue(Expression.checkCorrectness("2+2/7-8*452.5"));
+        assertTrue(Expression.checkCorrectness("2+452,5"));
         assertFalse(Expression.checkCorrectness("ajghrenlgiu"));
         assertFalse(Expression.checkCorrectness("02+2/7-8*452.5")); // 0 in beginning of number
         assertFalse(Expression.checkCorrectness("2+*452.5")); // more than 1 operator
-        assertFalse(Expression.checkCorrectness("2+452,5")); // comma instead of point
         assertFalse(Expression.checkCorrectness("2+4.52.5")); // more than 1 point
     }
 
