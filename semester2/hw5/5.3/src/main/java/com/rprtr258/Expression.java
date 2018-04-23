@@ -18,7 +18,7 @@ public class Expression {
         if ("".equals(expression)) {
             return true;
         }
-        String numberRegexp = "([1-9]\\d*|0)(\\.\\d*)?";
+        String numberRegexp = "([1-9]\\d*|0)((\\.|\\,)\\d*)?";
         String operatorRegexp = "[+\\-*/]";
         String expressionPattern = String.format("(-%s%s)?(%s%s)*%s", numberRegexp, operatorRegexp, numberRegexp, operatorRegexp, numberRegexp);
         return expression.matches(expressionPattern);
@@ -47,7 +47,7 @@ public class Expression {
      */
     private Expression(String expression) {
         this.expression = expression.replace(',', '.');
-        tokens = new StringTokenizer(expression, "+-", true);
+        tokens = new StringTokenizer(this.expression, "+-", true);
     }
 
     /**

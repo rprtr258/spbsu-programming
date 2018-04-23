@@ -26,13 +26,12 @@ public class MainWindow {
     public Button buttonMinus;
     public Button buttonPlus;
 
-    public Button buttonEvaluate;
-
     public Button buttonDelete;
     public Button buttonClearDisplay;
 
     public TextArea displayTextArea;
     public Label statusLabel;
+    public TextArea resultTextArea;
 
     private Display display = null;
 
@@ -40,11 +39,10 @@ public class MainWindow {
      * Sets listeners to all elements.
      */
     public void initialize() {
-        display = new Display(displayTextArea, statusLabel);
+        display = new Display(displayTextArea, statusLabel, resultTextArea);
         setDigitsAndCommaButtonsListeners();
         setOperatorButtonsListeners();
         setClearButtonsListeners();
-        setEvaluateButtonListener();
     }
 
     /**
@@ -80,12 +78,5 @@ public class MainWindow {
         buttonMinus.setOnAction((actionEvent) -> display.append('-'));
         buttonMultiply.setOnAction((actionEvent) -> display.append('*'));
         buttonDivide.setOnAction((actionEvent) -> display.append('/'));
-    }
-
-    /**
-     * Sets listener to button '=';
-     */
-    private void setEvaluateButtonListener() {
-        buttonEvaluate.setOnAction((actionEvent) -> display.showResult());
     }
 }

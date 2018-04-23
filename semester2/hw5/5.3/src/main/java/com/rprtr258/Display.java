@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
  */
 public class Display {
     private TextArea displayArea;
+    private TextArea resultArea;
     private Label statusLabel;
 
     /**
@@ -15,9 +16,19 @@ public class Display {
      * @param display text area which will display result and which display input.
      * @param statusLabel status label which displays status in certain situations.
      */
-    public Display(TextArea display, Label statusLabel) {
+    public Display(TextArea display, Label statusLabel, TextArea resultArea) {
         this.displayArea = display;
         this.statusLabel = statusLabel;
+        this.resultArea = resultArea;
+    }
+
+    /**
+     * Clears display.
+     */
+    public void clearDisplay() {
+        displayArea.setText("");
+        resultArea.setText("");
+        statusLabel.setText("");
     }
 
     /**
@@ -27,14 +38,22 @@ public class Display {
     public void append(char symbol) {
         displayArea.setText(displayArea.getText() + symbol);
         statusLabel.setText("");
+        showResult();
     }
 
     /**
-     * Clears display.
+     * Removes one last char from display.
+     * Shows message in status label if display is already empty.
      */
-    public void clearDisplay() {
-        displayArea.setText("");
-        statusLabel.setText("");
+    public void deleteSymbol() {
+        String displayText = displayArea.getText();
+        if (!"".equals(displayText)) {
+            displayArea.setText(displayText.substring(0, displayText.length() - 1));
+            statusLabel.setText("");
+            showResult();
+        } else {
+            statusLabel.setText("Display is already empty.");
+        }
     }
 
     /**
@@ -56,27 +75,13 @@ public class Display {
     }
 
     /**
-     * Removes one last char from display.
-     * Shows message in status label if display is already empty.
-     */
-    public void deleteSymbol() {
-        String displayText = displayArea.getText();
-        if (!"".equals(displayText)) {
-            displayArea.setText(displayText.substring(0, displayText.length() - 1));
-            statusLabel.setText("");
-        } else {
-            statusLabel.setText("Display is already empty.");
-        }
-    }
-
-    /**
      * Tries to show result of expression.
      * @param expression expression that will be evaluated.
      * @throws InvalidExpressionException if expression is incorrect.
      */
     private void tryShowResult(String expression) throws InvalidExpressionException {
         double result = Expression.evaluate(expression);
-        displayArea.setText(String.format("%.6f", result));
+        resultArea.setText(String.format("%.6f", result));
         statusLabel.setText("");
     }
 }
