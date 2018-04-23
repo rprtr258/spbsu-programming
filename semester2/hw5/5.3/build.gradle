@@ -2,20 +2,9 @@ group 'com.rprtr258'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: "application"
 
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
-group 'com.rprtr258'
-version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
+mainClassName = "com.rprtr258.Calculator"
 
 sourceCompatibility = 1.8
 
