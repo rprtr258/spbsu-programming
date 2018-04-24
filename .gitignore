@@ -14,7 +14,6 @@
 *.stackdump
 *.class
 
-
 **/gradlew
 **/gradlew.bat
 **/gradle/*
