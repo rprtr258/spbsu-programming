@@ -19,7 +19,7 @@ public class Controller {
     public Button button22;
     private TicTacToe game = null;
 
-    Alert alert = null;
+    private Alert alert = null;
 
     /**
      * Initializes buttons with listeners.
