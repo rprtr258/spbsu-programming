@@ -38,6 +38,15 @@ public class TicTacToe {
     }
 
     /**
+     * Restarts game.
+     */
+    public void restart() {
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                field[i][j] = EMPTY_MARK;
+    }
+
+    /**
      * Makes turn in given cell.
      * @param row row of cell.
      * @param column column of cell.

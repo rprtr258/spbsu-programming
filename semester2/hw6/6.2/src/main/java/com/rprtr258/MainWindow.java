@@ -30,6 +30,8 @@ public class MainWindow extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("Tic Tac Toe");
+            primaryStage.setMinHeight(200);
+            primaryStage.setMinWidth(200);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
