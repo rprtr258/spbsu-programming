@@ -16,13 +16,19 @@ public class ClassDecompiler {
      */
     public static String getClassCode(Class clazz) {
         String result = "";
-        result += printClassDeclaration(clazz);
-        result += "    //Fields\n";
-        result += printClassFields(clazz);
+        result += getClassDeclaration(clazz);
+        String classFields = getClassFields(clazz);
+        if (!"".equals(classFields)) {
+            result += "    //Fields\n";
+            result += classFields;
+        }
         result += "    //Constructors\n";
-        result += printClassConstructors(clazz);
-        result += "    //Methods\n";
-        result += printClassMethods(clazz);
+        result += getClassConstructors(clazz);
+        String classMethods = getClassMethods(clazz);
+        if (!"".equals(classMethods)) {
+            result += "    //Methods\n";
+            result += classMethods;
+        }
         result += "}";
         return result;
     }
@@ -32,7 +38,7 @@ public class ClassDecompiler {
      * @param clazz <b>Class</b> object.
      * @return class's declaration code.
      */
-    private static String printClassDeclaration(Class clazz) {
+    private static String getClassDeclaration(Class clazz) {
         String className = getGenericClassName(clazz);
         String parentClassName = clazz.getSuperclass().getSimpleName();
         String implementedList = Arrays.stream(clazz.getInterfaces()).map(Class::getSimpleName).collect(joining(", "));
@@ -46,7 +52,7 @@ public class ClassDecompiler {
      * @param clazz <b>Class</b> object.
      * @return class's fields.
      */
-    private static String printClassFields(Class clazz) {
+    private static String getClassFields(Class clazz) {
         StringBuilder result = new StringBuilder();
         for (Field field : clazz.getDeclaredFields()) {
             result.append(String.format("    %s %s %s;\n", Modifier.toString(field.getModifiers()), getGenericClassName(field.getType()), field.getName()));
@@ -59,7 +65,7 @@ public class ClassDecompiler {
      * @param clazz <b>Class</b> object.
      * @return class's constructors.
      */
-    private static String printClassConstructors(Class clazz) {
+    private static String getClassConstructors(Class clazz) {
         StringBuilder result = new StringBuilder();
         String className = clazz.getSimpleName();
         for (Constructor constructor : clazz.getDeclaredConstructors()) {
@@ -77,7 +83,7 @@ public class ClassDecompiler {
      * @param clazz <b>Class</b> object.
      * @return class's methods.
      */
-    private static String printClassMethods(Class clazz) {
+    private static String getClassMethods(Class clazz) {
         StringBuilder result = new StringBuilder();
         for (Method method : clazz.getDeclaredMethods()) {
             String returnTypeName = getGenericClassName(method.getReturnType());
