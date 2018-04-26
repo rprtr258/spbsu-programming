@@ -1,10 +1,6 @@
 package com.rprtr258;
 
-import java.io.File;
 import java.lang.reflect.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Arrays;
 
 import static java.util.stream.Collectors.joining;
@@ -32,34 +28,12 @@ public class ClassDecompiler {
     }
 
     /**
-     * Tries to print class.
-     * @param path path to .class file.
-     * @throws MalformedURLException if couldn't convert it to URL.
-     * @throws ClassNotFoundException if class was not found.
-     */
-    private static void tryPrintClass(String path) throws MalformedURLException, ClassNotFoundException {
-        int j = path.lastIndexOf('/');
-        String className = path.substring(j + 1);
-        String classDir = (j == -1 ? "." : path.substring(0, j));
-
-        File classDirFile = new File(classDir);
-        URL classDirURL = classDirFile.toURI().toURL();
-        Class loadedClass = new URLClassLoader(new URL[]{classDirURL}).loadClass(className);
-
-        System.out.printf("Class name: %s\n", className);
-        System.out.printf("Class directory: %s\n", classDirFile.getAbsolutePath());
-        System.out.print("\n");
-        String classCode = getClassCode(loadedClass);
-        System.out.println(classCode);
-    }
-
-    /**
      * Prints class's declaration.
      * @param clazz <b>Class</b> object.
      * @return class's declaration code.
      */
     private static String printClassDeclaration(Class clazz) {
-        String className = clazz.getSimpleName();
+        String className = getGenericClassName(clazz);
         String parentClassName = clazz.getSuperclass().getSimpleName();
         String implementedList = Arrays.stream(clazz.getInterfaces()).map(Class::getSimpleName).collect(joining(", "));
         if (!"".equals(implementedList))
@@ -74,8 +48,9 @@ public class ClassDecompiler {
      */
     private static String printClassFields(Class clazz) {
         StringBuilder result = new StringBuilder();
-        for (Field field : clazz.getDeclaredFields())
-            result.append(String.format("    %s %s %s;\n", getPrivacyModifier(field.getModifiers()), field.getType().getSimpleName(), field.getName()));
+        for (Field field : clazz.getDeclaredFields()) {
+            result.append(String.format("    %s %s %s;\n", Modifier.toString(field.getModifiers()), getGenericClassName(field.getType()), field.getName()));
+        }
         return result.toString();
     }
 
@@ -88,14 +63,11 @@ public class ClassDecompiler {
         StringBuilder result = new StringBuilder();
         String className = clazz.getSimpleName();
         for (Constructor constructor : clazz.getDeclaredConstructors()) {
-            String privacyModifier = getPrivacyModifier(constructor.getModifiers());
-            if (!"".equals(privacyModifier))
-                privacyModifier += " ";
-            String staticModifier = getStaticModifier(constructor.getModifiers());
-            if (!"".equals(staticModifier))
-                staticModifier += " ";
+            String modifiers = Modifier.toString(constructor.getModifiers());
+            if (!"".equals(modifiers))
+                modifiers += " ";
             String argsList = getArgsList(constructor);
-            result.append(String.format("    %s%s%s(%s);\n", privacyModifier, staticModifier, className, argsList));
+            result.append(String.format("    %s%s(%s);\n", modifiers, className, argsList));
         }
         return result.toString();
     }
@@ -108,19 +80,16 @@ public class ClassDecompiler {
     private static String printClassMethods(Class clazz) {
         StringBuilder result = new StringBuilder();
         for (Method method : clazz.getDeclaredMethods()) {
-            String returnTypeName = method.getReturnType().getSimpleName();
+            String returnTypeName = getGenericClassName(method.getReturnType());
             String methodName = method.getName();
-            String privacyModifier = getPrivacyModifier(method.getModifiers());
-            if (!"".equals(privacyModifier))
-                privacyModifier += " ";
-            String staticModifier = getStaticModifier(method.getModifiers());
-            if (!"".equals(staticModifier))
-                staticModifier += " ";
+            String modifiers = Modifier.toString(method.getModifiers());
+            if (!"".equals(modifiers))
+                modifiers += " ";
             String argsList = getArgsList(method);
             String throwList = Arrays.stream(method.getExceptionTypes()).map(Class::getSimpleName).collect(joining(", "));
             if (!"".equals(throwList))
                 throwList = " throws " + throwList;
-            result.append(String.format("    %s%s%s %s(%s)%s;\n", privacyModifier, staticModifier, returnTypeName, methodName, argsList, throwList));
+            result.append(String.format("    %s%s %s(%s)%s;\n", modifiers, returnTypeName, methodName, argsList, throwList));
         }
         return result.toString();
     }
@@ -131,32 +100,18 @@ public class ClassDecompiler {
      * @return list of arguments joined with comma.
      */
     private static String getArgsList(Executable executor) {
-        return Arrays.stream(executor.getParameterTypes()).map(Class::getSimpleName).collect(joining(", "));
+        return Arrays.stream(executor.getParameterTypes()).map(ClassDecompiler::getGenericClassName).collect(joining(", "));
     }
 
     /**
-     * Returns privacy modifier as string encoded in <i>mod</i>.
-     * @param mod modifiers bitmask.
-     * @return privacy modifier.
+     * Returns class name with generics if there is any.
+     * @param clazz given class.
+     * @return class name with generyc types in format "ClassName<T1, T2>"
      */
-    private static String getPrivacyModifier(int mod) {
-        if (Modifier.isPublic(mod))
-            return "public";
-        if (Modifier.isProtected(mod))
-            return "protected";
-        if (Modifier.isPrivate(mod))
-            return "private";
-        return "";
-    }
-
-    /**
-     * Returns static modifier as string encoded in <i>mod</i>.
-     * @param mod modifiers bitmask.
-     * @return static modifier as string.
-     */
-    private static String getStaticModifier(int mod) {
-        if (Modifier.isStatic(mod))
-            return "static";
-        return "";
+    private static String getGenericClassName(Class clazz) {
+        String genericTypes = Arrays.stream(clazz.getTypeParameters()).map(Type::getTypeName).collect(joining(", "));
+        if (!"".equals(genericTypes))
+            genericTypes = "<" + genericTypes + ">";
+        return clazz.getSimpleName() + genericTypes;
     }
 }
