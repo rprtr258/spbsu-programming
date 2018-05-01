@@ -17,7 +17,7 @@ public class Benchmark {
         int tmp = tests;
         double averageTimeSingle = 0;
         double averageTimeMulti = 0;
-        while (tests > 0) {
+        while (tmp > 0) {
             int[] array = new int[size];
             Random generator = new Random();
             for (int i = 0; i < array.length; i++)
@@ -25,10 +25,10 @@ public class Benchmark {
             int[] arrayCopy = array.clone();
             averageTimeSingle += measureTime(() -> QSorter.sort(array));
             averageTimeMulti += measureTime(() -> ParallelQSorter.sort(arrayCopy));
-            tests--;
+            tmp--;
         }
-        System.out.printf("SingleThread: %.3f\n", averageTimeSingle / tmp / 1000);
-        System.out.printf("MultiThread: %.3f\n", averageTimeMulti / tmp / 1000);
+        System.out.printf("SingleThread: %.3f ms\n", averageTimeSingle / tests / 1000000);
+        System.out.printf("MultiThread: %.3f ms\n", averageTimeMulti / tests / 1000000);
     }
 
     private static long measureTime(Runnable runnable) {
