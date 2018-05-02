@@ -29,8 +29,8 @@ public class ParallelQSorter {
             RecursiveAction rightPart = new SortAction(a, k, j);
             leftPart.fork();
             rightPart.fork();
-            leftPart.join();
             rightPart.join();
+            leftPart.join();
         }
 
         private int partition() {

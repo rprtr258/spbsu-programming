@@ -4,12 +4,13 @@ import java.util.Random;
 
 public class Benchmark {
     public static void main(String[] args) {
-        testRandom(100, 10);
-        testRandom(100, 100);
-        testRandom(100, 1000);
-        testRandom(100, 10000);
-        testRandom(100, 100000);
-        testRandom(100, 1000000);
+        final int TESTS = 100;
+        testRandom(TESTS, 10);
+        testRandom(TESTS, 100);
+        testRandom(TESTS, 1000);
+        testRandom(TESTS, 10000);
+        testRandom(TESTS, 100000);
+        testRandom(TESTS, 1000000);
     }
 
     private static void testRandom(int tests, int size) {
@@ -27,8 +28,8 @@ public class Benchmark {
             averageTimeMulti += measureTime(() -> ParallelQSorter.sort(arrayCopy));
             tmp--;
         }
-        System.out.printf("SingleThread: %.3f ms\n", averageTimeSingle / tests / 1000000);
-        System.out.printf("MultiThread: %.3f ms\n", averageTimeMulti / tests / 1000000);
+        System.out.printf("SingleThread: %.2f ms\n", averageTimeSingle / tests / 1000000);
+        System.out.printf("MultiThread: %.2f ms\n", averageTimeMulti / tests / 1000000);
     }
 
     private static long measureTime(Runnable runnable) {
