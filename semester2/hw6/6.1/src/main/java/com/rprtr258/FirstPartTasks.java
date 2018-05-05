@@ -47,18 +47,7 @@ public final class FirstPartTasks {
 
     // Число повторяющихся альбомов в потоке
     public static long countAlbumDuplicates(Stream<Album> albums) {
-        List<String> list = albums.map(Album::getName).collect(Collectors.toList());
-        Map<String, Integer> count = new TreeMap<>();
-        for (String albumName : list) {
-            count.put(albumName, 0);
-        }
-        for (String albumName : list) {
-            Integer quantity = count.get(albumName);
-            count.replace(albumName, quantity + 1);
-        }
-        return list.stream().filter(albumName -> count.get(albumName) > 1)
-                            .distinct()
-                            .count();
+        return albums.collect(Collectors.toMap(Function.identity(), album -> 1, Integer::sum)).entrySet().stream().filter(entry -> entry.getValue() > 1).count();
     }
 
     // Альбом, в котором максимум рейтинга минимален
@@ -83,9 +72,7 @@ public final class FirstPartTasks {
     // Вернуть строку, состояющую из конкатенаций переданного массива, и окруженную строками "<", ">"
     // см. тесты
     public static String joinTo(String... strings) {
-        StringJoiner j = new StringJoiner(", ", "<", ">");
-        Arrays.asList(strings).forEach(j::add);
-        return j.toString();
+        return Arrays.stream(strings).collect(Collectors.joining(", ", "<", ">"));
     }
 
     // Вернуть поток из объектов класса 'clazz'
@@ -102,8 +89,7 @@ public final class FirstPartTasks {
     }
 
     private static Double getAverageRating(Album album) {
-        double averageRating = album.getTracks().stream().map(Track::getRating)
-                .collect(Collectors.averagingInt(x -> x));
-        return (-1) * averageRating;
+        return (-1) * album.getTracks().stream().map(Track::getRating)
+                                                .collect(Collectors.averagingInt(x -> x));
     }
 }
