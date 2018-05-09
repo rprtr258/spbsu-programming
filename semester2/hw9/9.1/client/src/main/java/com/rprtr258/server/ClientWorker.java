@@ -4,14 +4,14 @@ import java.io.*;
 import java.net.Socket;
 
 public class ClientWorker implements Runnable {
-    private InputStream in = null;
-    private OutputStream out = null;
+    private BufferedReader in = null;
+    private PrintWriter out = null;
     private String clientName = null;
 
     public ClientWorker(Socket socket) {
         try {
-            in = socket.getInputStream();
-            out = socket.getOutputStream();
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,15 +32,13 @@ public class ClientWorker implements Runnable {
         }
     }
 
-    private void sendMessage(String message) throws IOException {
-        out.write((message + "\n").getBytes());
-        out.flush();
+    private void sendMessage(String message) {
+        out.println(message);
         System.out.printf("Server: Sent \"%s\" to client \"%s\"\n", message, clientName);
     }
 
     private String readMessage() throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        String result = br.readLine();
+        String result = in.readLine();
         System.out.printf("Server: Received \"%s\" from client \"%s\"\n", result, clientName);
         return result;
     }
