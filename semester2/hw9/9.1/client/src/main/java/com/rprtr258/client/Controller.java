@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.Charset;
 
 public class Controller {
     public Button button00;
@@ -45,8 +44,17 @@ public class Controller {
 
     private void makeMove(ActionEvent actionEvent, int row, int column) {
         try {
-            sendToServer(String.format("turn %d %d", row, column * 5));
+            sendToServer(String.format("turn %d %d", row, column));
             String response = readServerResponse();
+            switch (response) {
+                case "ok": {
+                    ((Button)actionEvent.getSource()).setText("X");
+                    break;
+                }
+                case "no": {
+                    break;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
