@@ -1,9 +1,10 @@
 package com.rprtr258.client;
 
+import com.rprtr258.com.rprtr258.network.SocketWrapper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.Socket;
 
 public class Controller {
@@ -17,9 +18,7 @@ public class Controller {
     public Button button21;
     public Button button22;
 
-    private Socket socket = null;
-    private BufferedReader in = null;
-    private PrintWriter out = null;
+    private SocketWrapper socketWrapper = null;
 
     public void initialize() {
         Button buttons[][] = {{button00, button01, button02},
@@ -33,20 +32,19 @@ public class Controller {
             }
         }
         try {
-            socket = new Socket("localhost", 12345);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-            sendToServer(String.format("connect %s", System.nanoTime()));
+            socketWrapper = new SocketWrapper(new Socket("localhost", 12345));
+            socketWrapper.sendMessage(String.format("connect %s", System.nanoTime()));
         } catch (IOException e) {
             e.printStackTrace();
+            // TODO: overthink
             System.exit(-1);
         }
     }
 
     private void makeMove(ActionEvent actionEvent, int row, int column) {
+        socketWrapper.sendMessage(String.format("turn %d %d", row, column));
         try {
-            sendToServer(String.format("turn %d %d", row, column));
-            String response = readServerResponse();
+            String response = socketWrapper.readMessage();
             switch (response) {
                 case "ok": {
                     ((Button)actionEvent.getSource()).setText("X");
@@ -59,16 +57,5 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void sendToServer(String message) {
-        out.println(message);
-        System.out.printf("Client: Sent \"%s\"\n", message);
-    }
-
-    private String readServerResponse() throws IOException {
-        String result = in.readLine();
-        System.out.printf("Client: Received \"%s\"\n", result);
-        return result;
     }
 }

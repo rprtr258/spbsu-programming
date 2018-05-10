@@ -1,45 +1,42 @@
 package com.rprtr258.server;
 
-import java.io.*;
+import com.rprtr258.com.rprtr258.network.SocketWrapper;
+
+import java.io.IOException;
 import java.net.Socket;
 
 public class ClientWorker implements Runnable {
-    private BufferedReader in = null;
-    private PrintWriter out = null;
+    private SocketWrapper socketWrapper = null;
     private String clientName = null;
 
     public ClientWorker(Socket socket) {
-        try {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        socketWrapper = new SocketWrapper(socket);
     }
 
     @Override
     public void run() {
+        establishName();
         try {
-            clientName = readMessage();
             while (true) {
-                String message = readMessage();
+                String message = socketWrapper.readMessage();
                 if ("disconnect".equals(message))
                     break;
-                sendMessage(String.format("Ok, %s, got %s", clientName, message));
+                socketWrapper.sendMessage(String.format("Ok, %s, got %s", clientName, message));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void sendMessage(String message) {
-        out.println(message);
-        System.out.printf("Server: Sent \"%s\" to client \"%s\"\n", message, clientName);
-    }
-
-    private String readMessage() throws IOException {
-        String result = in.readLine();
-        System.out.printf("Server: Received \"%s\" from client \"%s\"\n", result, clientName);
-        return result;
+    private void establishName() {
+        try {
+            String connectMessage = socketWrapper.readMessage();
+            if (connectMessage.startsWith("connect "))
+                clientName = connectMessage.substring(connectMessage.indexOf(' ') + 1);
+            else
+                ; // TODO: process incorrect client
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
