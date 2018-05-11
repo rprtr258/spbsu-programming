@@ -1,5 +1,6 @@
 package com.rprtr258.server;
 
+import com.rprtr258.game.TicTacToe;
 import com.rprtr258.network.SocketWrapper;
 
 import java.io.IOException;
@@ -8,35 +9,45 @@ import java.net.Socket;
 public class ClientWorker implements Runnable {
     private SocketWrapper socketWrapper = null;
     private String clientName = null;
+    private int playerNumber = 0;
+    private TicTacToe game = null;
+    private boolean myTurn;
 
-    public ClientWorker(Socket socket) {
+    public ClientWorker(Socket socket, int playerNumber, TicTacToe game) {
         socketWrapper = new SocketWrapper(socket);
+        this.playerNumber = playerNumber;
+        clientName = (playerNumber == 1 ? "X" : "O");
+        this.game = game;
     }
 
     @Override
     public void run() {
-        establishName();
+        sendConnectionInfo();
         try {
             while (true) {
-                String message = socketWrapper.readMessage();
+                String message = socketWrapper.readMessage(String.format("player %s", clientName));
                 if ("disconnect".equals(message))
                     break;
-                socketWrapper.sendMessage(String.format("Ok, %s, got %s", clientName, message));
+                if (message.startsWith("turn ")) {
+                    assert message.matches("turn [0-2] [0-2]");
+                    int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
+                    int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
+                    if (game.canMakeTurn(clientName, row, column)) {
+                        game.makeTurn(row, column);
+                        socketWrapper.sendMessage("success");
+                    } else {
+                        socketWrapper.sendMessage("not your turn");
+                    }
+                    System.out.println(game);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void establishName() {
-        try {
-            String connectMessage = socketWrapper.readMessage();
-            if (connectMessage.startsWith("connect "))
-                clientName = connectMessage.substring(connectMessage.indexOf(' ') + 1);
-            else
-                ; // TODO: process incorrect client
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void sendConnectionInfo() {
+        String mark = (playerNumber == 1 ? "X" : "O");
+        socketWrapper.sendMessage(String.format("player %s", mark));
     }
 }

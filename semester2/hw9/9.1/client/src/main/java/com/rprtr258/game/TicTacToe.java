@@ -1,23 +1,4 @@
-package com.rprtr258;
-
-/**
- * Game states.
- */
-enum GameState {
-    CROSS_WIN,
-    ZERO_WIN,
-    DRAW,
-    IN_PROCESS
-}
-
-/**
- * States of cell.
- */
-enum CellState {
-    ZERO_CELL,
-    CROSS_CELL,
-    EMPTY_CELL
-}
+package com.rprtr258.game;
 
 /**
  * Class for making tic-tac-toe game through it's interface.
@@ -56,7 +37,8 @@ public class TicTacToe {
      * @return <b>true</b> if turn was made.
      */
     public boolean makeTurn(int row, int column) {
-        if (getState() != GameState.IN_PROCESS)
+        GameState gameState = getState();
+        if (gameState != GameState.ZERO_TURN && gameState != GameState.CROSS_TURN)
             return false;
         if (field[row][column] != EMPTY_MARK)
             return false;
@@ -84,7 +66,21 @@ public class TicTacToe {
             return (winState == 1 ? GameState.CROSS_WIN : GameState.ZERO_WIN);
         if (countEmptyCells() == 0)
             return GameState.DRAW;
-        return GameState.IN_PROCESS;
+        return (currentPlayer == ZERO_PLAYER ? GameState.ZERO_TURN : GameState.CROSS_TURN);
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int cell = field[i][j];
+                result += (cell == 0 ? "_" : (cell == 1 ? "X" : "O")) + " ";
+            }
+            result += "\n";
+        }
+        result += getState();
+        return result;
     }
 
     /**
@@ -135,5 +131,11 @@ public class TicTacToe {
      */
     private void changePlayer() {
         currentPlayer = (currentPlayer == CROSS_PLAYER ? ZERO_PLAYER : CROSS_PLAYER);
+    }
+
+    public boolean canMakeTurn(String playerName, int row, int column) {
+        if (currentPlayer == ZERO_PLAYER && "O".equals(playerName) || currentPlayer == CROSS_PLAYER && "X".equals(playerName))
+            return (getCellState(row, column) == CellState.EMPTY_CELL);
+        return false;
     }
 }

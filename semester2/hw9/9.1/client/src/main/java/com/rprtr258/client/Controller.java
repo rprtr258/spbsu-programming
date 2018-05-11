@@ -18,6 +18,7 @@ public class Controller {
     public Button button21;
     public Button button22;
 
+    private String mark = null;
     private SocketWrapper socketWrapper = null;
 
     public void initialize() {
@@ -33,7 +34,9 @@ public class Controller {
         }
         try {
             socketWrapper = new SocketWrapper(new Socket("localhost", 12345));
-            socketWrapper.sendMessage(String.format("connect %s", System.nanoTime()));
+            socketWrapper.sendMessage("connect");
+            String response = socketWrapper.readMessage();
+            mark = response.substring(response.indexOf(' ') + 1);
         } catch (IOException e) {
             e.printStackTrace();
             // TODO: overthink
@@ -46,8 +49,8 @@ public class Controller {
         try {
             String response = socketWrapper.readMessage();
             switch (response) {
-                case "ok": {
-                    ((Button)actionEvent.getSource()).setText("X");
+                case "success": {
+                    ((Button)actionEvent.getSource()).setText(mark);
                     break;
                 }
                 case "no": {

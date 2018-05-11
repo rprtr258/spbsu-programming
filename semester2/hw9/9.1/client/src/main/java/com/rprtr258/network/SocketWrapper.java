@@ -28,4 +28,10 @@ public class SocketWrapper {
         System.out.printf("Received \"%s\"\n", result);
         return result;
     }
+
+    public String readMessage(String addMessage) throws IOException {
+        String result = in.readLine();
+        System.out.printf("Received \"%s\"[%s]\n", result, addMessage);
+        return result;
+    }
 }
