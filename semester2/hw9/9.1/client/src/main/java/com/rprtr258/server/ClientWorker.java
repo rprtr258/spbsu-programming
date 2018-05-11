@@ -1,6 +1,6 @@
 package com.rprtr258.server;
 
-import com.rprtr258.com.rprtr258.network.SocketWrapper;
+import com.rprtr258.network.SocketWrapper;
 
 import java.io.IOException;
 import java.net.Socket;

@@ -1,6 +1,6 @@
 package com.rprtr258.client;
 
-import com.rprtr258.com.rprtr258.network.SocketWrapper;
+import com.rprtr258.network.SocketWrapper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
