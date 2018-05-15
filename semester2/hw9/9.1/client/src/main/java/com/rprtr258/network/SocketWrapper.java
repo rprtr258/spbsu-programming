@@ -4,12 +4,10 @@ import java.io.*;
 import java.net.Socket;
 
 public class SocketWrapper {
-    private Socket socket = null;
     private BufferedReader in = null;
     private PrintWriter out = null;
 
     public SocketWrapper(Socket socket) {
-        this.socket = socket;
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
@@ -19,6 +17,7 @@ public class SocketWrapper {
         }
     }
 
+    // TODO: remove debug output
     public void sendMessage(String message) {
         out.println(message);
         System.out.printf("Sent \"%s\"\n", message);
@@ -38,7 +37,7 @@ public class SocketWrapper {
 
     public String waitMessageMatching(String regexp) throws IOException {
         String message = readToken();
-        while (!message.matches("opturn [0-2] [0-2]"))
+        while (!message.matches(regexp))
             message = in.readLine();
         System.out.printf("Received \"%s\"\n", message);
         return message;

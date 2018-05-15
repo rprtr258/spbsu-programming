@@ -11,6 +11,7 @@ public class Server {
 
     public static void main(String[] args) {
         try (ServerSocket socket = new ServerSocket(12345)) {
+            System.out.println("Server is on " + socket.getInetAddress());
             Thread playerThreads[] = {null, null};
             TicTacToe game = new TicTacToe();
             Socket[] playerSockets = new Socket[MAX_PLAYERS];

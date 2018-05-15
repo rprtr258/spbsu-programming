@@ -1,6 +1,7 @@
 package com.rprtr258.server;
 
 import com.rprtr258.game.TicTacToe;
+import com.rprtr258.network.MessagesProcessor;
 import com.rprtr258.network.SocketWrapper;
 
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class ClientWorker implements Runnable {
                 if ("disconnect".equals(message))
                     // TODO: send it sometimes
                     break;
-                if (message.matches("turn [0-2] [0-2]")) {
+                if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
                     if (game.canMakeTurn(clientName, row, column)) {
@@ -38,12 +39,14 @@ public class ClientWorker implements Runnable {
                         socketWrapper.sendMessage("success");
                         opponentSocketWrapper.sendMessage("op" + message);
                     } else {
+                        // TODO: notify about win/loss/draw/incorrect turn
                         socketWrapper.sendMessage("not your turn");
                     }
                     System.out.println(game);
                 }
             }
         } catch (IOException e) {
+            // TODO: :C
             e.printStackTrace();
         }
     }
