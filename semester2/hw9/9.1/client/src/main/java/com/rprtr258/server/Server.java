@@ -13,9 +13,15 @@ public class Server {
         try (ServerSocket socket = new ServerSocket(12345)) {
             Thread playerThreads[] = {null, null};
             TicTacToe game = new TicTacToe();
+            Socket[] playerSockets = new Socket[MAX_PLAYERS];
             for (int player = 0; player < MAX_PLAYERS; player++) {
                 Socket clientSocket = socket.accept();
-                ClientWorker worker = new ClientWorker(clientSocket, player + 1, game);
+                playerSockets[player] = clientSocket;
+            }
+            for (int player = 0; player < MAX_PLAYERS; player++) {
+                Socket playerSocket = playerSockets[player];
+                ClientWorker worker = new ClientWorker(playerSocket, player + 1, game);
+                worker.setOpponentSocket(playerSockets[1 - player]);
                 playerThreads[player] = new Thread(worker);
             }
             for (Thread playerThread : playerThreads) {

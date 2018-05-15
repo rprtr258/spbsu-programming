@@ -8,6 +8,7 @@ import java.net.Socket;
 
 public class ClientWorker implements Runnable {
     private SocketWrapper socketWrapper = null;
+    private SocketWrapper opponentSocketWrapper = null;
     private String clientName = null;
     private int playerNumber = 0;
     private TicTacToe game = null;
@@ -27,14 +28,15 @@ public class ClientWorker implements Runnable {
             while (true) {
                 String message = socketWrapper.readMessage(String.format("player %s", clientName));
                 if ("disconnect".equals(message))
+                    // TODO: send it sometimes
                     break;
-                if (message.startsWith("turn ")) {
-                    assert message.matches("turn [0-2] [0-2]");
+                if (message.matches("turn [0-2] [0-2]")) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
                     if (game.canMakeTurn(clientName, row, column)) {
                         game.makeTurn(row, column);
                         socketWrapper.sendMessage("success");
+                        opponentSocketWrapper.sendMessage("op" + message);
                     } else {
                         socketWrapper.sendMessage("not your turn");
                     }
@@ -44,6 +46,10 @@ public class ClientWorker implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setOpponentSocket(Socket opponentSocket) {
+        opponentSocketWrapper = new SocketWrapper(opponentSocket);
     }
 
     private void sendConnectionInfo() {

@@ -14,6 +14,7 @@ public class SocketWrapper {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         } catch (IOException e) {
+            // TODO: think
             e.printStackTrace();
         }
     }
@@ -24,14 +25,26 @@ public class SocketWrapper {
     }
 
     public String readMessage() throws IOException {
-        String result = in.readLine();
-        System.out.printf("Received \"%s\"\n", result);
-        return result;
+        String message = readToken();
+        System.out.printf("Received \"%s\"\n", message);
+        return message;
     }
 
     public String readMessage(String addMessage) throws IOException {
-        String result = in.readLine();
-        System.out.printf("Received \"%s\"[%s]\n", result, addMessage);
-        return result;
+        String message = readToken();
+        System.out.printf("Received \"%s\"[%s]\n", message, addMessage);
+        return message;
+    }
+
+    public String waitMessageMatching(String regexp) throws IOException {
+        String message = readToken();
+        while (!message.matches("opturn [0-2] [0-2]"))
+            message = in.readLine();
+        System.out.printf("Received \"%s\"\n", message);
+        return message;
+    }
+
+    private String readToken() throws IOException {
+        return in.readLine();
     }
 }
