@@ -11,4 +11,12 @@ public class MessagesProcessor {
     public static int parseColumn(String message) {
         return Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
     }
+
+    public static String getConnectRequest() {
+        return "connect";
+    }
+
+    public static String getTurnRequest(int row, int column) {
+        return String.format("turn %d %d", row, column);
+    }
 }

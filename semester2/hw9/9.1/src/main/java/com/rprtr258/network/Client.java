@@ -10,32 +10,34 @@ import java.util.function.Consumer;
 
 public class Client {
     private SocketWrapper socketWrapper = null;
+    private Runnable onLostConnection = null;
 
-    public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onLostConnection) {
+    public Client(Runnable onLostConnection) {
+        this.onLostConnection = onLostConnection;
+    }
+
+    public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onFailConnection) {
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
                 try {
-                    String playerName = connectToServer(host, port);
+                    socketWrapper = new SocketWrapper(new Socket(host, port));
+                    String connectRequest = MessagesProcessor.getConnectRequest();
+                    socketWrapper.sendMessage(connectRequest);
+                    String response = socketWrapper.readMessage();
+                    String playerName = response.substring(response.indexOf(' ') + 1);
                     Platform.runLater(() -> onConnect.accept(playerName));
                 } catch (IOException e) {
-                    // TODO: add button to retry connect?
-                    Platform.runLater(onLostConnection);
+                    Platform.runLater(onFailConnection);
                 }
                 return null;
             }
         }).start();
     }
 
-    private String connectToServer(String hostname, int port) throws IOException {
-        socketWrapper = new SocketWrapper(new Socket(hostname, port));
-        socketWrapper.sendMessage("connect");
-        String response = socketWrapper.readMessage();
-        return response.substring(response.indexOf(' ') + 1);
-    }
-
     public void makeMove(int row, int column, Runnable onSuccess, Runnable onLostConnection) {
-        socketWrapper.sendMessage(String.format("turn %d %d", row, column));
+        String turnRequest = MessagesProcessor.getTurnRequest(row, column);
+        socketWrapper.sendMessage(turnRequest);
         try {
             String response = socketWrapper.readMessage();
             if ("success".equals(response)) {
@@ -46,7 +48,7 @@ public class Client {
         }
     }
 
-    public void waitOpponentTurn(BiConsumer<Integer, Integer> onOpponentTurn, Runnable onLostConnection) {
+    public void waitOpponentTurn(BiConsumer<Integer, Integer> onOpponentTurn) {
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {

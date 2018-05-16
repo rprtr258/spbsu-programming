@@ -21,6 +21,8 @@ public class Controller {
     private Button buttons[][] = null;
     private boolean isWaitingForOpponentTurn = false;
     private Client thisClient = null;
+    private String host = "localhost";
+    private int port = 12345;
 
     public void initialize() {
         buttons = new Button[][]{{button00, button01, button02},
@@ -34,41 +36,50 @@ public class Controller {
             }
         }
         setButtonsDisable(true);
-        thisClient = new Client();
-        thisClient.tryConnectServer("localhost", 12345, (playerName) -> {
-            mark = playerName;
-            playerNameLabel.setText("You are player " + playerName);
-            setButtonsDisable(false);
-            if ("O".equals(mark)) {
-                isWaitingForOpponentTurn = true;
-                gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
-                thisClient.waitOpponentTurn((i, j) -> {
-                    isWaitingForOpponentTurn = false;
-                    setButtonText(i, j, "X".equals(mark) ? "O" : "X");
-                    gameStatusLabel.setText("Waiting for your turn.");
-                }, this::onLostServerConnection);
-            } else
-                gameStatusLabel.setText("Waiting for your turn.");
-        }, () -> {
-            setButtonsDisable(false);
-            playerNameLabel.setText("You are not playing :(");
-            gameStatusLabel.setText("Couldn't connect to server.");
-        });
+        playerNameLabel.setText("");
+        gameStatusLabel.setText(String.format("Trying connect server \"%s:%d\"", host, port));
+        thisClient = new Client(this::onLostServerConnection);
+        // TODO: add button to retry connect?
+        thisClient.tryConnectServer(host, port, this::onConnect, this::onServerConnectionFail);
     }
 
     private void makeMove(int row, int column) {
         if (isWaitingForOpponentTurn)
             return;
-        thisClient.makeMove(row, column, () -> {
-            buttons[row][column].setText(mark);
-            gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
-            isWaitingForOpponentTurn = true;
-            thisClient.waitOpponentTurn((i, j) -> {
-                        isWaitingForOpponentTurn = false;
-                        setButtonText(i, j, "X".equals(mark) ? "O" : "X");
-                        gameStatusLabel.setText("Waiting for your turn.");
-                    }, this::onLostServerConnection);
-        }, this::onLostServerConnection);
+        thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onLostServerConnection);
+    }
+
+    private void onSuccessTurn(int row, int column) {
+        setButtonText(row, column, mark);
+        gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
+        onTurnWaiting();
+    }
+
+    private void onOpponentTurn(int row, int column) {
+        isWaitingForOpponentTurn = false;
+        setButtonText(row, column, "X".equals(mark) ? "O" : "X");
+        gameStatusLabel.setText("Waiting for your turn.");
+    }
+
+    private void onConnect(String playerName) {
+        mark = playerName;
+        playerNameLabel.setText("You are player " + playerName);
+        setButtonsDisable(false);
+        if ("O".equals(mark)) {
+            onTurnWaiting();
+        } else
+            gameStatusLabel.setText("Waiting for your turn.");
+    }
+
+    private void onTurnWaiting() {
+        isWaitingForOpponentTurn = true;
+        thisClient.waitOpponentTurn(this::onOpponentTurn);
+    }
+
+    private void onServerConnectionFail() {
+        setButtonsDisable(false);
+        playerNameLabel.setText("You are not playing :(");
+        gameStatusLabel.setText("Couldn't connect to server.");
     }
 
     private void setButtonText(int i, int j, String s) {
