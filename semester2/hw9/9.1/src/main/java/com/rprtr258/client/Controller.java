@@ -4,6 +4,7 @@ import com.rprtr258.network.Client;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+// TODO: stop Socket thread on close
 public class Controller {
     public Button button00;
     public Button button01;
@@ -51,7 +52,6 @@ public class Controller {
 
     private void onSuccessTurn(int row, int column) {
         setButtonText(row, column, mark);
-        gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
         onTurnWaiting();
     }
 
@@ -72,6 +72,7 @@ public class Controller {
     }
 
     private void onTurnWaiting() {
+        gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
         isWaitingForOpponentTurn = true;
         thisClient.waitOpponentTurn(this::onOpponentTurn);
     }
