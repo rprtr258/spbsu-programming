@@ -1,5 +1,6 @@
 package com.rprtr258.server;
 
+import com.rprtr258.game.GameState;
 import com.rprtr258.game.TicTacToe;
 import com.rprtr258.network.MessagesProcessor;
 import com.rprtr258.network.SocketWrapper;
@@ -28,9 +29,10 @@ public class ClientWorker implements Runnable {
         try {
             while (true) {
                 String message = socketWrapper.readMessage(String.format("player %s", clientName));
-                if ("disconnect".equals(message))
+                if ("disconnect".equals(message)) {
                     // TODO: send it sometimes
                     break;
+                }
                 if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
@@ -39,14 +41,35 @@ public class ClientWorker implements Runnable {
                         socketWrapper.sendMessage("success");
                         opponentSocketWrapper.sendMessage("op" + message);
                     } else {
-                        // TODO: notify about win/loss/draw/incorrect turn
-                        socketWrapper.sendMessage("not your turn");
+                        socketWrapper.sendMessage("incorrect turn");
+                    }
+                    GameState gameState = game.getState();
+                    switch (gameState) {
+                        case CROSS_WIN: {
+                            socketWrapper.sendMessage("win X");
+                            opponentSocketWrapper.sendMessage("win X");
+                            break;
+                        }
+                        case ZERO_WIN: {
+                            socketWrapper.sendMessage("win O");
+                            opponentSocketWrapper.sendMessage("win O");
+                            break;
+                        }
+                        case DRAW: {
+                            socketWrapper.sendMessage("draw");
+                            opponentSocketWrapper.sendMessage("draw");
+                            break;
+                        }
+                        default: {
+                            socketWrapper.sendMessage("game running");
+                            opponentSocketWrapper.sendMessage("game running");
+                        }
                     }
                     System.out.println(game);
                 }
             }
         } catch (IOException e) {
-            // TODO: :C
+            // TODO: (client disconnect)
             e.printStackTrace();
         }
     }

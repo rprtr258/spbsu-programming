@@ -35,28 +35,43 @@ public class Client {
         }).start();
     }
 
-    public void makeMove(int row, int column, Runnable onSuccess, Runnable onLostConnection) {
+    public void makeMove(int row, int column, Runnable onSuccess, Runnable onLostConnection, Consumer<String> onGameEnd) {
         String turnRequest = MessagesProcessor.getTurnRequest(row, column);
         socketWrapper.sendMessage(turnRequest);
         try {
             String response = socketWrapper.readMessage();
             if ("success".equals(response)) {
-                onSuccess.run();
+                Platform.runLater(onSuccess);
+            }
+            String gameState = socketWrapper.readMessage();
+            if (gameState.startsWith("win")) {
+                Platform.runLater(() -> onGameEnd.accept(gameState.substring(gameState.indexOf(' ') + 1)));
+            } else if ("draw".equals(gameState)) {
+                Platform.runLater(() -> onGameEnd.accept("draw"));
             }
         } catch (IOException e) {
             onLostConnection.run();
         }
     }
 
-    public void waitOpponentTurn(BiConsumer<Integer, Integer> onOpponentTurn) {
+    // TODO: divide waiting game result and waiting opponent turn
+    public void waitGameChanges(BiConsumer<Integer, Integer> onOpponentTurn, Consumer<String> onGameEnd) {
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
                 try {
-                    String opponentTurn = socketWrapper.waitMessageMatching(MessagesProcessor.OPPONENT_TURN_REGEXP);
-                    int i = MessagesProcessor.parseRow(opponentTurn);
-                    int j = MessagesProcessor.parseColumn(opponentTurn);
-                    Platform.runLater(() -> onOpponentTurn.accept(i, j));
+                    String opponentTurn = socketWrapper.readMessage();
+                    if (opponentTurn.matches(MessagesProcessor.OPPONENT_TURN_REGEXP)) {
+                        int i = MessagesProcessor.parseRow(opponentTurn);
+                        int j = MessagesProcessor.parseColumn(opponentTurn);
+                        Platform.runLater(() -> onOpponentTurn.accept(i, j));
+                    }
+                    String gameState = socketWrapper.readMessage();
+                    if (gameState.startsWith("win")) {
+                        Platform.runLater(() -> onGameEnd.accept(gameState.substring(gameState.indexOf(' ') + 1)));
+                    } else if ("draw".equals(gameState)) {
+                        Platform.runLater(() -> onGameEnd.accept("draw"));
+                    }
                 } catch (IOException e) {
                     Platform.runLater(onLostConnection);
                 }

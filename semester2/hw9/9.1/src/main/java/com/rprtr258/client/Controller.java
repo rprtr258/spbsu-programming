@@ -47,7 +47,7 @@ public class Controller {
     private void makeMove(int row, int column) {
         if (isWaitingForOpponentTurn)
             return;
-        thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onLostServerConnection);
+        thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onLostServerConnection, this::onGameEnd);
     }
 
     private void onSuccessTurn(int row, int column) {
@@ -74,7 +74,24 @@ public class Controller {
     private void onTurnWaiting() {
         gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
         isWaitingForOpponentTurn = true;
-        thisClient.waitOpponentTurn(this::onOpponentTurn);
+        thisClient.waitGameChanges(this::onOpponentTurn, this::onGameEnd);
+    }
+
+    private void onGameEnd(String winner) {
+        switch (winner) {
+            case "draw": {
+                gameStatusLabel.setText("Draw!");
+                break;
+            }
+            case "X": {
+                gameStatusLabel.setText("First player won!");
+                break;
+            }
+            case "O": {
+                gameStatusLabel.setText("Second player won!");
+                break;
+            }
+        }
     }
 
     private void onServerConnectionFail() {

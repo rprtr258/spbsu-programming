@@ -10,6 +10,7 @@ public class Server {
     private static final int MAX_PLAYERS = 2;
 
     public static void main(String[] args) {
+        // TODO: change order: first recieve "connect", then reply with "player %s"
         try (ServerSocket socket = new ServerSocket(12345)) {
             Thread playerThreads[] = {null, null};
             TicTacToe game = new TicTacToe();
