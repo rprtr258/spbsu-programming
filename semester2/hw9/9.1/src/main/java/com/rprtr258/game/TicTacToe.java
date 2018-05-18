@@ -5,6 +5,7 @@ package com.rprtr258.game;
  */
 public class TicTacToe {
     private TicTacToeField field = null;
+    private final int FIELD_SIZE = 3;
     private final int CROSS_PLAYER = 1;
     private final int ZERO_PLAYER = -1;
     private int currentPlayer = CROSS_PLAYER;
@@ -42,7 +43,7 @@ public class TicTacToe {
      * @return state of the game.
      */
     public GameState getState() {
-        int winState = field.checkWin();
+        int winState = field.getMaxLineSum() / FIELD_SIZE;
         if (winState != 0)
             return (winState == 1 ? GameState.CROSS_WIN : GameState.ZERO_WIN);
         if (field.countEmptyCells() == 0)
@@ -55,13 +56,6 @@ public class TicTacToe {
         return String.valueOf(field) + getState();
     }
 
-    /**
-     * Changes one player to another when turn ends.
-     */
-    private void changePlayer() {
-        currentPlayer = (currentPlayer == CROSS_PLAYER ? ZERO_PLAYER : CROSS_PLAYER);
-    }
-
     public boolean canMakeTurn(String playerName, int row, int column) {
         if (ended())
             return false;
@@ -69,6 +63,13 @@ public class TicTacToe {
         if (gameState == GameState.ZERO_TURN && "O".equals(playerName) || gameState == GameState.CROSS_TURN && "X".equals(playerName))
             return (field.getCellState(row, column) == CellState.EMPTY_CELL);
         return false;
+    }
+
+    /**
+     * Changes one player to another when turn ends.
+     */
+    private void changePlayer() {
+        currentPlayer = (currentPlayer == CROSS_PLAYER ? ZERO_PLAYER : CROSS_PLAYER);
     }
 
     private boolean ended() {

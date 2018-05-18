@@ -1,5 +1,7 @@
 package com.rprtr258.game;
 
+import static java.lang.Math.abs;
+
 public class TicTacToeField {
     private final int EMPTY_MARK = 0;
     private final int CROSS_MARK = 1;
@@ -51,30 +53,6 @@ public class TicTacToeField {
         return result.toString();
     }
 
-    public int checkWin() {
-        for (int i = 0; i < 3; i++) {
-            int rowSum = field[i][0] + field[i][1] + field[i][2];
-            if (rowSum == 3 || rowSum == -3)
-                return rowSum / 3;
-        }
-        for (int i = 0; i < 3; i++) {
-            int columnSum = field[0][i] + field[1][i] + field[2][i];
-            if (columnSum == 3 || columnSum == -3)
-                return columnSum / 3;
-        }
-        int mainDiagonalSum = 0;
-        for (int i = 0; i < 3; i++)
-            mainDiagonalSum += field[i][i];
-        if (mainDiagonalSum == 3 || mainDiagonalSum == -3)
-            return mainDiagonalSum / 3;
-        int secondDiagonalSum = 0;
-        for (int i = 0; i < 3; i++)
-            secondDiagonalSum += field[i][2 - i];
-        if (secondDiagonalSum == 3 || secondDiagonalSum == -3)
-            return secondDiagonalSum / 3;
-        return 0;
-    }
-
     public int countEmptyCells() {
         int result = 0;
         for (int[] row : field)
@@ -82,5 +60,49 @@ public class TicTacToeField {
                 if (cell == EMPTY_MARK)
                     result++;
         return result;
+    }
+
+    public int getMaxLineSum() {
+        int result = 0;
+        int maxRowSum = getMaxRowSum();
+        int maxColumnSum = getMaxColumnSum();
+        int maxDiagonalSum = getMaxDiagonalSum();
+        if (abs(maxRowSum) > abs(result))
+            result = maxRowSum;
+        if (abs(maxColumnSum) > abs(result))
+            result = maxColumnSum;
+        if (abs(maxDiagonalSum) > abs(result))
+            result = maxDiagonalSum;
+        return result;
+    }
+
+    private int getMaxRowSum() {
+        int result = 0;
+        for (int i = 0; i < 3; i++) {
+            int rowSum = field[i][0] + field[i][1] + field[i][2];
+            if (abs(rowSum) > abs(result))
+                result = rowSum;
+        }
+        return result;
+    }
+
+    private int getMaxColumnSum() {
+        int result = 0;
+        for (int i = 0; i < 3; i++) {
+            int rowSum = field[0][i] + field[1][i] + field[2][i];
+            if (abs(rowSum) > abs(result))
+                result = rowSum;
+        }
+        return result;
+    }
+
+    private int getMaxDiagonalSum() {
+        int mainDiagonalSum = 0;
+        for (int i = 0; i < 3; i++)
+            mainDiagonalSum += field[i][i];
+        int secondDiagonalSum = 0;
+        for (int i = 0; i < 3; i++)
+            secondDiagonalSum += field[i][2 - i];
+        return (abs(mainDiagonalSum) > abs(secondDiagonalSum) ? mainDiagonalSum : secondDiagonalSum);
     }
 }
