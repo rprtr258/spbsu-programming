@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox prefHeight="320.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rprtr258.client.Controller">
+<VBox prefHeight="320.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rprtr258.client.MainWindowController">
    <Label fx:id="playerNameLabel" prefHeight="17.0" prefWidth="149.0" text="You are player F" />
    <GridPane gridLinesVisible="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/8.0.121">
       <children>

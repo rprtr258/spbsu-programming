@@ -12,27 +12,21 @@ public class Client {
     private SocketWrapper socketWrapper = null;
     private Runnable onLostConnection = null;
 
-    public Client(Runnable onLostConnection) {
+    public void setOnLostConnection(Runnable onLostConnection) {
         this.onLostConnection = onLostConnection;
     }
 
     public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onFailConnection) {
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() {
-                try {
-                    socketWrapper = new SocketWrapper(new Socket(host, port));
-                    String connectRequest = MessagesProcessor.getConnectRequest();
-                    socketWrapper.sendMessage(connectRequest);
-                    String response = socketWrapper.readMessage();
-                    String playerName = response.substring(response.indexOf(' ') + 1);
-                    Platform.runLater(() -> onConnect.accept(playerName));
-                } catch (IOException e) {
-                    Platform.runLater(onFailConnection);
-                }
-                return null;
-            }
-        }).start();
+        try {
+            socketWrapper = new SocketWrapper(new Socket(host, port));
+            String connectRequest = MessagesProcessor.getConnectRequest();
+            socketWrapper.sendMessage(connectRequest);
+            String response = socketWrapper.readMessage();
+            String playerName = response.substring(response.indexOf(' ') + 1);
+            Platform.runLater(() -> onConnect.accept(playerName));
+        } catch (IOException e) {
+            Platform.runLater(onFailConnection);
+        }
     }
 
     public void makeMove(int row, int column, Runnable onSuccess, Runnable onLostConnection, Consumer<String> onGameEnd) {

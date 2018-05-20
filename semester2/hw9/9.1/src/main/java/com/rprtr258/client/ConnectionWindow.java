@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MainWindow extends Application {
+public class ConnectionWindow extends Application {
     public static void main(String[] args) {
         launch(args);
     }
@@ -16,9 +16,9 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("MainWindow.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("ConnectionWindow.fxml"));
             primaryStage.setScene(new Scene(parent));
-            primaryStage.setTitle("Tic-Tac-Toe");
+            primaryStage.setTitle("Connect server");
             primaryStage.setResizable(false);
             primaryStage.show();
         } catch (IOException e) {

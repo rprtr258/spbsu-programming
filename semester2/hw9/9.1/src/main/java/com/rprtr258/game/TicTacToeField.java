@@ -4,9 +4,7 @@ import static java.lang.Math.abs;
 
 public class TicTacToeField {
     private final int EMPTY_MARK = 0;
-    private final int CROSS_MARK = 1;
-    private final int ZERO_MARK = -1;
-    private int[][] field = new int[3][3];
+    private final int[][] field = new int[3][3];
 
     public TicTacToeField() {
         clear();
@@ -26,10 +24,12 @@ public class TicTacToeField {
     public void setCellState(int i, int j, CellState value) {
         switch (value) {
             case ZERO_CELL: {
+                int ZERO_MARK = -1;
                 field[i][j] = ZERO_MARK;
                 break;
             }
             case CROSS_CELL: {
+                int CROSS_MARK = 1;
                 field[i][j] = CROSS_MARK;
                 break;
             }
@@ -104,5 +104,9 @@ public class TicTacToeField {
         for (int i = 0; i < 3; i++)
             secondDiagonalSum += field[i][2 - i];
         return (abs(mainDiagonalSum) > abs(secondDiagonalSum) ? mainDiagonalSum : secondDiagonalSum);
+    }
+
+    public int getSize() {
+        return field.length;
     }
 }

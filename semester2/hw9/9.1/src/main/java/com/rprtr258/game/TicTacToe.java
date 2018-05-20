@@ -5,7 +5,6 @@ package com.rprtr258.game;
  */
 public class TicTacToe {
     private TicTacToeField field = null;
-    private final int FIELD_SIZE = 3;
     private final int CROSS_PLAYER = 1;
     private final int ZERO_PLAYER = -1;
     private int currentPlayer = CROSS_PLAYER;
@@ -43,7 +42,7 @@ public class TicTacToe {
      * @return state of the game.
      */
     public GameState getState() {
-        int winState = field.getMaxLineSum() / FIELD_SIZE;
+        int winState = field.getMaxLineSum() / field.getSize();
         if (winState != 0)
             return (winState == 1 ? GameState.CROSS_WIN : GameState.ZERO_WIN);
         if (field.countEmptyCells() == 0)

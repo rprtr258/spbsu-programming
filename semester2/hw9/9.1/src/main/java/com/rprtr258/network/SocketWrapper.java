@@ -35,14 +35,6 @@ public class SocketWrapper {
         return message;
     }
 
-    public String waitMessageMatching(String regexp) throws IOException {
-        String message = readToken();
-        while (!message.matches(regexp))
-            message = in.readLine();
-        System.out.printf("Received \"%s\"\n", message);
-        return message;
-    }
-
     private String readToken() throws IOException {
         return in.readLine();
     }

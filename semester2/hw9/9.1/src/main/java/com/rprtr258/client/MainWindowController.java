@@ -5,7 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 // TODO: stop Socket thread on close
-public class Controller {
+public class MainWindowController {
     public Button button00;
     public Button button01;
     public Button button02;
@@ -22,8 +22,6 @@ public class Controller {
     private Button buttons[][] = null;
     private boolean isWaitingForOpponentTurn = false;
     private Client thisClient = null;
-    private String host = "localhost";
-    private int port = 12345;
 
     public void initialize() {
         buttons = new Button[][]{{button00, button01, button02},
@@ -38,10 +36,22 @@ public class Controller {
         }
         setButtonsDisable(true);
         playerNameLabel.setText("");
-        gameStatusLabel.setText(String.format("Trying connect server \"%s:%d\"", host, port));
-        thisClient = new Client(this::onLostServerConnection);
-        // TODO: add button to retry connect?
-        thisClient.tryConnectServer(host, port, this::onConnect, this::onServerConnectionFail);
+    }
+
+    public void setPlayerName(String playerName) {
+        mark = playerName;
+        playerNameLabel.setText("You are player " + playerName);
+        setButtonsDisable(false);
+        if ("O".equals(mark)) {
+            onTurnWaiting();
+        } else {
+            gameStatusLabel.setText("Waiting for your turn.");
+        }
+    }
+
+    public void setClient(Client client) {
+        this.thisClient = client;
+        thisClient.setOnLostConnection(this::onLostServerConnection);
     }
 
     private void makeMove(int row, int column) {
@@ -59,16 +69,6 @@ public class Controller {
         isWaitingForOpponentTurn = false;
         setButtonText(row, column, "X".equals(mark) ? "O" : "X");
         gameStatusLabel.setText("Waiting for your turn.");
-    }
-
-    private void onConnect(String playerName) {
-        mark = playerName;
-        playerNameLabel.setText("You are player " + playerName);
-        setButtonsDisable(false);
-        if ("O".equals(mark)) {
-            onTurnWaiting();
-        } else
-            gameStatusLabel.setText("Waiting for your turn.");
     }
 
     private void onTurnWaiting() {
@@ -92,12 +92,6 @@ public class Controller {
                 break;
             }
         }
-    }
-
-    private void onServerConnectionFail() {
-        setButtonsDisable(false);
-        playerNameLabel.setText("You are not playing :(");
-        gameStatusLabel.setText("Couldn't connect to server.");
     }
 
     private void setButtonText(int i, int j, String s) {

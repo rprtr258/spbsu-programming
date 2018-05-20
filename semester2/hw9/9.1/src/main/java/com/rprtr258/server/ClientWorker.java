@@ -14,7 +14,6 @@ public class ClientWorker implements Runnable {
     private String clientName = null;
     private int playerNumber = 0;
     private TicTacToe game = null;
-    private boolean myTurn;
 
     public ClientWorker(Socket socket, int playerNumber, TicTacToe game) {
         socketWrapper = new SocketWrapper(socket);
