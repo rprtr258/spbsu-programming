@@ -3,7 +3,6 @@ package com.rprtr258.server;
 import com.rprtr258.game.GameState;
 import com.rprtr258.game.TicTacToe;
 import com.rprtr258.network.MessagesProcessor;
-import com.rprtr258.network.SocketWrapper;
 
 import java.io.IOException;
 
@@ -27,10 +26,6 @@ public class ClientWorker implements Runnable {
             while (true) {
                 String message = null;
                 message = serverWorker.readMessage(clientName);
-                if ("disconnect".equals(message)) {
-                    // TODO: send it sometimes
-                    break;
-                }
                 if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));

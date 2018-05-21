@@ -10,9 +10,9 @@ import java.util.function.Consumer;
 
 public class Client {
     private SocketWrapper socketWrapper = null;
-    private Runnable onLostConnection = null;
+    private Consumer<Exception> onLostConnection = null;
 
-    public void setOnLostConnection(Runnable onLostConnection) {
+    public void setOnLostConnection(Consumer<Exception> onLostConnection) {
         this.onLostConnection = onLostConnection;
     }
 
@@ -31,7 +31,7 @@ public class Client {
         }
     }
 
-    public void makeMove(int row, int column, Runnable onSuccess, Runnable onLostConnection, Consumer<String> onGameEnd) {
+    public void makeMove(int row, int column, Runnable onSuccess, Consumer<Exception> onLostConnection, Consumer<String> onGameEnd) {
         String turnRequest = MessagesProcessor.getTurnRequest(row, column);
         socketWrapper.sendMessage(turnRequest);
         try {
@@ -46,8 +46,7 @@ public class Client {
                 Platform.runLater(() -> onGameEnd.accept("draw"));
             }
         } catch (IOException e) {
-            // TODO: pass exception to onLostConnection and save log to file
-            onLostConnection.run();
+            onLostConnection.accept(e);
         }
     }
 
@@ -70,7 +69,7 @@ public class Client {
                         Platform.runLater(() -> onGameEnd.accept("draw"));
                     }
                 } catch (IOException e) {
-                    Platform.runLater(onLostConnection);
+                    Platform.runLater(() -> onLostConnection.accept(e));
                 }
                 return null;
             }

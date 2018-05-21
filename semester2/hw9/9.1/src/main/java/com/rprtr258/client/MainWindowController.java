@@ -4,6 +4,10 @@ import com.rprtr258.network.Client;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 // TODO: stop Socket thread on close
 // TODO: restart button work
 public class MainWindowController {
@@ -24,6 +28,7 @@ public class MainWindowController {
     private Button buttons[][] = null;
     private boolean isWaitingForOpponentTurn = false;
     private Client thisClient = null;
+    private Thread serverReadThread = null;
 
     public void initialize() {
         buttons = new Button[][]{{button00, button01, button02},
@@ -114,9 +119,17 @@ public class MainWindowController {
         buttons[i][j].setText(s);
     }
 
-    private void onLostServerConnection() {
+    private void onLostServerConnection(Exception e) {
         setButtonsDisable(true);
         gameStatusLabel.setText("Lost connection to server :C");
+        File errorFile = new File("error.txt");
+        errorFile.delete();
+        try {
+            errorFile.createNewFile();
+            Files.write(errorFile.toPath(), e.toString().getBytes());
+        } catch (IOException e1) {
+            System.err.println("Unable to create error.txt file -_-");
+        }
     }
 
     private void setButtonsDisable(boolean value) {
