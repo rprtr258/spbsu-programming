@@ -4,10 +4,6 @@ import com.rprtr258.network.Client;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-
 public class MainWindowController {
     public Button button00;
     public Button button01;
@@ -125,14 +121,6 @@ public class MainWindowController {
     private void onLostServerConnection(Exception e) {
         setButtonsDisable(true);
         gameStatusLabel.setText("Lost connection to server :C");
-        File errorFile = new File("error.txt");
-        errorFile.delete();
-        try {
-            errorFile.createNewFile();
-            Files.write(errorFile.toPath(), e.toString().getBytes());
-        } catch (IOException e1) {
-            System.err.println("Unable to create error.txt file -_-");
-        }
     }
 
     private void setButtonsDisable(boolean value) {
