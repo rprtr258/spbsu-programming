@@ -60,7 +60,6 @@ public class Client {
         }
     }
 
-    // TODO: divide waiting game result and waiting opponent turn(?)
     public void waitGameChanges(BiConsumer<Integer, Integer> onOpponentTurn, Consumer<String> onGameEnd) {
         new Thread(new Task<Void>() {
             @Override

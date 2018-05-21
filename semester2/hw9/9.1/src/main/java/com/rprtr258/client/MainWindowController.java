@@ -104,7 +104,7 @@ public class MainWindowController {
     }
 
     private void onDisconnect() {
-        gameStatusLabel.setText("Opponent or server has disconnected");
+        gameStatusLabel.setText("Opponent has disconnected");
         setButtonsDisable(true);
         restartButton.setDisable(true);
     }

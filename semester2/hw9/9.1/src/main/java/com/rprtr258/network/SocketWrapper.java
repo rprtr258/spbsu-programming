@@ -19,7 +19,6 @@ public class SocketWrapper {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
         } catch (IOException e) {
-            // TODO: think
             e.printStackTrace();
         }
     }

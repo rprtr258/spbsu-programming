@@ -17,13 +17,14 @@ public class Server {
             Thread playerThreads[] = new Thread[MAX_PLAYERS];
             TicTacToe game = new TicTacToe();
             ServerWorker serverWorker = new ServerWorker();
+            ServerState serverState = ServerState.RUNNING;
             for (int i = 0; i < MAX_PLAYERS; i++) {
                 SocketWrapper playerSocket = new SocketWrapper(socket.accept(), true);
                 if ("connect".equals(playerSocket.readMessage())) {
                     String playerName = playerNames[i];
                     playerSocket.sendMessage("player " + playerName);
                     serverWorker.addClient(playerName, playerSocket);
-                    ClientWorker worker = new ClientWorker(playerName, game, serverWorker);
+                    ClientWorker worker = new ClientWorker(playerName, game, serverWorker, serverState);
                     playerThreads[i] = new Thread(worker);
                 }
             }

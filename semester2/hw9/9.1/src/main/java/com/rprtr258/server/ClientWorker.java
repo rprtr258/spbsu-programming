@@ -12,24 +12,26 @@ public class ClientWorker implements Runnable {
     private String socketId = null;
     private TicTacToe game = null;
     private ServerWorker serverWorker = null;
+    private ServerState serverState = ServerState.RUNNING;
 
-    public ClientWorker(String playerName, TicTacToe game, ServerWorker serverWorker) {
+    public ClientWorker(String playerName, TicTacToe game, ServerWorker serverWorker, ServerState serverState) {
         this.clientName = playerName;
         this.socketId = playerName;
         this.opponentSocketId = ("X".equals(playerName) ? "O" : "X");
         this.game = game;
         this.serverWorker = serverWorker;
+        this.serverState = serverState;
     }
 
     @Override
     public void run() {
         serverWorker.sendTo(clientName, "connected");
         try {
-            while (true) {
+            while (serverState == ServerState.RUNNING) {
                 String message = serverWorker.readMessage(socketId);
                 if ("disconnect".equals(message)) {
                     serverWorker.sendAll("disconnect echo");
-                    break;
+                    serverState = ServerState.STOPPED;
                 } else if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
@@ -53,8 +55,8 @@ public class ClientWorker implements Runnable {
             }
         } catch (IOException e) {
             // TODO: stop server in case of client disconnect
+            serverState = ServerState.STOPPED;
             System.out.println("Client " + clientName + " disconnected");
-            e.printStackTrace();
         }
     }
 }
