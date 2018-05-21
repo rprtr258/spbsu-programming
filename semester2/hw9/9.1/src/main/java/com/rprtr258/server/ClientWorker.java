@@ -24,8 +24,7 @@ public class ClientWorker implements Runnable {
         serverWorker.sendTo(clientName, "connected");
         try {
             while (true) {
-                String message = null;
-                message = serverWorker.readMessage(clientName);
+                String message = serverWorker.readMessage(clientName);
                 if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
@@ -40,10 +39,18 @@ public class ClientWorker implements Runnable {
                     String gameStateString = MessagesProcessor.getGameStateMessage(gameState);
                     serverWorker.sendAll(gameStateString);
                     System.out.println(game);
+                } else if ("restart".equals(message)) {
+                    String tmp = opponentName;
+                    opponentName = clientName + "";
+                    clientName = tmp + "";
+                    serverWorker.sendTo(clientName, "player " + clientName);
+                    serverWorker.connectConfirm(clientName);
+                    game.restart();
                 }
             }
         } catch (IOException e) {
             // TODO: stop server in case of client disconnect
+            System.out.println("Client " + clientName + " disconnected");
             e.printStackTrace();
         }
     }

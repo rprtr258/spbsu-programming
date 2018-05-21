@@ -13,25 +13,27 @@ public class Client {
     private Consumer<Exception> onLostConnection = null;
 
     public void setOnLostConnection(Consumer<Exception> onLostConnection) {
-        this.onLostConnection = onLostConnection;
+        this.onLostConnection = (e) -> Platform.runLater(() -> onLostConnection.accept(e));
     }
 
     public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onFailConnection) {
-        try {
-            socketWrapper = new SocketWrapper(new Socket(host, port));
-            String connectRequest = MessagesProcessor.getConnectRequest();
-            socketWrapper.sendMessage(connectRequest);
-            String response = socketWrapper.readMessage();
-            String playerName = response.substring(response.indexOf(' ') + 1);
-            String connectedMessage = socketWrapper.readMessage();
-            if ("connected".equals(connectedMessage))
-                Platform.runLater(() -> onConnect.accept(playerName));
-        } catch (IOException e) {
-            Platform.runLater(onFailConnection);
-        }
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                try {
+                    socketWrapper = new SocketWrapper(new Socket(host, port));
+                    String connectRequest = MessagesProcessor.getConnectRequest();
+                    socketWrapper.sendMessage(connectRequest);
+                    waitConnected((playerName) -> Platform.runLater(() -> onConnect.accept(playerName)));
+                } catch (IOException e) {
+                    Platform.runLater(onFailConnection);
+                }
+                return null;
+            }
+        }).start();
     }
 
-    public void makeMove(int row, int column, Runnable onSuccess, Consumer<Exception> onLostConnection, Consumer<String> onGameEnd) {
+    public void makeMove(int row, int column, Runnable onSuccess, Runnable onGameContinue, Consumer<String> onGameEnd) {
         String turnRequest = MessagesProcessor.getTurnRequest(row, column);
         socketWrapper.sendMessage(turnRequest);
         try {
@@ -44,6 +46,8 @@ public class Client {
                 Platform.runLater(() -> onGameEnd.accept(gameState.substring(gameState.indexOf(' ') + 1)));
             } else if ("draw".equals(gameState)) {
                 Platform.runLater(() -> onGameEnd.accept("draw"));
+            } else {
+                Platform.runLater(onGameContinue);
             }
         } catch (IOException e) {
             onLostConnection.accept(e);
@@ -69,10 +73,36 @@ public class Client {
                         Platform.runLater(() -> onGameEnd.accept("draw"));
                     }
                 } catch (IOException e) {
-                    Platform.runLater(() -> onLostConnection.accept(e));
+                    onLostConnection.accept(e);
                 }
                 return null;
             }
         }).start();
+    }
+
+    public void restart(Consumer<String> onGameBegin) {
+        new Thread(new Task<Void>() {
+            @Override
+            protected Void call() {
+                String connectRequest = MessagesProcessor.getRestartRequest();
+                socketWrapper.sendMessage(connectRequest);
+                try {
+                    waitConnected((playerName) -> Platform.runLater(() -> onGameBegin.accept(playerName)));
+                } catch (IOException e) {
+                    onLostConnection.accept(e);
+                }
+                return null;
+            }
+        }).run();
+    }
+
+    private void waitConnected(Consumer<String> onConnect) throws IOException {
+        String response = socketWrapper.readMessage();
+        String playerName = response.substring(response.indexOf(' ') + 1);
+        String connectedMessage = "";
+        while (!"connected".equals(connectedMessage)) {
+            connectedMessage = socketWrapper.readMessage();
+        }
+        Platform.runLater(() -> onConnect.accept(playerName));
     }
 }

@@ -38,4 +38,8 @@ public class MessagesProcessor {
             }
         }
     }
+
+    public static String getRestartRequest() {
+        return "restart";
+    }
 }

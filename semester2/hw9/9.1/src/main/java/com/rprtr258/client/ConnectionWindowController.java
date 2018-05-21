@@ -32,18 +32,18 @@ public class ConnectionWindowController {
             statusLabel.setText("Incorrect port " + port);
             return;
         }
-        statusLabel.setText("Trying to connect given server");
+        statusLabel.setText("Waiting for other player to connect");
         connectButton.setDisable(true);
         hostTextField.setDisable(true);
         portTextField.setDisable(true);
         Client client = new Client();
-        client.setOnLostConnection(() -> statusLabel.setText("Lost connection to server"));
-        new Thread(() -> client.tryConnectServer(host, port, (playerName) -> launchMainWindow(playerName, client), () -> {
+        client.setOnLostConnection((e) -> statusLabel.setText("Lost connection to server"));
+        client.tryConnectServer(host, port, (playerName) -> launchMainWindow(playerName, client), () -> {
             statusLabel.setText("Failed to connect");
             connectButton.setDisable(false);
             hostTextField.setDisable(false);
             portTextField.setDisable(false);
-        })).start();
+        });
     }
 
     private void launchMainWindow(String playerName, Client client) {
@@ -52,8 +52,7 @@ public class ConnectionWindowController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
             Scene scene = new Scene(loader.load());
             MainWindowController controller = loader.getController();
-            controller.setClient(client);
-            controller.setPlayerName(playerName);
+            controller.configure(playerName, client);
             thisStage.setScene(scene);
             thisStage.setTitle("Tic-Tac-Toe");
             thisStage.setResizable(false);

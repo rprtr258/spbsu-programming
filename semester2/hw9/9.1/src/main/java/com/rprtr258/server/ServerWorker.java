@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 public class ServerWorker {
     private Map<String, SocketWrapper> clients = new TreeMap<>();
+    private Map<String, Boolean> confirmationQueue = new TreeMap<>();
 
     public void addClient(String clientName, SocketWrapper socketWrapper) {
         if (clients.containsKey(clientName))
@@ -29,6 +30,20 @@ public class ServerWorker {
 
     public synchronized void sendTo(String clientName, String message) {
         clients.get(clientName).sendMessage(message);
+    }
+
+    public synchronized void connectConfirm(String clientName) {
+        confirmationQueue.put(clientName, true);
+        boolean allConfirmed = true;
+        for (String client : clients.keySet())
+            if (confirmationQueue.containsKey(client))
+                allConfirmed &= confirmationQueue.get(client);
+            else
+                allConfirmed = false;
+        if (allConfirmed) {
+            confirmationQueue.clear();
+            sendAll("connected");
+        }
     }
 
     private class ClientAlreadyAddedException extends RuntimeException {}

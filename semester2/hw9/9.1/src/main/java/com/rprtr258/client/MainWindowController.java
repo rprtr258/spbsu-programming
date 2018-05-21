@@ -39,13 +39,15 @@ public class MainWindowController {
                 buttons[i][j].setOnAction((actionEvent) -> makeMove(finalI, finalJ));
             }
         }
-        restartButton.setOnAction((actionEvent) -> onRestart());
+        restartButton.setOnAction((actionEvent) -> onRestartRequest());
         playerNameLabel.setText("");
         setButtonsDisable(true);
         restartButton.setDisable(true);
     }
 
-    public void setPlayerName(String playerName) {
+    public void configure(String playerName, Client client) {
+        this.thisClient = client;
+        thisClient.setOnLostConnection(this::onLostServerConnection);
         mark = playerName;
         playerNameLabel.setText("You are player " + playerName);
         setButtonsDisable(false);
@@ -56,31 +58,42 @@ public class MainWindowController {
         }
     }
 
-    public void setClient(Client client) {
-        this.thisClient = client;
-        thisClient.setOnLostConnection(this::onLostServerConnection);
-    }
-
     private void makeMove(int row, int column) {
         if (isWaitingForOpponentTurn)
             return;
-        thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onLostServerConnection, this::onGameEnd);
+        thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onGameContinuing, this::onGameEnd);
     }
 
-    private void onRestart() {
+    private void onSuccessTurn(int row, int column) {
+        setButtonText(row, column, mark);
+    }
+
+    private void onGameContinuing() {
+        onTurnWaiting();
+    }
+
+    private void onRestartRequest() {
         for (Button[] buttonsRow : buttons) {
             for (Button button : buttonsRow) {
                 button.setText("");
             }
         }
         playerNameLabel.setText(""); // TODO: change player
+        gameStatusLabel.setText("Waiting for other player to confirm");
         setButtonsDisable(true);
         restartButton.setDisable(true);
+        thisClient.restart(this::onRestart);
     }
 
-    private void onSuccessTurn(int row, int column) {
-        setButtonText(row, column, mark);
-        onTurnWaiting();
+    private void onRestart(String playerName) {
+        mark = playerName;
+        playerNameLabel.setText("You are player " + playerName);
+        setButtonsDisable(false);
+        if ("O".equals(mark)) {
+            onTurnWaiting();
+        } else {
+            gameStatusLabel.setText("Waiting for your turn.");
+        }
     }
 
     private void onOpponentTurn(int row, int column) {
