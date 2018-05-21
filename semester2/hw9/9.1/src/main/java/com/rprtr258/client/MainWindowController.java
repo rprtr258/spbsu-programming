@@ -42,7 +42,7 @@ public class MainWindowController {
 
     public void configure(String playerName, Client client) {
         this.thisClient = client;
-        thisClient.setOnLostConnection(this::onLostServerConnection);
+        thisClient.configure(this::onLostServerConnection, this::onDisconnect);
         mark = playerName;
         playerNameLabel.setText("You are player " + playerName);
         setButtonsDisable(false);
@@ -101,6 +101,12 @@ public class MainWindowController {
         gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
         isWaitingForOpponentTurn = true;
         thisClient.waitGameChanges(this::onOpponentTurn, this::onGameEnd);
+    }
+
+    private void onDisconnect() {
+        gameStatusLabel.setText("Opponent or server has disconnected");
+        setButtonsDisable(true);
+        restartButton.setDisable(true);
     }
 
     private void onGameEnd(String winner) {

@@ -37,7 +37,7 @@ public class ConnectionWindowController {
         hostTextField.setDisable(true);
         portTextField.setDisable(true);
         Client client = new Client();
-        client.setOnLostConnection((e) -> statusLabel.setText("Lost connection to server"));
+        client.configure((e) -> statusLabel.setText("Lost connection to server"), () -> {});
         client.tryConnectServer(host, port, (playerName) -> launchMainWindow(playerName, client), () -> {
             statusLabel.setText("Failed to connect");
             connectButton.setDisable(false);
@@ -56,6 +56,7 @@ public class ConnectionWindowController {
             thisStage.setScene(scene);
             thisStage.setTitle("Tic-Tac-Toe");
             thisStage.setResizable(false);
+            thisStage.setOnCloseRequest((event) -> client.disconnect());
             thisStage.show();
         } catch (IOException e) {
             e.printStackTrace();

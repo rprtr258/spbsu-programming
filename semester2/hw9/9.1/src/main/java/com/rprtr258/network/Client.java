@@ -11,9 +11,11 @@ import java.util.function.Consumer;
 public class Client {
     private SocketWrapper socketWrapper = null;
     private Consumer<Exception> onLostConnection = null;
+    private Runnable onDisconnect;
 
-    public void setOnLostConnection(Consumer<Exception> onLostConnection) {
+    public void configure(Consumer<Exception> onLostConnection, Runnable onDisconnect) {
         this.onLostConnection = (e) -> Platform.runLater(() -> onLostConnection.accept(e));
+        this.onDisconnect = () -> Platform.runLater(onDisconnect);
     }
 
     public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onFailConnection) {
@@ -33,11 +35,15 @@ public class Client {
         }).start();
     }
 
+    // TODO: message reading and proceeding through polymorphism to handle "disconnect" everywhere(?)
     public void makeMove(int row, int column, Runnable onSuccess, Runnable onGameContinue, Consumer<String> onGameEnd) {
         String turnRequest = MessagesProcessor.getTurnRequest(row, column);
         socketWrapper.sendMessage(turnRequest);
         try {
             String response = socketWrapper.readMessage();
+            if ("disconnect".equals(response)) {
+                onDisconnect.run();
+            }
             if ("success".equals(response)) {
                 Platform.runLater(onSuccess);
             }
@@ -61,6 +67,10 @@ public class Client {
             protected Void call() {
                 try {
                     String opponentTurn = socketWrapper.readMessage();
+                    if ("disconnect echo".equals(opponentTurn)) {
+                        onDisconnect.run();
+                        return null;
+                    }
                     if (opponentTurn.matches(MessagesProcessor.OPPONENT_TURN_REGEXP)) {
                         int i = MessagesProcessor.parseRow(opponentTurn);
                         int j = MessagesProcessor.parseColumn(opponentTurn);
@@ -104,5 +114,14 @@ public class Client {
             connectedMessage = socketWrapper.readMessage();
         }
         Platform.runLater(() -> onConnect.accept(playerName));
+    }
+
+    public void disconnect() {
+        socketWrapper.sendMessage("disconnect");
+        socketWrapper.disconnect();
+    }
+
+    public SocketWrapper getSocket() {
+        return socketWrapper;
     }
 }

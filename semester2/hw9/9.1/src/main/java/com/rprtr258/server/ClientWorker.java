@@ -27,7 +27,10 @@ public class ClientWorker implements Runnable {
         try {
             while (true) {
                 String message = serverWorker.readMessage(socketId);
-                if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
+                if ("disconnect".equals(message)) {
+                    serverWorker.sendAll("disconnect echo");
+                    break;
+                } else if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
                     if (game.canMakeTurn(clientName, row, column)) {

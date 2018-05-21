@@ -40,4 +40,13 @@ public class SocketWrapper {
     private String readToken() throws IOException {
         return in.readLine();
     }
+
+    public void disconnect() {
+        try {
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        out.close();
+    }
 }
