@@ -8,14 +8,12 @@ import com.rprtr258.network.SocketWrapper;
 import java.io.IOException;
 
 public class ClientWorker implements Runnable {
-    private SocketWrapper socketWrapper = null;
     private String clientName = null;
     private String opponentName = null;
     private TicTacToe game = null;
     private ServerWorker serverWorker = null;
 
-    public ClientWorker(SocketWrapper socket, String playerName, TicTacToe game, ServerWorker serverWorker) {
-        this.socketWrapper = socket;
+    public ClientWorker(String playerName, TicTacToe game, ServerWorker serverWorker) {
         this.clientName = playerName;
         this.opponentName = ("X".equals(playerName) ? "O" : "X");
         this.game = game;
@@ -24,7 +22,7 @@ public class ClientWorker implements Runnable {
 
     @Override
     public void run() {
-        sendConnectionInfo();
+        serverWorker.sendTo(clientName, "connected");
         try {
             while (true) {
                 String message = null;
@@ -53,10 +51,5 @@ public class ClientWorker implements Runnable {
             // TODO: stop server in case of client disconnect
             e.printStackTrace();
         }
-    }
-
-    private void sendConnectionInfo() {
-        String mark = clientName;
-        socketWrapper.sendMessage(String.format("player %s", mark));
     }
 }

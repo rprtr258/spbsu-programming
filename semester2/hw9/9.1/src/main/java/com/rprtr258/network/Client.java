@@ -23,7 +23,9 @@ public class Client {
             socketWrapper.sendMessage(connectRequest);
             String response = socketWrapper.readMessage();
             String playerName = response.substring(response.indexOf(' ') + 1);
-            Platform.runLater(() -> onConnect.accept(playerName));
+            String connectedMessage = socketWrapper.readMessage();
+            if ("connected".equals(connectedMessage))
+                Platform.runLater(() -> onConnect.accept(playerName));
         } catch (IOException e) {
             Platform.runLater(onFailConnection);
         }
@@ -44,6 +46,7 @@ public class Client {
                 Platform.runLater(() -> onGameEnd.accept("draw"));
             }
         } catch (IOException e) {
+            // TODO: pass exception to onLostConnection and save log to file
             onLostConnection.run();
         }
     }

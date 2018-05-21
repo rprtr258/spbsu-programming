@@ -2,13 +2,11 @@ package com.rprtr258.client;
 
 import com.rprtr258.network.Client;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import sun.applet.Main;
 
 import java.io.IOException;
 
@@ -34,9 +32,18 @@ public class ConnectionWindowController {
             statusLabel.setText("Incorrect port " + port);
             return;
         }
+        statusLabel.setText("Trying to connect given server");
+        connectButton.setDisable(true);
+        hostTextField.setDisable(true);
+        portTextField.setDisable(true);
         Client client = new Client();
         client.setOnLostConnection(() -> statusLabel.setText("Lost connection to server"));
-        client.tryConnectServer(host, port, (playerName) -> launchMainWindow(playerName, client), () -> statusLabel.setText("Failed to connect"));
+        new Thread(() -> client.tryConnectServer(host, port, (playerName) -> launchMainWindow(playerName, client), () -> {
+            statusLabel.setText("Failed to connect");
+            connectButton.setDisable(false);
+            hostTextField.setDisable(false);
+            portTextField.setDisable(false);
+        })).start();
     }
 
     private void launchMainWindow(String playerName, Client client) {

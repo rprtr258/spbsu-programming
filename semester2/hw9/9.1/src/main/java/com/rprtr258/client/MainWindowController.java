@@ -5,6 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 // TODO: stop Socket thread on close
+// TODO: restart button work
 public class MainWindowController {
     public Button button00;
     public Button button01;
@@ -17,6 +18,7 @@ public class MainWindowController {
     public Button button22;
     public Label gameStatusLabel;
     public Label playerNameLabel;
+    public Button restartButton;
 
     private String mark = null;
     private Button buttons[][] = null;
@@ -34,8 +36,10 @@ public class MainWindowController {
                 buttons[i][j].setOnAction((actionEvent) -> makeMove(finalI, finalJ));
             }
         }
-        setButtonsDisable(true);
+        restartButton.setOnAction((actionEvent) -> onRestart());
         playerNameLabel.setText("");
+        setButtonsDisable(true);
+        restartButton.setDisable(true);
     }
 
     public void setPlayerName(String playerName) {
@@ -58,6 +62,17 @@ public class MainWindowController {
         if (isWaitingForOpponentTurn)
             return;
         thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onLostServerConnection, this::onGameEnd);
+    }
+
+    private void onRestart() {
+        for (Button[] buttonsRow : buttons) {
+            for (Button button : buttonsRow) {
+                button.setText("");
+            }
+        }
+        playerNameLabel.setText(""); // TODO: change player
+        setButtonsDisable(true);
+        restartButton.setDisable(true);
     }
 
     private void onSuccessTurn(int row, int column) {
@@ -92,6 +107,7 @@ public class MainWindowController {
                 break;
             }
         }
+        restartButton.setDisable(false);
     }
 
     private void setButtonText(int i, int j, String s) {

@@ -17,7 +17,7 @@ public class SocketWrapper {
         }
     }
 
-    // TODO: remove debug output
+    // TODO: remove debug output(not only in this class)
     public void sendMessage(String message) {
         out.println(message);
         System.out.printf("Sent \"%s\"\n", message);
@@ -26,12 +26,6 @@ public class SocketWrapper {
     public String readMessage() throws IOException {
         String message = readToken();
         System.out.printf("Received \"%s\"\n", message);
-        return message;
-    }
-
-    public String readMessage(String addMessage) throws IOException {
-        String message = readToken();
-        System.out.printf("Received \"%s\"[%s]\n", message, addMessage);
         return message;
     }
 

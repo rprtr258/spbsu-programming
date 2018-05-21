@@ -16,15 +16,18 @@ public class ServerWorker {
     }
 
     public String readMessage(String clientName) throws IOException {
-        return clients.get(clientName).readMessage();
+        SocketWrapper clientSocket = clients.get(clientName);
+        synchronized (clientSocket) {
+            return clientSocket.readMessage();
+        }
     }
 
-    public void sendAll(String message) {
+    public synchronized void sendAll(String message) {
         for (SocketWrapper client : clients.values())
             client.sendMessage(message);
     }
 
-    public void sendTo(String clientName, String message) {
+    public synchronized void sendTo(String clientName, String message) {
         clients.get(clientName).sendMessage(message);
     }
 

@@ -12,7 +12,7 @@
    <HBox prefHeight="100.0" prefWidth="200.0">
       <children>
          <Label fx:id="playerNameLabel" prefHeight="25.0" prefWidth="200.0" text="You are player F" />
-         <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Play again" />
+         <Button fx:id="restartButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Play again" />
       </children>
    </HBox>
    <GridPane gridLinesVisible="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/8.0.121">

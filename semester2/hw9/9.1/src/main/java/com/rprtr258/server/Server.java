@@ -11,18 +11,21 @@ public class Server {
     private static final String playerNames[] = {"X", "O"};
 
     public static void main(String[] args) {
-        // TODO: change order: first receive "connect", then reply with "player %s"
-        // TODO: waiting other client to connect
+        // TODO: console run
         try (ServerSocket socket = new ServerSocket(12345)) {
-            Thread playerThreads[] = {null, null};
+            System.out.println("Server run on port 12345");
+            Thread playerThreads[] = new Thread[MAX_PLAYERS];
             TicTacToe game = new TicTacToe();
             ServerWorker serverWorker = new ServerWorker();
             for (int i = 0; i < MAX_PLAYERS; i++) {
                 SocketWrapper playerSocket = new SocketWrapper(socket.accept());
-                String playerName = playerNames[i];
-                serverWorker.addClient(playerName, playerSocket);
-                ClientWorker worker = new ClientWorker(playerSocket, playerName, game, serverWorker);
-                playerThreads[i] = new Thread(worker);
+                if ("connect".equals(playerSocket.readMessage())) {
+                    String playerName = playerNames[i];
+                    playerSocket.sendMessage("player " + playerName);
+                    serverWorker.addClient(playerName, playerSocket);
+                    ClientWorker worker = new ClientWorker(playerName, game, serverWorker);
+                    playerThreads[i] = new Thread(worker);
+                }
             }
             for (Thread playerThread : playerThreads) {
                 playerThread.start();
