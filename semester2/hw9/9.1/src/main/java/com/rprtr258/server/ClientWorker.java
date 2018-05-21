@@ -8,13 +8,15 @@ import java.io.IOException;
 
 public class ClientWorker implements Runnable {
     private String clientName = null;
-    private String opponentName = null;
+    private String opponentSocketId = null;
+    private String socketId = null;
     private TicTacToe game = null;
     private ServerWorker serverWorker = null;
 
     public ClientWorker(String playerName, TicTacToe game, ServerWorker serverWorker) {
         this.clientName = playerName;
-        this.opponentName = ("X".equals(playerName) ? "O" : "X");
+        this.socketId = playerName;
+        this.opponentSocketId = ("X".equals(playerName) ? "O" : "X");
         this.game = game;
         this.serverWorker = serverWorker;
     }
@@ -24,26 +26,24 @@ public class ClientWorker implements Runnable {
         serverWorker.sendTo(clientName, "connected");
         try {
             while (true) {
-                String message = serverWorker.readMessage(clientName);
+                String message = serverWorker.readMessage(socketId);
                 if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
                     int row = Integer.parseInt(message.substring(message.indexOf(' ') + 1, message.lastIndexOf(' ')));
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
                     if (game.canMakeTurn(clientName, row, column)) {
                         game.makeTurn(row, column);
-                        serverWorker.sendTo(clientName, "success");
-                        serverWorker.sendTo(opponentName, "op" + message);
+                        serverWorker.sendTo(socketId, "success");
+                        serverWorker.sendTo(opponentSocketId, "op" + message);
                     } else {
-                        serverWorker.sendTo(clientName, "incorrect turn");
+                        serverWorker.sendTo(socketId, "incorrect turn");
                     }
                     GameState gameState = game.getState();
                     String gameStateString = MessagesProcessor.getGameStateMessage(gameState);
                     serverWorker.sendAll(gameStateString);
                     System.out.println(game);
                 } else if ("restart".equals(message)) {
-                    String tmp = opponentName;
-                    opponentName = clientName + "";
-                    clientName = tmp + "";
-                    serverWorker.sendTo(clientName, "player " + clientName);
+                    clientName = ("X".equals(clientName) ? "O" : "X");
+                    serverWorker.queueTo(socketId, "player " + clientName);
                     serverWorker.connectConfirm(clientName);
                     game.restart();
                 }

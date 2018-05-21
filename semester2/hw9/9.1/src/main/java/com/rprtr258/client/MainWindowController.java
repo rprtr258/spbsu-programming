@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-// TODO: restart button work
 public class MainWindowController {
     public Button button00;
     public Button button01;
@@ -78,7 +77,7 @@ public class MainWindowController {
                 button.setText("");
             }
         }
-        playerNameLabel.setText(""); // TODO: change player
+        playerNameLabel.setText("");
         gameStatusLabel.setText("Waiting for other player to confirm");
         setButtonsDisable(true);
         restartButton.setDisable(true);
@@ -109,19 +108,12 @@ public class MainWindowController {
     }
 
     private void onGameEnd(String winner) {
-        switch (winner) {
-            case "draw": {
-                gameStatusLabel.setText("Draw!");
-                break;
-            }
-            case "X": {
-                gameStatusLabel.setText("First player won!");
-                break;
-            }
-            case "O": {
-                gameStatusLabel.setText("Second player won!");
-                break;
-            }
+        if ("draw".equals(winner)) {
+            gameStatusLabel.setText("Draw!");
+        } else if (mark.equals(winner)) {
+            gameStatusLabel.setText("You won!");
+        } else {
+            gameStatusLabel.setText("You lost!");
         }
         restartButton.setDisable(false);
     }

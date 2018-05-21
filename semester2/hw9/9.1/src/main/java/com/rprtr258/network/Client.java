@@ -20,11 +20,11 @@ public class Client {
         new Thread(new Task<Void>() {
             @Override
             protected Void call() {
+                String connectRequest = MessagesProcessor.getConnectRequest();
                 try {
                     socketWrapper = new SocketWrapper(new Socket(host, port));
-                    String connectRequest = MessagesProcessor.getConnectRequest();
                     socketWrapper.sendMessage(connectRequest);
-                    waitConnected((playerName) -> Platform.runLater(() -> onConnect.accept(playerName)));
+                    waitConnected(onConnect);
                 } catch (IOException e) {
                     Platform.runLater(onFailConnection);
                 }
@@ -87,7 +87,7 @@ public class Client {
                 String connectRequest = MessagesProcessor.getRestartRequest();
                 socketWrapper.sendMessage(connectRequest);
                 try {
-                    waitConnected((playerName) -> Platform.runLater(() -> onGameBegin.accept(playerName)));
+                    waitConnected(onGameBegin);
                 } catch (IOException e) {
                     onLostConnection.accept(e);
                 }
