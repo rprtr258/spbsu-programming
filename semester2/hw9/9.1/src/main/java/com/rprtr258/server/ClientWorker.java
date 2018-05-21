@@ -6,20 +6,20 @@ import com.rprtr258.network.MessagesProcessor;
 import com.rprtr258.network.SocketWrapper;
 
 import java.io.IOException;
-import java.net.Socket;
 
 public class ClientWorker implements Runnable {
     private SocketWrapper socketWrapper = null;
-    private SocketWrapper opponentSocketWrapper = null;
     private String clientName = null;
-    private int playerNumber = 0;
+    private String opponentName = null;
     private TicTacToe game = null;
+    private ServerWorker serverWorker = null;
 
-    public ClientWorker(Socket socket, int playerNumber, TicTacToe game) {
-        socketWrapper = new SocketWrapper(socket);
-        this.playerNumber = playerNumber;
-        clientName = (playerNumber == 1 ? "X" : "O");
+    public ClientWorker(SocketWrapper socket, String playerName, TicTacToe game, ServerWorker serverWorker) {
+        this.socketWrapper = socket;
+        this.clientName = playerName;
+        this.opponentName = ("X".equals(playerName) ? "O" : "X");
         this.game = game;
+        this.serverWorker = serverWorker;
     }
 
     @Override
@@ -27,7 +27,8 @@ public class ClientWorker implements Runnable {
         sendConnectionInfo();
         try {
             while (true) {
-                String message = socketWrapper.readMessage(String.format("player %s", clientName));
+                String message = null;
+                message = serverWorker.readMessage(clientName);
                 if ("disconnect".equals(message)) {
                     // TODO: send it sometimes
                     break;
@@ -37,48 +38,25 @@ public class ClientWorker implements Runnable {
                     int column = Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
                     if (game.canMakeTurn(clientName, row, column)) {
                         game.makeTurn(row, column);
-                        socketWrapper.sendMessage("success");
-                        opponentSocketWrapper.sendMessage("op" + message);
+                        serverWorker.sendTo(clientName, "success");
+                        serverWorker.sendTo(opponentName, "op" + message);
                     } else {
-                        socketWrapper.sendMessage("incorrect turn");
+                        serverWorker.sendTo(clientName, "incorrect turn");
                     }
                     GameState gameState = game.getState();
-                    switch (gameState) {
-                        case CROSS_WIN: {
-                            socketWrapper.sendMessage("win X");
-                            opponentSocketWrapper.sendMessage("win X");
-                            break;
-                        }
-                        case ZERO_WIN: {
-                            socketWrapper.sendMessage("win O");
-                            opponentSocketWrapper.sendMessage("win O");
-                            break;
-                        }
-                        case DRAW: {
-                            socketWrapper.sendMessage("draw");
-                            opponentSocketWrapper.sendMessage("draw");
-                            break;
-                        }
-                        default: {
-                            socketWrapper.sendMessage("game running");
-                            opponentSocketWrapper.sendMessage("game running");
-                        }
-                    }
+                    String gameStateString = MessagesProcessor.getGameStateMessage(gameState);
+                    serverWorker.sendAll(gameStateString);
                     System.out.println(game);
                 }
             }
         } catch (IOException e) {
-            // TODO: (client disconnect)
+            // TODO: stop server in case of client disconnect
             e.printStackTrace();
         }
     }
 
-    public void setOpponentSocket(Socket opponentSocket) {
-        opponentSocketWrapper = new SocketWrapper(opponentSocket);
-    }
-
     private void sendConnectionInfo() {
-        String mark = (playerNumber == 1 ? "X" : "O");
+        String mark = clientName;
         socketWrapper.sendMessage(String.format("player %s", mark));
     }
 }
