@@ -6,8 +6,14 @@ import java.net.Socket;
 public class SocketWrapper {
     private BufferedReader in = null;
     private PrintWriter out = null;
+    private boolean debug = false;
 
     public SocketWrapper(Socket socket) {
+        this(socket, false);
+    }
+
+    public SocketWrapper(Socket socket, boolean debug) {
+        this.debug = debug;
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
@@ -17,15 +23,16 @@ public class SocketWrapper {
         }
     }
 
-    // TODO: remove debug output(not only in this class)
     public void sendMessage(String message) {
         out.println(message);
-        System.out.printf("Sent \"%s\"\n", message);
+        if (debug)
+            System.out.printf("Sent \"%s\"\n", message);
     }
 
     public String readMessage() throws IOException {
         String message = readToken();
-        System.out.printf("Received \"%s\"\n", message);
+        if (debug)
+            System.out.printf("Received \"%s\"\n", message);
         return message;
     }
 

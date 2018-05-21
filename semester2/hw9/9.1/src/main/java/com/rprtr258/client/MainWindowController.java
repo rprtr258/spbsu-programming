@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-// TODO: stop Socket thread on close
 // TODO: restart button work
 public class MainWindowController {
     public Button button00;
@@ -28,7 +27,6 @@ public class MainWindowController {
     private Button buttons[][] = null;
     private boolean isWaitingForOpponentTurn = false;
     private Client thisClient = null;
-    private Thread serverReadThread = null;
 
     public void initialize() {
         buttons = new Button[][]{{button00, button01, button02},

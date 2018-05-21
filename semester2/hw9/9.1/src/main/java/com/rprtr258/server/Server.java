@@ -18,7 +18,7 @@ public class Server {
             TicTacToe game = new TicTacToe();
             ServerWorker serverWorker = new ServerWorker();
             for (int i = 0; i < MAX_PLAYERS; i++) {
-                SocketWrapper playerSocket = new SocketWrapper(socket.accept());
+                SocketWrapper playerSocket = new SocketWrapper(socket.accept(), true);
                 if ("connect".equals(playerSocket.readMessage())) {
                     String playerName = playerNames[i];
                     playerSocket.sendMessage("player " + playerName);
