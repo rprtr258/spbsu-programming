@@ -54,7 +54,7 @@ public class Client {
         }
     }
 
-    // TODO: divide waiting game result and waiting opponent turn
+    // TODO: divide waiting game result and waiting opponent turn(?)
     public void waitGameChanges(BiConsumer<Integer, Integer> onOpponentTurn, Consumer<String> onGameEnd) {
         new Thread(new Task<Void>() {
             @Override
@@ -93,7 +93,7 @@ public class Client {
                 }
                 return null;
             }
-        }).run();
+        }).start();
     }
 
     private void waitConnected(Consumer<String> onConnect) throws IOException {
