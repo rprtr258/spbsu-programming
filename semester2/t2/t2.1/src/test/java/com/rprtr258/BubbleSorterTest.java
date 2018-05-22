@@ -9,17 +9,17 @@ import static org.junit.Assert.*;
 public class BubbleSorterTest {
     @Test
     public void intSortTest() {
-        testType(Arrays.asList(4, 1, 3, 2), Integer::compare);
+        testType(Arrays.asList(1, 4, 2, 1, 3, 2, 1), Integer::compare);
     }
 
     @Test
     public void stringSortTest() {
-        testType(Arrays.asList("", "abc", "fasdf", "235(&*%^", "❦ ❧ ☙ ❥ ❣ ♡ ♥ ❤ ➳ ღ💟💘💝🎔❦💓💔💕💖💗💙💚💛💜💞🖤🧡♡♥❤💑❣❧☙❥🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂼🂽🂾😍😻⼼⺖⺗心忄痵怆愴肓衷懑"), (s1, s2) -> (s1.compareTo(s2)));
+        testType(Arrays.asList("abc", "", "abc", "fasdf", "235(&*%^", "❦ ❧ ☙ ❥ ❣ ♡ ♥ ❤ ➳ ღ💟💘💝🎔❦💓💔💕💖💗💙💚💛💜💞🖤🧡♡♥❤💑❣❧☙❥🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂼🂽🂾😍😻⼼⺖⺗心忄痵怆愴肓衷懑"), (s1, s2) -> (s1.compareTo(s2)));
     }
 
     @Test
     public void myVectorSortTest() {
-        List<Vector> list = Arrays.asList(new Vector(), new Vector(new int[]{1, 2, 3}), new Vector(new int[]{1, 2}));
+        List<Vector> list = Arrays.asList(new Vector(), new Vector(new int[]{1, 2, 3}), new Vector(), new Vector(new int[]{1, 2}));
         testType(list, this::compareVectors);
     }
 
