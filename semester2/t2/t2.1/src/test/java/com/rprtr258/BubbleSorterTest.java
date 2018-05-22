@@ -13,6 +13,11 @@ public class BubbleSorterTest {
     }
 
     @Test
+    public void intReversedSortTest() {
+        testType(Arrays.asList(1, 4, 2, 1, 3, 2, 1), Comparator.comparingInt(x -> -x));
+    }
+
+    @Test
     public void charSortTest() {
         testType(Arrays.asList('1', '4', '2', '1', '3', '2', '1'), Character::compare);
     }
