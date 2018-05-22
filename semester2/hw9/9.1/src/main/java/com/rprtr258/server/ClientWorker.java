@@ -54,7 +54,6 @@ public class ClientWorker implements Runnable {
                 }
             }
         } catch (IOException e) {
-            // TODO: stop server in case of client disconnect
             serverState = ServerState.STOPPED;
             System.out.println("Client " + clientName + " disconnected");
         }
