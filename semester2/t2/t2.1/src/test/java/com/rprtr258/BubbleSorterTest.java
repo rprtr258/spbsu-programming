@@ -13,6 +13,11 @@ public class BubbleSorterTest {
     }
 
     @Test
+    public void charSortTest() {
+        testType(Arrays.asList('1', '4', '2', '1', '3', '2', '1'), Character::compare);
+    }
+
+    @Test
     public void stringSortTest() {
         testType(Arrays.asList("abc", "", "abc", "fasdf", "235(&*%^", "❦ ❧ ☙ ❥ ❣ ♡ ♥ ❤ ➳ ღ💟💘💝🎔❦💓💔💕💖💗💙💚💛💜💞🖤🧡♡♥❤💑❣❧☙❥🂱🂲🂳🂴🂵🂶🂷🂸🂹🂺🂻🂼🂽🂾😍😻⼼⺖⺗心忄痵怆愴肓衷懑"), (s1, s2) -> (s1.compareTo(s2)));
     }
