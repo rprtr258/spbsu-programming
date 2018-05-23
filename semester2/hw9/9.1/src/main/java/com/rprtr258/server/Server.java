@@ -19,6 +19,7 @@ public class Server {
             ServerState serverState = ServerState.RUNNING;
             for (int i = 0; i < MAX_PLAYERS; i++) {
                 SocketWrapper playerSocket = new SocketWrapper(socket.accept(), true);
+                System.out.println("player " + i + " connected");
                 if ("connect".equals(playerSocket.readMessage())) {
                     String playerName = playerNames[i];
                     playerSocket.sendMessage("player " + playerName);
