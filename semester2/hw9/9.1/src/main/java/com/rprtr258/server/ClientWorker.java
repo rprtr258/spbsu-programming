@@ -39,7 +39,7 @@ public class ClientWorker implements Runnable {
      */
     @Override
     public void run() {
-        serverWorker.sendTo(clientName, "connected");
+        serverWorker.sendTo(socketId, "connected");
         try {
             while (serverState == ServerState.RUNNING) {
                 String message = serverWorker.readMessage(socketId);
@@ -63,7 +63,7 @@ public class ClientWorker implements Runnable {
                 } else if ("restart".equals(message)) {
                     clientName = ("X".equals(clientName) ? "O" : "X");
                     serverWorker.queueTo(socketId, "player " + clientName);
-                    serverWorker.connectConfirm(clientName);
+                    serverWorker.connectConfirm(socketId);
                     game.restart();
                 }
             }
