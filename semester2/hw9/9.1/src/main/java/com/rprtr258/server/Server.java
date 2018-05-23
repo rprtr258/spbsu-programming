@@ -6,10 +6,18 @@ import com.rprtr258.network.SocketWrapper;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+/**
+ * Server main class.
+ */
 public class Server {
     private static final int MAX_PLAYERS = 2;
     private static final String playerNames[] = {"X", "O"};
 
+    /**
+     * Entry point. Processes clients and when all connected starts the game.
+     *
+     * @param args ignored.
+     */
     public static void main(String[] args) {
         try (ServerSocket socket = new ServerSocket(12345)) {
             System.out.println("Server run on port 12345");

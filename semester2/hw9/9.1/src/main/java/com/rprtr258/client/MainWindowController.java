@@ -23,6 +23,9 @@ public class MainWindowController {
     private boolean isWaitingForOpponentTurn = false;
     private Client thisClient = null;
 
+    /**
+     * Initializes game window elements with init state and listeners.
+     */
     public void initialize() {
         buttons = new Button[][]{{button00, button01, button02},
                                  {button10, button11, button12},
@@ -40,6 +43,12 @@ public class MainWindowController {
         restartButton.setDisable(true);
     }
 
+    /**
+     * Configures controller with required objects.
+     *
+     * @param playerName player name(mark).
+     * @param client connected client.
+     */
     public void configure(String playerName, Client client) {
         this.thisClient = client;
         thisClient.configure(this::onLostServerConnection, this::onDisconnect);
@@ -53,32 +62,61 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Makes turn in game.
+     *
+     * @param row row coordinate of cell.
+     * @param column column coordinate of cell.
+     */
     private void makeMove(int row, int column) {
         if (isWaitingForOpponentTurn)
             return;
         thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onGameContinuing, this::onGameEnd);
     }
 
+    /**
+     * Called when turn was made successfully.
+     *
+     * @param row row coordinate of cell.
+     * @param column column coordinate of cell.
+     */
     private void onSuccessTurn(int row, int column) {
         setButtonText(row, column, mark);
     }
 
+    /**
+     * Called when game is continuing after turn.
+     */
     private void onGameContinuing() {
         onTurnWaiting();
     }
 
+    /**
+     * Called when player has to wait opponent turn.
+     */
     private void onTurnWaiting() {
         gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
         isWaitingForOpponentTurn = true;
         thisClient.waitGameChanges(this::onOpponentTurn, this::onGameEnd);
     }
 
+    /**
+     * Called when opponent turn was made.
+     *
+     * @param row row coordinate of cell.
+     * @param column column coordinate of cell.
+     */
     private void onOpponentTurn(int row, int column) {
         isWaitingForOpponentTurn = false;
         setButtonText(row, column, "X".equals(mark) ? "O" : "X");
         gameStatusLabel.setText("Waiting for your turn.");
     }
 
+    /**
+     * Called when game ended.
+     *
+     * @param winner game winner.
+     */
     private void onGameEnd(String winner) {
         if ("draw".equals(winner)) {
             gameStatusLabel.setText("Draw!");
@@ -90,6 +128,9 @@ public class MainWindowController {
         restartButton.setDisable(false);
     }
 
+    /**
+     * Called when requested restart.
+     */
     private void onRestartRequest() {
         for (Button[] buttonsRow : buttons) {
             for (Button button : buttonsRow) {
@@ -103,6 +144,11 @@ public class MainWindowController {
         thisClient.restart(this::onRestart);
     }
 
+    /**
+     * Called when game restarted.
+     *
+     * @param playerName new player name(mark) given by server.
+     */
     private void onRestart(String playerName) {
         mark = playerName;
         playerNameLabel.setText("You are player " + playerName);
@@ -114,21 +160,39 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Called when opponent disconnected.
+     */
     private void onDisconnect() {
         gameStatusLabel.setText("Opponent has disconnected");
         setButtonsDisable(true);
         restartButton.setDisable(true);
     }
 
-    private void setButtonText(int i, int j, String s) {
-        buttons[i][j].setText(s);
-    }
-
+    /**
+     * Called when lost connection to server.
+     */
     private void onLostServerConnection() {
         setButtonsDisable(true);
         gameStatusLabel.setText("Lost connection to server :C");
     }
 
+    /**
+     * Sets button text.
+     *
+     * @param i row coordinate of button.
+     * @param j column coordinate of button.
+     * @param s string to set in button.
+     */
+    private void setButtonText(int i, int j, String s) {
+        buttons[i][j].setText(s);
+    }
+
+    /**
+     * Sets disable status on game buttons.
+     *
+     * @param value new disable status.
+     */
     private void setButtonsDisable(boolean value) {
         for (Button[] buttonsRow : buttons)
             for (Button button : buttonsRow)

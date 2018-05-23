@@ -6,6 +6,9 @@ import com.rprtr258.network.MessagesProcessor;
 
 import java.io.IOException;
 
+/**
+ * Client worker runnable which talks to clients during game.
+ */
 public class ClientWorker implements Runnable {
     private String clientName = null;
     private String opponentSocketId = null;
@@ -14,6 +17,14 @@ public class ClientWorker implements Runnable {
     private ServerWorker serverWorker = null;
     private ServerState serverState = ServerState.RUNNING;
 
+    /**
+     * Constructs client worker.
+     *
+     * @param playerName player mark.
+     * @param game game object reference.
+     * @param serverWorker server worker.
+     * @param serverState server state reference.
+     */
     public ClientWorker(String playerName, TicTacToe game, ServerWorker serverWorker, ServerState serverState) {
         this.clientName = playerName;
         this.socketId = playerName;
@@ -23,6 +34,9 @@ public class ClientWorker implements Runnable {
         this.serverState = serverState;
     }
 
+    /**
+     * Run method.
+     */
     @Override
     public void run() {
         serverWorker.sendTo(clientName, "connected");

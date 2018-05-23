@@ -50,11 +50,14 @@ public class TicTacToe {
         return (currentPlayer == ZERO_PLAYER ? GameState.ZERO_TURN : GameState.CROSS_TURN);
     }
 
-    @Override
-    public String toString() {
-        return String.valueOf(field) + getState();
-    }
-
+    /**
+     * Checks if given player can make turn to given position.
+     *
+     * @param playerName player mark.
+     * @param row row coordinate.
+     * @param column column coordinate.
+     * @return true if player can perform that turn.
+     */
     public boolean canMakeTurn(String playerName, int row, int column) {
         if (ended())
             return false;
@@ -74,5 +77,15 @@ public class TicTacToe {
     private boolean ended() {
         GameState gameState = getState();
         return gameState == GameState.CROSS_WIN || gameState == GameState.ZERO_WIN || gameState == GameState.DRAW;
+    }
+
+    /**
+     * Represents game as string.
+     *
+     * @return game string representation.
+     */
+    @Override
+    public String toString() {
+        return String.valueOf(field) + getState();
     }
 }

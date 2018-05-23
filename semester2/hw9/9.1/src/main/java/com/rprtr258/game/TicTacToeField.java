@@ -2,25 +2,48 @@ package com.rprtr258.game;
 
 import static java.lang.Math.abs;
 
+/**
+ * Class that holds Tic-Tac-Toe field.
+ */
 public class TicTacToeField {
     private final int EMPTY_MARK = 0;
     private final int[][] field = new int[3][3];
 
+    /**
+     * Constructs empty field.
+     */
     public TicTacToeField() {
         clear();
     }
 
+    /**
+     * Clears field.
+     */
     public void clear() {
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
                 field[i][j] = EMPTY_MARK;
     }
 
+    /**
+     * Return cell state.
+     *
+     * @param i row coordinate of cell.
+     * @param j column coordinate of cell.
+     * @return state of that cell.
+     */
     public CellState getCellState(int i, int j) {
         int cell = field[i][j];
         return (cell == 0 ? CellState.EMPTY_CELL : (cell == 1 ? CellState.CROSS_CELL : CellState.ZERO_CELL));
     }
 
+    /**
+     * Sets new state to given cell.
+     *
+     * @param i row coordinate of cell.
+     * @param j column coordinate of cell.
+     * @param value value to set.
+     */
     public void setCellState(int i, int j, CellState value) {
         switch (value) {
             case ZERO_CELL: {
@@ -40,19 +63,11 @@ public class TicTacToeField {
         }
     }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                int cell = field[i][j];
-                result.append(cell == 0 ? "_" : (cell == 1 ? "X" : "O")).append(" ");
-            }
-            result.append("\n");
-        }
-        return result.toString();
-    }
-
+    /**
+     * Counts how many empty cells left.
+     *
+     * @return empty cells count.
+     */
     public int countEmptyCells() {
         int result = 0;
         for (int[] row : field)
@@ -62,6 +77,11 @@ public class TicTacToeField {
         return result;
     }
 
+    /**
+     * Max(by absolute value) sum of cells in a line which is used to determine winner.
+     *
+     * @return max line in sum.
+     */
     public int getMaxLineSum() {
         int result = 0;
         int maxRowSum = getMaxRowSum();
@@ -74,6 +94,24 @@ public class TicTacToeField {
         if (abs(maxDiagonalSum) > abs(result))
             result = maxDiagonalSum;
         return result;
+    }
+
+    /**
+     * Returns string representation of field.
+     *
+     * @return field string representation.
+     */
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int cell = field[i][j];
+                result.append(cell == 0 ? "_" : (cell == 1 ? "X" : "O")).append(" ");
+            }
+            result.append("\n");
+        }
+        return result.toString();
     }
 
     private int getMaxRowSum() {

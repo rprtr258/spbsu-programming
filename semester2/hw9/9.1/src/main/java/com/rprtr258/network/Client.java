@@ -8,16 +8,33 @@ import java.net.Socket;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+/**
+ * Class that can be used to make application connecting Tic-Tac-Toe server and perform actions.
+ */
 public class Client {
     private SocketWrapper socketWrapper = null;
     private Runnable onLostConnection = null;
     private Runnable onDisconnect;
 
+    /**
+     * Configures reactions to events.
+     *
+     * @param onLostConnection reaction to lost server connection event.
+     * @param onDisconnect reaction to client disconnect event.
+     */
     public void configure(Runnable onLostConnection, Runnable onDisconnect) {
         this.onLostConnection = () -> Platform.runLater(onLostConnection);
         this.onDisconnect = () -> Platform.runLater(onDisconnect);
     }
 
+    /**
+     * Tries connect given server.
+     *
+     * @param host server host.
+     * @param port server port.
+     * @param onConnect reaction to connect event.
+     * @param onFailConnection reaction to fail connection event.
+     */
     public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onFailConnection) {
         new Thread(new Task<Void>() {
             @Override
@@ -35,6 +52,15 @@ public class Client {
         }).start();
     }
 
+    /**
+     * Makes turn in given position.
+     *
+     * @param row row coordinate of cell.
+     * @param column column coordinate of cell.
+     * @param onSuccess reaction to success turn.
+     * @param onGameContinue reaction to game continuing.
+     * @param onGameEnd reaction to game end.
+     */
     public void makeMove(int row, int column, Runnable onSuccess, Runnable onGameContinue, Consumer<String> onGameEnd) {
         String turnRequest = MessagesProcessor.getTurnRequest(row, column);
         socketWrapper.sendMessage(turnRequest);
@@ -59,6 +85,12 @@ public class Client {
         }
     }
 
+    /**
+     * Waits for opponent turn.
+     *
+     * @param onOpponentTurn reaction to opponent turn.
+     * @param onGameEnd reaction to game end.
+     */
     public void waitGameChanges(BiConsumer<Integer, Integer> onOpponentTurn, Consumer<String> onGameEnd) {
         new Thread(new Task<Void>() {
             @Override
@@ -88,6 +120,11 @@ public class Client {
         }).start();
     }
 
+    /**
+     * Restarts game.
+     *
+     * @param onGameBegin reaction to new game begin.
+     */
     public void restart(Consumer<String> onGameBegin) {
         new Thread(new Task<Void>() {
             @Override
