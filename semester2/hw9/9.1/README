@@ -1,0 +1,9 @@
+To run server use command:
+~~~
+gradle runServer
+~~~
+
+To run client use:
+~~~
+gradle runClient
+~~~

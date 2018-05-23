@@ -10,7 +10,6 @@ public class SocketWrapper {
 
     public SocketWrapper(Socket socket) {
         this(socket, false);
-        debug = true;
     }
 
     public SocketWrapper(Socket socket, boolean debug) {

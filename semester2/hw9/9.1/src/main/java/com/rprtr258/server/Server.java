@@ -11,7 +11,6 @@ public class Server {
     private static final String playerNames[] = {"X", "O"};
 
     public static void main(String[] args) {
-        // TODO: console run
         try (ServerSocket socket = new ServerSocket(12345)) {
             System.out.println("Server run on port 12345");
             Thread playerThreads[] = new Thread[MAX_PLAYERS];
