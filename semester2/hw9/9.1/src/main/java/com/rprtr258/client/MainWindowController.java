@@ -42,7 +42,7 @@ public class MainWindowController {
 
     public void configure(String playerName, Client client) {
         this.thisClient = client;
-        thisClient.configure(e -> onLostServerConnection(), this::onDisconnect);
+        thisClient.configure(this::onLostServerConnection, this::onDisconnect);
         mark = playerName;
         playerNameLabel.setText("You are player " + playerName);
         setButtonsDisable(false);
@@ -65,6 +65,29 @@ public class MainWindowController {
 
     private void onGameContinuing() {
         onTurnWaiting();
+    }
+
+    private void onTurnWaiting() {
+        gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
+        isWaitingForOpponentTurn = true;
+        thisClient.waitGameChanges(this::onOpponentTurn, this::onGameEnd);
+    }
+
+    private void onOpponentTurn(int row, int column) {
+        isWaitingForOpponentTurn = false;
+        setButtonText(row, column, "X".equals(mark) ? "O" : "X");
+        gameStatusLabel.setText("Waiting for your turn.");
+    }
+
+    private void onGameEnd(String winner) {
+        if ("draw".equals(winner)) {
+            gameStatusLabel.setText("Draw!");
+        } else if (mark.equals(winner)) {
+            gameStatusLabel.setText("You won!");
+        } else {
+            gameStatusLabel.setText("You lost!");
+        }
+        restartButton.setDisable(false);
     }
 
     private void onRestartRequest() {
@@ -91,33 +114,10 @@ public class MainWindowController {
         }
     }
 
-    private void onOpponentTurn(int row, int column) {
-        isWaitingForOpponentTurn = false;
-        setButtonText(row, column, "X".equals(mark) ? "O" : "X");
-        gameStatusLabel.setText("Waiting for your turn.");
-    }
-
-    private void onTurnWaiting() {
-        gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
-        isWaitingForOpponentTurn = true;
-        thisClient.waitGameChanges(this::onOpponentTurn, this::onGameEnd);
-    }
-
     private void onDisconnect() {
         gameStatusLabel.setText("Opponent has disconnected");
         setButtonsDisable(true);
         restartButton.setDisable(true);
-    }
-
-    private void onGameEnd(String winner) {
-        if ("draw".equals(winner)) {
-            gameStatusLabel.setText("Draw!");
-        } else if (mark.equals(winner)) {
-            gameStatusLabel.setText("You won!");
-        } else {
-            gameStatusLabel.setText("You lost!");
-        }
-        restartButton.setDisable(false);
     }
 
     private void setButtonText(int i, int j, String s) {

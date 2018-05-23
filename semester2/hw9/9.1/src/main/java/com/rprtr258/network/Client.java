@@ -10,11 +10,11 @@ import java.util.function.Consumer;
 
 public class Client {
     private SocketWrapper socketWrapper = null;
-    private Consumer<Exception> onLostConnection = null;
+    private Runnable onLostConnection = null;
     private Runnable onDisconnect;
 
-    public void configure(Consumer<Exception> onLostConnection, Runnable onDisconnect) {
-        this.onLostConnection = (e) -> Platform.runLater(() -> onLostConnection.accept(e));
+    public void configure(Runnable onLostConnection, Runnable onDisconnect) {
+        this.onLostConnection = () -> Platform.runLater(onLostConnection);
         this.onDisconnect = () -> Platform.runLater(onDisconnect);
     }
 
@@ -35,7 +35,6 @@ public class Client {
         }).start();
     }
 
-    // TODO: message reading and proceeding through polymorphism to handle "disconnect" everywhere(?)
     public void makeMove(int row, int column, Runnable onSuccess, Runnable onGameContinue, Consumer<String> onGameEnd) {
         String turnRequest = MessagesProcessor.getTurnRequest(row, column);
         socketWrapper.sendMessage(turnRequest);
@@ -56,7 +55,7 @@ public class Client {
                 Platform.runLater(onGameContinue);
             }
         } catch (IOException e) {
-            onLostConnection.accept(e);
+            onLostConnection.run();
         }
     }
 
@@ -82,7 +81,7 @@ public class Client {
                         Platform.runLater(() -> onGameEnd.accept("draw"));
                     }
                 } catch (IOException e) {
-                    onLostConnection.accept(e);
+                    onLostConnection.run();
                 }
                 return null;
             }
@@ -98,7 +97,7 @@ public class Client {
                 try {
                     waitConnected(onGameBegin);
                 } catch (IOException e) {
-                    onLostConnection.accept(e);
+                    onLostConnection.run();
                 }
                 return null;
             }
