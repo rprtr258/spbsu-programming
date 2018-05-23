@@ -42,7 +42,7 @@ public class MainWindowController {
 
     public void configure(String playerName, Client client) {
         this.thisClient = client;
-        thisClient.configure(this::onLostServerConnection, this::onDisconnect);
+        thisClient.configure(e -> onLostServerConnection(), this::onDisconnect);
         mark = playerName;
         playerNameLabel.setText("You are player " + playerName);
         setButtonsDisable(false);
@@ -124,7 +124,7 @@ public class MainWindowController {
         buttons[i][j].setText(s);
     }
 
-    private void onLostServerConnection(Exception e) {
+    private void onLostServerConnection() {
         setButtonsDisable(true);
         gameStatusLabel.setText("Lost connection to server :C");
     }
