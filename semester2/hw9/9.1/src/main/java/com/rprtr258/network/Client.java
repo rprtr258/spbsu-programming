@@ -141,6 +141,14 @@ public class Client {
         }).start();
     }
 
+    /**
+     * Disconnects client form server.
+     */
+    public void disconnect() {
+        socketWrapper.sendMessage("disconnect");
+        socketWrapper.disconnect();
+    }
+
     private void waitConnected(Consumer<String> onConnect) throws IOException {
         String response = socketWrapper.readMessage();
         String playerName = response.substring(response.indexOf(' ') + 1);
@@ -149,14 +157,5 @@ public class Client {
             connectedMessage = socketWrapper.readMessage();
         }
         Platform.runLater(() -> onConnect.accept(playerName));
-    }
-
-    public void disconnect() {
-        socketWrapper.sendMessage("disconnect");
-        socketWrapper.disconnect();
-    }
-
-    public SocketWrapper getSocket() {
-        return socketWrapper;
     }
 }
