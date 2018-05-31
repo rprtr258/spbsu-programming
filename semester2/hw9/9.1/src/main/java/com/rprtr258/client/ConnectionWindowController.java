@@ -1,6 +1,7 @@
 package com.rprtr258.client;
 
 import com.rprtr258.network.Client;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -55,11 +56,11 @@ public class ConnectionWindowController {
      */
     private void tryConnect(String host, int port) {
         Client client = new Client();
-        client.configure(() -> statusLabel.setText("Lost connection to server"), () -> {});
-        client.tryConnectServer(host, port, (playerName) -> launchMainWindow(playerName, client), () -> {
+        client.configure(() -> Platform.runLater(() -> statusLabel.setText("Lost connection to server")), () -> {});
+        client.tryConnectServer(host, port, (playerName) -> Platform.runLater(() -> launchMainWindow(playerName, client)), () -> Platform.runLater(() -> {
             statusLabel.setText("Failed to connect");
             setElementsDisable(false);
-        });
+        }));
     }
 
     /**
@@ -78,7 +79,7 @@ public class ConnectionWindowController {
             thisStage.setScene(scene);
             thisStage.setTitle("Tic-Tac-Toe");
             thisStage.setResizable(false);
-            thisStage.setOnCloseRequest((event) -> client.disconnect());
+            thisStage.setOnCloseRequest((event) -> Platform.runLater(client::disconnect));
             thisStage.show();
         } catch (IOException e) {
             e.printStackTrace();

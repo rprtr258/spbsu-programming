@@ -1,8 +1,5 @@
 package com.rprtr258.network;
 
-import javafx.application.Platform;
-import javafx.concurrent.Task;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.function.BiConsumer;
@@ -23,8 +20,8 @@ public class Client {
      * @param onDisconnect reaction to client disconnect event.
      */
     public void configure(Runnable onLostConnection, Runnable onDisconnect) {
-        this.onLostConnection = () -> Platform.runLater(onLostConnection);
-        this.onDisconnect = () -> Platform.runLater(onDisconnect);
+        this.onLostConnection = onLostConnection;
+        this.onDisconnect = onDisconnect;
     }
 
     /**
@@ -36,18 +33,15 @@ public class Client {
      * @param onFailConnection reaction to fail connection event.
      */
     public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onFailConnection) {
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() {
-                String connectRequest = MessagesProcessor.getConnectRequest();
-                try {
-                    socketWrapper = new SocketWrapper(new Socket(host, port));
-                    socketWrapper.sendMessage(connectRequest);
-                    waitConnected(onConnect);
-                } catch (IOException e) {
-                    Platform.runLater(onFailConnection);
-                }
-                return null;
+        new Thread(() -> {
+            String connectRequest = MessagesProcessor.getConnectRequest();
+            try {
+                socketWrapper = new SocketWrapper(new Socket(host, port));
+                socketWrapper.sendMessage(connectRequest);
+                waitConnected(onConnect);
+            } catch (IOException e) {
+                e.printStackTrace();
+                onFailConnection.run();
             }
         }).start();
     }
@@ -68,17 +62,19 @@ public class Client {
             String response = socketWrapper.readMessage();
             if ("disconnect".equals(response)) {
                 onDisconnect.run();
+                return;
             }
             if ("success".equals(response)) {
-                Platform.runLater(onSuccess);
+                onSuccess.run();
             }
             String gameState = socketWrapper.readMessage();
             if (gameState.startsWith("win")) {
-                Platform.runLater(() -> onGameEnd.accept(gameState.substring(gameState.indexOf(' ') + 1)));
+                String winner = gameState.substring(gameState.indexOf(' ') + 1);
+                onGameEnd.accept(winner);
             } else if ("draw".equals(gameState)) {
-                Platform.runLater(() -> onGameEnd.accept("draw"));
+                onGameEnd.accept("draw");
             } else {
-                Platform.runLater(onGameContinue);
+                onGameContinue.run();
             }
         } catch (IOException e) {
             onLostConnection.run();
@@ -92,30 +88,26 @@ public class Client {
      * @param onGameEnd reaction to game end.
      */
     public void waitGameChanges(BiConsumer<Integer, Integer> onOpponentTurn, Consumer<String> onGameEnd) {
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() {
-                try {
-                    String opponentTurn = socketWrapper.readMessage();
-                    if ("disconnect echo".equals(opponentTurn)) {
-                        onDisconnect.run();
-                        return null;
-                    }
-                    if (opponentTurn.matches(MessagesProcessor.OPPONENT_TURN_REGEXP)) {
-                        int i = MessagesProcessor.parseRow(opponentTurn);
-                        int j = MessagesProcessor.parseColumn(opponentTurn);
-                        Platform.runLater(() -> onOpponentTurn.accept(i, j));
-                    }
-                    String gameState = socketWrapper.readMessage();
-                    if (gameState.startsWith("win")) {
-                        Platform.runLater(() -> onGameEnd.accept(gameState.substring(gameState.indexOf(' ') + 1)));
-                    } else if ("draw".equals(gameState)) {
-                        Platform.runLater(() -> onGameEnd.accept("draw"));
-                    }
-                } catch (IOException e) {
-                    onLostConnection.run();
+        new Thread(() -> {
+            try {
+                String opponentTurn = socketWrapper.readMessage();
+                if ("disconnect echo".equals(opponentTurn)) {
+                    onDisconnect.run();
+                    return;
                 }
-                return null;
+                if (opponentTurn.matches(MessagesProcessor.OPPONENT_TURN_REGEXP)) {
+                    int i = MessagesProcessor.parseRow(opponentTurn);
+                    int j = MessagesProcessor.parseColumn(opponentTurn);
+                    onOpponentTurn.accept(i, j);
+                }
+                String gameState = socketWrapper.readMessage();
+                if (gameState.startsWith("win")) {
+                    onGameEnd.accept(gameState.substring(gameState.indexOf(' ') + 1));
+                } else if ("draw".equals(gameState)) {
+                    onGameEnd.accept("draw");
+                }
+            } catch (IOException e) {
+                onLostConnection.run();
             }
         }).start();
     }
@@ -126,17 +118,13 @@ public class Client {
      * @param onGameBegin reaction to new game begin.
      */
     public void restart(Consumer<String> onGameBegin) {
-        new Thread(new Task<Void>() {
-            @Override
-            protected Void call() {
-                String connectRequest = MessagesProcessor.getRestartRequest();
-                socketWrapper.sendMessage(connectRequest);
-                try {
-                    waitConnected(onGameBegin);
-                } catch (IOException e) {
-                    onLostConnection.run();
-                }
-                return null;
+        new Thread(() -> {
+            String restartRequest = MessagesProcessor.getRestartRequest();
+            socketWrapper.sendMessage(restartRequest);
+            try {
+                waitConnected(onGameBegin);
+            } catch (IOException e) {
+                onLostConnection.run();
             }
         }).start();
     }
@@ -153,9 +141,9 @@ public class Client {
         String response = socketWrapper.readMessage();
         String playerName = response.substring(response.indexOf(' ') + 1);
         String connectedMessage = "";
-        while (!"connected".equals(connectedMessage)) {
+        while (!MessagesProcessor.getConnectRequest().equals(connectedMessage)) {
             connectedMessage = socketWrapper.readMessage();
         }
-        Platform.runLater(() -> onConnect.accept(playerName));
+        onConnect.accept(playerName);
     }
 }

@@ -1,6 +1,7 @@
 package com.rprtr258.client;
 
 import com.rprtr258.network.Client;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -51,7 +52,7 @@ public class MainWindowController {
      */
     public void configure(String playerName, Client client) {
         this.thisClient = client;
-        thisClient.configure(this::onLostServerConnection, this::onDisconnect);
+        thisClient.configure(() -> Platform.runLater(this::onLostServerConnection), () -> Platform.runLater(this::onDisconnect));
         mark = playerName;
         playerNameLabel.setText("You are player " + playerName);
         setButtonsDisable(false);
@@ -71,7 +72,9 @@ public class MainWindowController {
     private void makeMove(int row, int column) {
         if (isWaitingForOpponentTurn)
             return;
-        thisClient.makeMove(row, column, () -> onSuccessTurn(row, column), this::onGameContinuing, this::onGameEnd);
+        thisClient.makeMove(row, column, () -> Platform.runLater(() -> onSuccessTurn(row, column)),
+                                         () -> Platform.runLater(this::onGameContinuing),
+                                         (winner) -> Platform.runLater(() -> this.onGameEnd(winner)));
     }
 
     /**
@@ -97,7 +100,8 @@ public class MainWindowController {
     private void onTurnWaiting() {
         gameStatusLabel.setText("Waiting for " + ("X".equals(mark) ? "O" : "X") + "'s turn.");
         isWaitingForOpponentTurn = true;
-        thisClient.waitGameChanges(this::onOpponentTurn, this::onGameEnd);
+        thisClient.waitGameChanges((i, j) -> Platform.runLater(() -> this.onOpponentTurn(i, j)),
+                                   (winner) -> Platform.runLater(() -> this.onGameEnd(winner)));
     }
 
     /**
@@ -141,7 +145,7 @@ public class MainWindowController {
         gameStatusLabel.setText("Waiting for other player to confirm");
         setButtonsDisable(true);
         restartButton.setDisable(true);
-        thisClient.restart(this::onRestart);
+        thisClient.restart((playerName) -> Platform.runLater(() -> this.onRestart(playerName)));
     }
 
     /**

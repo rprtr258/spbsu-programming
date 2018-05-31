@@ -39,11 +39,13 @@ public class ClientWorker implements Runnable {
      */
     @Override
     public void run() {
-        serverWorker.sendTo(socketId, "connected");
+        serverWorker.sendTo(socketId, MessagesProcessor.getConnectRequest());
         try {
             while (serverState == ServerState.RUNNING) {
                 String message = serverWorker.readMessage(socketId);
-                if ("disconnect".equals(message)) {
+                if (message == null) {
+                    throw new IOException("socket disconnected");
+                } else if ("disconnect".equals(message)) {
                     serverWorker.sendAll("disconnect echo");
                     serverState = ServerState.STOPPED;
                 } else if (message.matches(MessagesProcessor.MY_TURN_REGEXP)) {
@@ -53,13 +55,13 @@ public class ClientWorker implements Runnable {
                         game.makeTurn(row, column);
                         serverWorker.sendTo(socketId, "success");
                         serverWorker.sendTo(opponentSocketId, "op" + message);
+                        GameState gameState = game.getState();
+                        String gameStateString = MessagesProcessor.getGameStateMessage(gameState);
+                        serverWorker.sendAll(gameStateString);
+                        //System.out.println(game);
                     } else {
                         serverWorker.sendTo(socketId, "incorrect turn");
                     }
-                    GameState gameState = game.getState();
-                    String gameStateString = MessagesProcessor.getGameStateMessage(gameState);
-                    serverWorker.sendAll(gameStateString);
-                    System.out.println(game);
                 } else if ("restart".equals(message)) {
                     clientName = ("X".equals(clientName) ? "O" : "X");
                     serverWorker.queueTo(socketId, "player " + clientName);
