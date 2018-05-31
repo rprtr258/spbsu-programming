@@ -39,7 +39,7 @@ public class ClientWorker implements Runnable {
      */
     @Override
     public void run() {
-        serverWorker.sendTo(socketId, MessagesProcessor.getConnectRequest());
+        serverWorker.sendTo(socketId, MessagesProcessor.CONNECT_REQUEST);
         try {
             while (serverState == ServerState.RUNNING) {
                 String message = serverWorker.readMessage(socketId);
@@ -58,7 +58,6 @@ public class ClientWorker implements Runnable {
                         GameState gameState = game.getState();
                         String gameStateString = MessagesProcessor.getGameStateMessage(gameState);
                         serverWorker.sendAll(gameStateString);
-                        //System.out.println(game);
                     } else {
                         serverWorker.sendTo(socketId, "incorrect turn");
                     }

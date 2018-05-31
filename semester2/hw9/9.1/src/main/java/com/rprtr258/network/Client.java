@@ -34,7 +34,7 @@ public class Client {
      */
     public void tryConnectServer(String host, int port, Consumer<String> onConnect, Runnable onFailConnection) {
         new Thread(() -> {
-            String connectRequest = MessagesProcessor.getConnectRequest();
+            String connectRequest = MessagesProcessor.CONNECT_REQUEST;
             try {
                 socketWrapper = new SocketWrapper(new Socket(host, port));
                 socketWrapper.sendMessage(connectRequest);
@@ -138,10 +138,13 @@ public class Client {
     }
 
     private void waitConnected(Consumer<String> onConnect) throws IOException {
-        String response = socketWrapper.readMessage();
+        String response = "";
+        while (!response.matches("player [OX]")) {
+            response = socketWrapper.readMessage();
+        }
         String playerName = response.substring(response.indexOf(' ') + 1);
         String connectedMessage = "";
-        while (!MessagesProcessor.getConnectRequest().equals(connectedMessage)) {
+        while (!connectedMessage.equals(MessagesProcessor.CONNECT_REQUEST)) {
             connectedMessage = socketWrapper.readMessage();
         }
         onConnect.accept(playerName);

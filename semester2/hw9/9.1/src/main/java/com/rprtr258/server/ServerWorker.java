@@ -77,7 +77,7 @@ public class ServerWorker {
                 allConfirmed = false;
         if (allConfirmed) {
             messageQueue.forEach(this::sendTo);
-            sendAll(MessagesProcessor.getConnectRequest());
+            sendAll(MessagesProcessor.CONNECT_REQUEST);
             confirmationQueue.clear();
             messageQueue.clear();
         }

@@ -75,6 +75,18 @@ public class NetworkTest {
                 "draw");
     }
 
+    @Test
+    public void restartTest() throws InterruptedException {
+        playGame(new int[][]{{0, 1}, {0, 0},
+                        {0, 2}, {1, 1},
+                        {1, 0}, {1, 2},
+                        {2, 0}, {2, 1},
+                        {2, 2}},
+                "draw");
+        firstClient.restart((s) -> assertEquals("O", s));
+        secondClient.restart((s) -> assertEquals("X", s));
+    }
+
     private void playGame(int turns[][], String expectedResult) throws InterruptedException {
         secondClient.waitGameChanges((r, c) -> {
             assertTrue(turns[0][0] == r);

@@ -14,6 +14,10 @@ public class MessagesProcessor {
      * Regex that checks if message is opponent's turn.
      */
     public final static String OPPONENT_TURN_REGEXP = "opturn [0-2] [0-2]";
+    /**
+     * Connect request message.
+     */
+    public final static String CONNECT_REQUEST = "connect";
 
     /**
      * Makes game state message.
@@ -56,13 +60,6 @@ public class MessagesProcessor {
      */
     public static int parseColumn(String message) {
         return Integer.parseInt(message.substring(message.lastIndexOf(' ') + 1));
-    }
-
-    /**
-     * @return server connect request.
-     */
-    public static String getConnectRequest() {
-        return "connect";
     }
 
     /**
