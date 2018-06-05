@@ -1,9 +1,9 @@
 To run server use command:
 ~~~
-gradle runServer
+./gradlew runServer
 ~~~
 
 To run client use:
 ~~~
-gradle runClient
+./gradlew runClient
 ~~~
