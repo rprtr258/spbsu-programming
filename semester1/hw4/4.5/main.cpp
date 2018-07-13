@@ -17,7 +17,7 @@ int main() {
     int postfixLength = strlen(postfix);
     int result = eval(postfix, postfixLength);
     
-    printf("Result: %d", result);
+    printf("Result: %d\n", result);
     
     return 0;
 }

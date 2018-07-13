@@ -75,6 +75,6 @@ int main() {
     
     int result = eval(expr, exprLength);
     
-    printf("Result: %d", result);
+    printf("Result: %d\n", result);
     return 0;
 }

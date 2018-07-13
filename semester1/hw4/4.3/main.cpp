@@ -19,5 +19,6 @@ int main() {
     for (int i = 0; i < resultLength; i++) {
         printf("%c", result[i]);
     }
+    printf("\n");
     return 0;
 }
