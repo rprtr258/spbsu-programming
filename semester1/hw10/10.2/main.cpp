@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include "string/string.h"
-#include "list/list.h"
+#include "../../utils/string.h"
+#include "../../utils/list.h"
 
 void readString(String *&string) {
     char symbol;
@@ -41,17 +41,17 @@ int main() {
     //printf("PATTERN:\n%s\n", pattern->data);
     
     LinkedList *list = findOccurences(text, pattern);
-    if (list == nullptr || list->size == 0) {
+    if (list == nullptr || listIsEmpty(list)) {
         printf("Found no occurences\n");
-    } else if (list->size == 1) {
-        printf("Found 1 occurence at position %d\n", peekBegin(list));
+    } else if (listSize(list) == 1) {
+        printf("Found 1 occurence at position %d\n", listGetFirst(list));
     } else {
-        printf("Found %d occurences at positions:\n", list->size);
-        printList(list);
+        printf("Found %d occurences at positions:\n", listSize(list));
+        listPrint(list);
         printf("\n");
     }
     
-    deleteList(list);
+    listDelete(list);
     deleteString(text);
     deleteString(pattern);
     return 0;

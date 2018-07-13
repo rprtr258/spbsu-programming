@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "string/string.h"
+#include "../../utils/string.h"
 
 void clearString(String *&string) {
 	if (string != nullptr) {

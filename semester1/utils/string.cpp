@@ -74,16 +74,6 @@ void addChar(String *&str, char const symbol) {
     str->size++;
 }
 
-int lengthString(String *string) {
-    if (string != nullptr)
-        return string->size;
-    return 0;
-}
-
-bool isEmptyString(String *string) {
-    return (lengthString(string) == 0);
-}
-
 LinkedList* findOccurences(String* text, String* pattern) {
     if (isEmptyString(text) || isEmptyString(pattern))
         return nullptr;
@@ -113,20 +103,11 @@ LinkedList* findOccurences(String* text, String* pattern) {
             for (int j = 0; j < pattern->size; j++)
                 found &= (text->data[i + j] == pattern->data[j]);
             if (found)
-                insertAtEnd(result, i);
+                listPushBack(result, i);
         }
     }
     
     return result;
-}
-
-bool areEqual(String *str1, String *str2) {
-    if (isEmptyString(str1) && isEmptyString(str2))
-        return true;
-    if (isEmptyString(str1) || isEmptyString(str2))
-        return false;
-    
-    return (strcmp(str1->data, str2->data) == 0);
 }
 
 char* rawString(String *string) {
@@ -134,13 +115,6 @@ char* rawString(String *string) {
         return nullptr;
     char *newString = new char[string->size + 1];
     strcpy(newString, string->data);
-    return newString;
-}
-
-String* cloneString(String *string) {
-    if (string == nullptr || string->data == nullptr)
-        return nullptr;
-    String *newString = createString(string->data);
     return newString;
 }
 
@@ -160,4 +134,28 @@ void deleteString(String *&string) {
     eraseString(string);
     delete string;
     string = nullptr;
+}
+
+int lengthString(String *string) {
+    if (string != nullptr)
+        return string->size;
+    return 0;
+}
+
+bool isEmptyString(String *string) {
+    return (lengthString(string) == 0);
+}
+
+bool areEqual(String *str1, String *str2) {
+    if (isEmptyString(str1) && isEmptyString(str2))
+        return true;
+    
+    return (strcmp(str1->data, str2->data) == 0);
+}
+
+String* cloneString(String *string) {
+    if (string == nullptr || string->data == nullptr)
+        return nullptr;
+    String *newString = createString(string->data);
+    return newString;
 }

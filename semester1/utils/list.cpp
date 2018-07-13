@@ -10,6 +10,12 @@ LinkedList* createList() {
     return new LinkedList;
 }
 
+void listDelete(LinkedList *list) {
+    while (!listIsEmpty(list))
+        listPopBack(list);
+    delete list;
+}
+
 Node* beforeLastNode(LinkedList *list) {
     Node *temp = list->head;
     while (temp->next->next != nullptr)
@@ -46,6 +52,10 @@ void listPopBack(LinkedList *list) {
     }
 }
 
+int listGetFirst(LinkedList *list) {
+    return list->head->val;
+}
+
 int listGetLast(LinkedList *list) {
     if (list->head->next == nullptr) {
         return list->head->val;
@@ -55,6 +65,16 @@ int listGetLast(LinkedList *list) {
     }
 }
 
+int listSize(LinkedList *list) {
+    int result = 1;
+    Node *temp = list->head;
+    while (temp->next != nullptr) {
+        temp = temp->next;
+        result++;
+    }
+    return result;
+}
+
 bool listIsEmpty(LinkedList *list) {
     return list->head == nullptr;
 }
@@ -62,6 +82,16 @@ bool listIsEmpty(LinkedList *list) {
 void listErase(LinkedList *list) {
     while (list->head != nullptr)
         listPopBack(list);
+}
+
+void listPrint(LinkedList *list) {
+    Node *temp = list->head;
+    while (temp != nullptr) {
+        printf("%d", temp->val);
+        if (temp->next != nullptr)
+            printf(", ");
+        temp = temp->next;
+    }
 }
 
 bool listTestModule() {
