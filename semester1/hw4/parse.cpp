@@ -1,7 +1,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "parse.h"
-#include "../../utils/stack.h"
+#include "../utils/stack.h"
 
 bool isOperator(const char sym) {
     return (sym == '+' || sym == '-' || sym == '*' || sym == '/');
