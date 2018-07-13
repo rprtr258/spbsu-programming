@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "stack.h"
+#include "../../utils/stack.h"
 
 int eval(char *expr, const int exprLength) {
     Stack *stack = createStack();

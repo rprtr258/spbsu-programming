@@ -1,5 +1,5 @@
 #pragma once
-#include "../../utils/list.h"
+#include "list.h"
 
 struct Stack {
     LinkedList *list = nullptr;
