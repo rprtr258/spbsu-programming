@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "tree.h"
+#include "../tree.h"
 
 struct Node {
     Node *l = nullptr;
