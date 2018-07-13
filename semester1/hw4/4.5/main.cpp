@@ -2,7 +2,7 @@
 #include <string.h>
 #include "../parse.h"
 #include "tests.h"
-#include "eval.h"
+#include "../eval.h"
 
 int main() {
 //    if (!test())

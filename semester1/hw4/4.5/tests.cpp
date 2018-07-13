@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../parse.h"
-#include "eval.h"
+#include "../eval.h"
 #include "tests.h"
 
 bool testCalc() {
