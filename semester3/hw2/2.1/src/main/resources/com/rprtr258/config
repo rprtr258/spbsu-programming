@@ -1,0 +1,45 @@
+{
+    type: os
+    name: "Windows"
+    security: 0.3
+}
+{
+    type: os
+    name: "Linux"
+    security: 0.9
+}
+{
+    type: os
+    name: "DOS"
+    security: 0.1
+}
+{
+    type: os
+    name: "RKN"
+    security: 0
+}
+{
+    type: user
+    name: "A"
+    neighbours: ["B"]
+    os: "Windows"
+}
+{
+    type: user
+    name: "B"
+    neighbours: ["A", "C"]
+    os: "Linux"
+}
+{
+    type: user
+    name: "C"
+    neighbours: ["B", "Internet"]
+    os: "DOS"
+}
+{
+    type: user
+    name: "Internet"
+    neighbours: ["C"]
+    os: "RKN"
+    infected: true
+}
