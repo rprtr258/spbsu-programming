@@ -4,8 +4,6 @@
 *.exe
 *.o
 *.bak
-*~
-*.gch
 *.swp
 *.out
 **/nbproject/*
