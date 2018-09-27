@@ -1,0 +1,25 @@
+group 'com.rprtr258'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task runServer(dependsOn: 'classes', type: JavaExec) {
+   main = 'com.rprtr258.server.Server'
+   classpath = sourceSets.main.runtimeClasspath
+}
+
+task runClient(dependsOn: 'classes', type: JavaExec) {
+    main = 'com.rprtr258.client.ConnectionWindow'
+    classpath = sourceSets.main.runtimeClasspath
+}

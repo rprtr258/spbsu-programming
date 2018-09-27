@@ -1,0 +1,9 @@
+To run server use command:
+~~~
+./gradlew runServer
+~~~
+
+To run client use:
+~~~
+./gradlew runClient
+~~~

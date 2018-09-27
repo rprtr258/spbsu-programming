@@ -4,8 +4,6 @@
 *.exe
 *.o
 *.bak
-*~
-*.gch
 *.swp
 *.out
 **/nbproject/*
@@ -26,3 +24,5 @@
 *.iml
 *.iws
 *.xml
+
+**/out/*

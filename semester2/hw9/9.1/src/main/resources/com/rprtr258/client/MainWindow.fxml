@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="320.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.rprtr258.client.MainWindowController">
+   <HBox prefHeight="100.0" prefWidth="200.0">
+      <children>
+         <Label fx:id="playerNameLabel" prefHeight="25.0" prefWidth="200.0" text="You are player F" />
+         <Button fx:id="restartButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Play again" />
+      </children>
+   </HBox>
+   <GridPane gridLinesVisible="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/8.0.121">
+      <children>
+         <Button fx:id="button00" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+         <Button fx:id="button01" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.columnIndex="1" />
+         <Button fx:id="button02" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.columnIndex="2" />
+         <Button fx:id="button10" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.rowIndex="1" />
+         <Button fx:id="button11" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+         <Button fx:id="button12" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+         <Button fx:id="button20" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.rowIndex="2" />
+         <Button fx:id="button21" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <Button fx:id="button22" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+      </children>
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+   </GridPane>
+   <Label fx:id="gameStatusLabel" prefHeight="17.0" prefWidth="307.0" text="Game status" />
+</VBox>
