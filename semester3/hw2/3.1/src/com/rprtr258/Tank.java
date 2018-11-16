@@ -25,7 +25,6 @@ public class Tank extends Entity {
         gc.fillOval(center.getX() - radius / 2, center.getY() - radius / 2, radius, radius);
     }
 
-    @Override
     public Rectangle2D getBoundary() {
         return new Rectangle2D(position.getX() - 10, position.getY() - 10, 20, 20);
     }
