@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import static java.lang.Math.*;
 
 public class Tank extends Entity {
-    private double angle = 0;
+    private DoubleProperty angle = new DoubleProperty();
     private double angleDelta = 0;
 
     public Tank(double x, double y) {
@@ -20,7 +20,7 @@ public class Tank extends Entity {
         Point2D center = position;
         double radius = 30.0;
 
-        Point2D gunEndPoint = position.add(Point2D.ZERO.add(cos(angle), -sin(angle)).multiply(50));
+        Point2D gunEndPoint = position.add(Point2D.ZERO.add(cos(angle.getValue()), -sin(angle.getValue())).multiply(50));
         gc.strokeLine(position.getX(), position.getY(), gunEndPoint.getX(), gunEndPoint.getY());
         gc.fillOval(center.getX() - radius / 2, center.getY() - radius / 2, radius, radius);
     }
@@ -37,16 +37,17 @@ public class Tank extends Entity {
         angleDelta -= 1;
     }
 
-    public double getAngle() {
+    public DoubleProperty getAngle() {
         return angle;
     }
 
+    @Override
     public void update(double time) {
         super.update(time);
         if (angleDelta < 0)
-            angle = max(angle + angleDelta * time, 0);
+            angle.setValue(max(angle.getValue() + angleDelta * time, 0));
         else
-            angle = min(angle + angleDelta * time, PI);
+            angle.setValue(min(angle.getValue() + angleDelta * time, PI));
         angleDelta = 0;
     }
 }

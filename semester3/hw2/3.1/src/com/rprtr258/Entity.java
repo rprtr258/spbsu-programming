@@ -1,10 +1,8 @@
 package com.rprtr258;
 
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
 
-public abstract class Entity {
+public abstract class Entity implements Renderable {
     protected Point2D position;
     private Point2D velocity = Point2D.ZERO;
 
@@ -24,13 +22,6 @@ public abstract class Entity {
         position = position.add(velocity.multiply(time));
         velocity = Point2D.ZERO;
     }
-
-    public boolean intersects(Entity s) {
-        return s.getBoundary().intersects(this.getBoundary());
-    }
-
-    public abstract Rectangle2D getBoundary();
-    public abstract void render(GraphicsContext gc);
 
     @Override
     public String toString() {
