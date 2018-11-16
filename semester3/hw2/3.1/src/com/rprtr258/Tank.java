@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 
 import static java.lang.Math.*;
 
-public class Tank extends Entity implements Renderable {
+public class Tank extends Entity {
     private DoubleProperty angle = new DoubleProperty();
     private double angleDelta = 0;
 

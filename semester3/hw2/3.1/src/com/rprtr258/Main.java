@@ -1,6 +1,7 @@
 package com.rprtr258;
 
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.animation.AnimationTimer;
@@ -8,11 +9,15 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
+import static java.lang.Math.*;
+
 public class Main extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
     private ArrayList<String> input = new ArrayList<>();
-    private List<Renderable> entityList = new ArrayList<>();
+    private List<Renderable> renderList = new ArrayList<>();
+    private List<Entity> updateList = new ArrayList<>();
+    private Queue<Entity> deleteQueue = new ArrayDeque<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -44,8 +49,10 @@ public class Main extends Application {
         tank = new Tank(200, 100);
         GUI gui = new GUI(tank.getAngle());
 
-        entityList.add(gui);
-        entityList.add(tank);
+        renderList.add(gui);
+        renderList.add(tank);
+
+        updateList.add(tank);
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
@@ -65,23 +72,36 @@ public class Main extends Application {
         lastNanoTime[0] = currentNanoTime;
 
         if (tank.getBoundary().getMaxY() <= 380)
-            tank.addVelocity(0, 100);
-        tank.update(elapsedTime);
+            tank.addVelocity(new Point2D(0, 100));
+        for (Entity e : updateList) {
+            e.update(elapsedTime);
+            if (e.isReadyToDie())
+                deleteQueue.add(e);
+        }
+        while (!deleteQueue.isEmpty()) {
+            renderList.remove(deleteQueue.peek());
+            updateList.remove(deleteQueue.remove());
+        }
     }
 
     private void handleInput() {
         if (input.contains("LEFT"))
-            tank.addVelocity(-50,0);
+            tank.addVelocity(new Point2D(-50,0));
         if (input.contains("RIGHT"))
-            tank.addVelocity(50,0);
+            tank.addVelocity(new Point2D(50,0));
         if (input.contains("UP"))
             tank.increaseAngle();
         if (input.contains("DOWN"))
             tank.decreaseAngle();
+        if (input.contains("SPACE")) {
+            Bullet bullet = new Bullet(tank.getPosition(), new Point2D(cos(tank.getAngle().getValue()), -sin(tank.getAngle().getValue())));
+            renderList.add(bullet);
+            updateList.add(bullet);
+        }
     }
 
     private void render(GraphicsContext gc) {
-        for (Renderable e : entityList)
+        for (Renderable e : renderList)
             e.render(gc);
     }
 }

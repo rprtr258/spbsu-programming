@@ -2,12 +2,17 @@ package com.rprtr258;
 
 import javafx.geometry.Point2D;
 
-public class Entity {
+public abstract class Entity implements Renderable {
     protected Point2D position;
-    private Point2D velocity = Point2D.ZERO;
+    protected Point2D velocity = Point2D.ZERO;
+    protected boolean readyToDie = false;
 
     public Entity(double x, double y) {
         setPosition(x, y);
+    }
+
+    public Entity(Point2D pos) {
+        this(pos.getX(), pos.getY());
     }
 
     private void setPosition(double x, double y) {
@@ -18,9 +23,21 @@ public class Entity {
         velocity = velocity.add(x, y);
     }
 
+    public void addVelocity(Point2D delta) {
+        velocity = velocity.add(delta);
+    }
+
     public void update(double time) {
         position = position.add(velocity.multiply(time));
         velocity = Point2D.ZERO;
+    }
+
+    public Point2D getPosition() {
+        return position;
+    }
+
+    public boolean isReadyToDie() {
+        return readyToDie;
     }
 
     @Override
