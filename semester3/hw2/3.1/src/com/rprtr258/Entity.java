@@ -2,9 +2,8 @@ package com.rprtr258;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.canvas.GraphicsContext;
 
-public abstract class Entity {
+public abstract class Entity implements Renderable {
     protected Point2D position;
     private Point2D velocity = Point2D.ZERO;
 
@@ -30,7 +29,6 @@ public abstract class Entity {
     }
 
     public abstract Rectangle2D getBoundary();
-    public abstract void render(GraphicsContext gc);
 
     @Override
     public String toString() {
