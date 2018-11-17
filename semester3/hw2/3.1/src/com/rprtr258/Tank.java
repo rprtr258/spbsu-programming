@@ -3,6 +3,7 @@ package com.rprtr258;
 import javafx.geometry.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 
 import static java.lang.Math.*;
 
@@ -16,18 +17,14 @@ public class Tank extends Entity {
     }
 
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.RED);
-        gc.setStroke(Color.BLACK);
-        Point2D center = position;
-        double radius = 30.0;
-
-        Point2D gunEndPoint = position.add(Point2D.ZERO.add(cos(angle.getValue()), -sin(angle.getValue())).multiply(50));
+        double radius = 20.0;
+        Point2D gunEndPoint = position.add(Point2D.ZERO.add(cos(angle.getValue()), -sin(angle.getValue())).multiply(radius + 2));
+        gc.setStroke(Color.rgb(0, 255, 0));
+        gc.setLineWidth(1);
         gc.strokeLine(position.getX(), position.getY(), gunEndPoint.getX(), gunEndPoint.getY());
-        gc.fillOval(center.getX() - radius / 2, center.getY() - radius / 2, radius, radius);
-    }
 
-    public Rectangle2D getBoundary() {
-        return new Rectangle2D(position.getX() - 10, position.getY() - 10, 20, 20);
+        gc.setFill(Color.rgb(0, 255, 0));
+        gc.fillArc(position.getX() - radius / 2, position.getY() - radius / 2 + 3, radius, radius, 0, 180, ArcType.ROUND);
     }
 
     public void increaseAngle() {

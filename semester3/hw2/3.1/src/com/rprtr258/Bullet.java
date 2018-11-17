@@ -16,7 +16,7 @@ public class Bullet extends Entity {
     @Override
     public void render(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
-        gc.fillOval(position.getX() - 5, position.getY() - 5, 10, 10);
+        gc.fillOval(position.getX() - 1, position.getY() - 1, 2, 2);
     }
 
     @Override
