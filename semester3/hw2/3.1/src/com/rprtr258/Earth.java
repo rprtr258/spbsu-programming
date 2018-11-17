@@ -50,8 +50,8 @@ public class Earth implements Renderable {
                 max(A.getY(), B.getY()) >= intersectionPoint.getY()) {
                 if (res == Point2D.ZERO || position.distance(intersectionPoint) < position.distance(res)) {
                     res = intersectionPoint;
-                    //norm = new Point2D(A.getY() - B.getY(), B.getX() - A.getX());
-                    norm = B.subtract(A);
+                    norm = new Point2D(A.getY() - B.getY(), B.getX() - A.getX());
+                    //norm = B.subtract(A);
                 }
             }
         }

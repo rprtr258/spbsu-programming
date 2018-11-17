@@ -18,7 +18,7 @@ public class Tank extends Entity {
     public Tank(double x, double y, Earth earth) {
         super(x, y);
         earthRef = earth;
-        angle.setValue(28.0 / 180 * PI);
+        angle.setValue(toRadians(28));
     }
 
     public void render(GraphicsContext gc) {
@@ -29,8 +29,16 @@ public class Tank extends Entity {
         gc.strokeLine(position.getX(), position.getY(), gunEndPoint.getX(), gunEndPoint.getY());
 
         gc.setFill(Color.rgb(0, 255, 0));
-        double ang = atan2(dir.getY(), dir.getX());
-        gc.fillArc(position.getX() - radius / 2, position.getY() - radius / 2, radius, radius, -toDegrees(ang), 180, ArcType.ROUND);
+        double ang = atan2(-dir.getX(), dir.getY());
+        Point2D center = position.subtract(radius / 2, radius / 2);
+        gc.fillArc(center.getX(), center.getY(), radius, radius, -toDegrees(ang), 180, ArcType.ROUND);
+
+        gc.setFill(Color.rgb(255, 0, 0));
+        gc.fillOval(position.getX() - 3, position.getY() - 3, 6, 6);
+
+        gc.setStroke(Color.RED);
+        Point2D rstart = center.add(dir.multiply(10));
+        gc.strokeLine(position.getX(), position.getY(), rstart.getX(), rstart.getY());
     }
 
     public void increaseAngle() {
@@ -60,15 +68,8 @@ public class Tank extends Entity {
         angleDelta = 0;
     }
     private void fixPosition() {
-        List<Point2D> res = earthRef.getIntersection(position, Point2D.ZERO.add(0, 1));
-        Point2D intersectionPoint = res.get(0);
-        if (position.distance(intersectionPoint) < 1) {
-            gravityAcc = Point2D.ZERO;
-            permanentVelocity = Point2D.ZERO;
-        }
-        position = intersectionPoint;
+        List<Point2D> res = earthRef.getIntersection(position, dir);
+        position = res.get(0);
         dir = res.get(1);
-        // find norm in intersection point
-        // put tank on norm
     }
 }
