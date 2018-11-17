@@ -45,9 +45,12 @@ public class Tank extends Entity {
     @Override
     public void update(double time) {
         super.update(time);
-        if (position.getY() > 380) {
+        if (position.getY() > 380)
             position = position.add(0, 380 - position.getY());
-        }
+        if (position.getX() < 22)
+            position = position.add(22 - position.getX(), 0);
+        if (position.getX() > 620)
+            position = position.add(620 - position.getX(), 0);
         if (angleDelta < 0)
             angle.setValue(max(angle.getValue() + angleDelta * time, 0));
         else

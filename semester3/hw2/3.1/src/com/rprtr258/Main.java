@@ -49,8 +49,10 @@ public class Main extends Application {
 
         tank = new Tank(200, 100);
         GUI gui = new GUI(tank.getAngle());
+        Earth earth = new Earth();
 
         renderList.add(gui);
+        renderList.add(earth);
         renderList.add(tank);
 
         updateList.add(tank);
@@ -65,8 +67,8 @@ public class Main extends Application {
                 render(gc);
                 gc.setFill(Color.rgb(56, 35, 40));
                 gc.fillRect(0, 50, 21, 480);
-                gc.fillRect(620, 0, 20, 480);
-                gc.fillRect(0, 455, 640, 25);
+                gc.fillRect(621, 0, 20, 480);
+                gc.fillRect(0, 456, 640, 25);
 
                 gc.setStroke(Color.rgb(249, 89, 247));
                 gc.setLineWidth(2);
