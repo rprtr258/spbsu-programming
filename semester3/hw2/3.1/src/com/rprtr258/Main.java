@@ -69,6 +69,7 @@ public class Main extends Application {
                 gc.fillRect(0, 50, 21, 480);
                 gc.fillRect(621, 0, 20, 480);
                 gc.fillRect(0, 456, 640, 25);
+                gc.fillRect(0, 87, 640, 5);
 
                 gc.setStroke(Color.rgb(249, 89, 247));
                 gc.setLineWidth(2);

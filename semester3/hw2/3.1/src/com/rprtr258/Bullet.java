@@ -23,7 +23,7 @@ public class Bullet extends Entity {
     public void update(double time) {
         addVelocity(direction.multiply(100));
         super.update(time);
-        if (position.getX() < 10 || position.getY() < 80 ||
+        if (position.getX() < 10 || position.getY() < 90 ||
             position.getX() > 650 || position.getY() > 500)
             readyToDie = true;
     }

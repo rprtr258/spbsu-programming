@@ -42,11 +42,11 @@ public class Tank extends Entity {
     }
 
     public void increaseAngle() {
-        angleDelta += 1;
+        angleDelta += 0.01;
     }
 
     public void decreaseAngle() {
-        angleDelta -= 1;
+        angleDelta -= 0.01;
     }
 
     public DoubleProperty getAngle() {
@@ -61,15 +61,25 @@ public class Tank extends Entity {
         if (position.getX() > 620)
             position = position.add(620 - position.getX(), 0);
         fixPosition();
-        if (angleDelta < 0)
-            angle.setValue(max(angle.getValue() + angleDelta * time, 0));
-        else
-            angle.setValue(min(angle.getValue() + angleDelta * time, PI));
+        angle.setValue(angle.getValue() + angleDelta);
+        while (angle.getValue() >= 2 * PI)
+            angle.setValue(angle.getValue() - 2 * PI);
+        while (angle.getValue() < 0)
+            angle.setValue(angle.getValue() + 2 * PI);
         angleDelta = 0;
     }
+
     private void fixPosition() {
         List<Point2D> res = earthRef.getIntersection(position, dir);
         position = res.get(0);
-        dir = res.get(1);
+        Point2D newDir = res.get(1);
+        if (newDir.angle(dir) != 0) {
+            double cross = newDir.getX() * dir.getY() - newDir.getY() * dir.getX();
+            if (cross < 0)
+                angleDelta -= toRadians(newDir.angle(dir));
+            else
+                angleDelta += toRadians(newDir.angle(dir));
+            dir = newDir;
+        }
     }
 }
