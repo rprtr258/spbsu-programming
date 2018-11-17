@@ -9,6 +9,7 @@ public class Bullet extends Entity {
     public Bullet(Point2D pos, Point2D dir) {
         super(pos);
         direction = dir.normalize();
+        addAcceleration(new Point2D(0, 30));
     }
 
     @Override
@@ -18,8 +19,7 @@ public class Bullet extends Entity {
 
     @Override
     public void update(double time) {
-        double speed = time * 10000;
-        addVelocity(direction.multiply(speed));
+        addVelocity(direction.multiply(100));
         super.update(time);
         if (position.getX() < 0 || position.getX() > 500)
             readyToDie = true;

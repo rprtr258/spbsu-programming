@@ -12,6 +12,7 @@ public class Tank extends Entity {
 
     public Tank(double x, double y) {
         super(x, y);
+        addAcceleration(new Point2D(0, 100));
     }
 
     public void render(GraphicsContext gc) {
@@ -30,11 +31,11 @@ public class Tank extends Entity {
     }
 
     public void increaseAngle() {
-        angleDelta += 1;
+        angleDelta += 3;
     }
 
     public void decreaseAngle() {
-        angleDelta -= 1;
+        angleDelta -= 3;
     }
 
     public DoubleProperty getAngle() {
@@ -44,6 +45,9 @@ public class Tank extends Entity {
     @Override
     public void update(double time) {
         super.update(time);
+        if (position.getY() > 380) {
+            position = position.add(0, 380 - position.getY());
+        }
         if (angleDelta < 0)
             angle.setValue(max(angle.getValue() + angleDelta * time, 0));
         else

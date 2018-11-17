@@ -71,8 +71,8 @@ public class Main extends Application {
         double elapsedTime = (currentNanoTime - lastNanoTime[0]) / 1e9;
         lastNanoTime[0] = currentNanoTime;
 
-        if (tank.getBoundary().getMaxY() <= 380)
-            tank.addVelocity(new Point2D(0, 100));
+        //if (tank.getBoundary().getMaxY() >= 380)
+        //    tank.addVelocity(new Point2D(0, -100));
         for (Entity e : updateList) {
             e.update(elapsedTime);
             if (e.isReadyToDie())
