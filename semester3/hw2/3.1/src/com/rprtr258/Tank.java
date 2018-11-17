@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static java.lang.Math.*;
 
@@ -36,10 +37,25 @@ public class Tank extends Entity {
     }
 
     public void render(GraphicsContext gc) {
+        gc.setLineWidth(1);
+        gc.setStroke(Color.AQUAMARINE);
+        double X0 = position.getX();
+        double Y0 = position.getY();
+        double alpha = angle.getValue();
+        double t0 = 10.0 / 3 * sin(alpha);
+        double x0 = 100 * cos(alpha) * t0;
+        double y0 = -100 * sin(alpha) * t0 + 15 * t0 * t0;
+        double A = -y0 / (x0 * x0);
+        double B = -2 * A * (X0 + x0);
+        double C = Y0 + A * X0 * (X0 + 2 * x0);
+        for (int i = -999; i < 1000; i++) {
+            gc.strokeLine(X0 - i, A * (X0 - i) * (X0 - i) + B * (X0 - i) + C, X0 - i + 1, A * (X0 - i + 1) * (X0 - i + 1) + B * (X0 - i + 1) + C);
+        }
+
         double radius = 20.0;
         Point2D gunEndPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(radius + 2));
         gc.setStroke(Color.rgb(0, 255, 0));
-        gc.setLineWidth(1);
+        gc.setLineWidth(2);
         gc.strokeLine(position.getX(), position.getY(), gunEndPoint.getX(), gunEndPoint.getY());
 
         gc.setFill(Color.rgb(0, 255, 0));

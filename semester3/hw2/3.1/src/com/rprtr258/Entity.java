@@ -3,7 +3,7 @@ package com.rprtr258;
 import javafx.geometry.Point2D;
 
 public abstract class Entity implements Renderable {
-    protected static Point2D gravityAcc = Point2D.ZERO.add(0, 20);
+    protected static Point2D gravityAcc = Point2D.ZERO.add(0, 30);
     protected Point2D position;
     protected Point2D velocity = Point2D.ZERO;
     protected Point2D acceleration = Point2D.ZERO;

@@ -106,7 +106,7 @@ public class Main extends Application {
             tank.increaseAngle();
         if (input.contains("DOWN"))
             tank.decreaseAngle();
-        if (input.contains("SPACE")) {
+        if (input.contains("ENTER")) {
             Bullet bullet = new Bullet(tank.getPosition(), new Point2D(cos(tank.getAngle().getValue()), -sin(tank.getAngle().getValue())));
             renderList.add(bullet);
             updateList.add(bullet);
