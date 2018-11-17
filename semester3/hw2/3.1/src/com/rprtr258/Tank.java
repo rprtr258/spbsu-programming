@@ -12,7 +12,7 @@ public class Tank extends Entity {
 
     public Tank(double x, double y) {
         super(x, y);
-        addAcceleration(new Point2D(0, 100));
+        addAcceleration(new Point2D(0, 120));
     }
 
     public void render(GraphicsContext gc) {
@@ -31,11 +31,11 @@ public class Tank extends Entity {
     }
 
     public void increaseAngle() {
-        angleDelta += 3;
+        angleDelta += 1;
     }
 
     public void decreaseAngle() {
-        angleDelta -= 3;
+        angleDelta -= 1;
     }
 
     public DoubleProperty getAngle() {

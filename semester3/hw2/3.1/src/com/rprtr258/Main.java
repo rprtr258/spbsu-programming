@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.animation.AnimationTimer;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -62,6 +63,15 @@ public class Main extends Application {
 
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 render(gc);
+                gc.setFill(Color.rgb(56, 35, 40));
+                gc.fillRect(0, 0, 21, 480);
+                gc.fillRect(620, 0, 20, 480);
+                gc.fillRect(0, 455, 640, 25);
+
+                gc.setStroke(Color.rgb(249, 89, 247));
+                gc.setLineWidth(2);
+                gc.strokeRect(16, 87, 610, 374);
+                gc.strokeRect(20, 91, 602, 366);
             }
         }.start();
         theStage.show();
