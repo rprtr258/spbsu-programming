@@ -11,7 +11,7 @@ import static java.lang.Math.*;
 
 public class Tank extends Entity {
     private DoubleProperty angle = new DoubleProperty();
-    private Point2D dir = Point2D.ZERO.add(0, 1);
+    private Point2D dir = new Point2D(0, 1);
     private double angleDelta = 0;
     private Earth earthRef;
 
@@ -21,9 +21,23 @@ public class Tank extends Entity {
         angle.setValue(toRadians(28));
     }
 
+    public void goLeft() {
+        double a = atan2(dir.getX(), dir.getY());
+        Point2D deltaVelocity = new Point2D(-50, 0);
+        deltaVelocity = new Point2D(cos(a) * deltaVelocity.getX() + sin(a) * deltaVelocity.getY(), -sin(a) * deltaVelocity.getX() + cos(a) * deltaVelocity.getY());
+        addVelocity(deltaVelocity);
+    }
+
+    public void goRight() {
+        double a = atan2(dir.getX(), dir.getY());
+        Point2D deltaVelocity = new Point2D(50, 0);
+        deltaVelocity = new Point2D(cos(a) * deltaVelocity.getX() + sin(a) * deltaVelocity.getY(), -sin(a) * deltaVelocity.getX() + cos(a) * deltaVelocity.getY());
+        addVelocity(deltaVelocity);
+    }
+
     public void render(GraphicsContext gc) {
         double radius = 20.0;
-        Point2D gunEndPoint = position.add(Point2D.ZERO.add(cos(angle.getValue()), -sin(angle.getValue())).multiply(radius + 2));
+        Point2D gunEndPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(radius + 2));
         gc.setStroke(Color.rgb(0, 255, 0));
         gc.setLineWidth(1);
         gc.strokeLine(position.getX(), position.getY(), gunEndPoint.getX(), gunEndPoint.getY());

@@ -99,9 +99,9 @@ public class Main extends Application {
 
     private void handleInput() {
         if (input.contains("LEFT"))
-            tank.addVelocity(new Point2D(-50,0));
+            tank.goLeft();
         if (input.contains("RIGHT"))
-            tank.addVelocity(new Point2D(50,0));
+            tank.goRight();
         if (input.contains("UP"))
             tank.increaseAngle();
         if (input.contains("DOWN"))
