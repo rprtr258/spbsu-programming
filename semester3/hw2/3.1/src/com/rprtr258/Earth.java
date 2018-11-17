@@ -6,6 +6,8 @@ import javafx.scene.paint.Color;
 
 import java.util.*;
 
+import static java.lang.Math.*;
+
 public class Earth implements Renderable {
     private List<Point2D> points = new ArrayList<>();
 
@@ -30,5 +32,29 @@ public class Earth implements Renderable {
     public void render(GraphicsContext gc) {
         gc.setFill(Color.rgb(0, 170, 0));
         gc.fillPolygon(points.stream().map(Point2D::getX).mapToDouble(i->i).toArray(), points.stream().map(Point2D::getY).mapToDouble(i->i).toArray(), points.size());
+    }
+
+    public List<Point2D> getIntersection(Point2D position, Point2D dir) {
+        Point2D res = Point2D.ZERO;
+        Point2D norm = Point2D.ZERO;
+        for (int i = 0; i < points.size(); i++) {
+            Point2D A = points.get(i);
+            Point2D B = points.get((i + 1) % points.size());
+            double D = dir.getX() * (A.getY() - B.getY()) - dir.getY() * (A.getX() - B.getX());
+            double Dl = (A.getX() - position.getX()) * (A.getY() - B.getY()) - (A.getY() - position.getY()) * (A.getX() - B.getX());
+            double l = Dl / D;
+            Point2D intersectionPoint = position.add(dir.multiply(l));
+            if (min(A.getX(), B.getX()) <= intersectionPoint.getX() &&
+                min(A.getY(), B.getY()) <= intersectionPoint.getY() &&
+                max(A.getX(), B.getX()) >= intersectionPoint.getX() &&
+                max(A.getY(), B.getY()) >= intersectionPoint.getY()) {
+                if (res == Point2D.ZERO || position.distance(intersectionPoint) < position.distance(res)) {
+                    res = intersectionPoint;
+                    //norm = new Point2D(A.getY() - B.getY(), B.getX() - A.getX());
+                    norm = B.subtract(A);
+                }
+            }
+        }
+        return Arrays.asList(res, norm);
     }
 }

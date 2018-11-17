@@ -47,9 +47,9 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        tank = new Tank(200, 100);
-        GUI gui = new GUI(tank.getAngle());
         Earth earth = new Earth();
+        tank = new Tank(200, 100, earth);
+        GUI gui = new GUI(tank.getAngle());
 
         renderList.add(gui);
         renderList.add(earth);
