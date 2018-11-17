@@ -64,7 +64,7 @@ public class Main extends Application {
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 render(gc);
                 gc.setFill(Color.rgb(56, 35, 40));
-                gc.fillRect(0, 0, 21, 480);
+                gc.fillRect(0, 50, 21, 480);
                 gc.fillRect(620, 0, 20, 480);
                 gc.fillRect(0, 455, 640, 25);
 

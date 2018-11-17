@@ -21,10 +21,10 @@ public class GUI implements Renderable {
 
         gc.setFill(Color.rgb(170, 0, 170));
         String angleText = "Angle: ";
-        gc.fillText(angleText, 30, 23);
+        gc.fillText(angleText, 20, 30);
 
         gc.setFill(Color.rgb(255, 255, 83));
         String angleValueText = String.format("%.0f", (180 * angleProperty.getValue() / Math.PI));
-        gc.fillText(angleValueText, 95, 23);
+        gc.fillText(angleValueText, 85, 30);
     }
 }
