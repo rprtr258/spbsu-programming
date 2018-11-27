@@ -2,6 +2,9 @@ package com.rprtr258;
 
 import javafx.geometry.Point2D;
 
+/**
+ * Abstract entity that can be moved and rendered.
+ */
 public abstract class Entity implements Renderable {
     protected static Point2D gravityAcc = Point2D.ZERO.add(0, 30);
     protected Point2D position;
@@ -18,14 +21,26 @@ public abstract class Entity implements Renderable {
         this(new Point2D(x, y));
     }
 
+    /**
+     * Adds velocity allowing to move entity.
+     * @param delta vector to add
+     */
     public void addVelocity(Point2D delta) {
         velocity = velocity.add(delta);
     }
 
+    /**
+     * Adds acceleration which repeatedly increases velocity.
+     * @param acc acceleration to add
+     */
     public void addAcceleration(Point2D acc) {
         acceleration = acceleration.add(acc);
     }
 
+    /**
+     * Updates entity's position.
+     * @param time world time passed
+     */
     public void update(double time) {
         permanentVelocity = permanentVelocity.add(acceleration.multiply(time));
         velocity = velocity.add(permanentVelocity).multiply(time);
@@ -33,10 +48,16 @@ public abstract class Entity implements Renderable {
         velocity = Point2D.ZERO;
     }
 
+    /**
+     * @return entity position
+     */
     public Point2D getPosition() {
         return position;
     }
 
+    /**
+     * @return true if entity is ready to be deleted
+     */
     public boolean isReadyToDie() {
         return readyToDie;
     }

@@ -9,6 +9,9 @@ import java.util.List;
 
 import static java.lang.Math.*;
 
+/**
+ *  Tank entity that is controlled by the player.
+ */
 public class Tank extends Entity {
     private boolean DEBUG = false;
     private DoubleProperty angle = new DoubleProperty();
@@ -22,6 +25,9 @@ public class Tank extends Entity {
         angle.setValue(toRadians(28));
     }
 
+    /**
+     * Makes tank going left.
+     */
     public void goLeft() {
         double a = atan2(dir.getX(), dir.getY());
         Point2D deltaVelocity = new Point2D(-50, 0);
@@ -29,6 +35,9 @@ public class Tank extends Entity {
         addVelocity(deltaVelocity);
     }
 
+    /**
+     * Makes tank going right.
+     */
     public void goRight() {
         double a = atan2(dir.getX(), dir.getY());
         Point2D deltaVelocity = new Point2D(50, 0);
@@ -36,6 +45,12 @@ public class Tank extends Entity {
         addVelocity(deltaVelocity);
     }
 
+    /**
+     * Renders tank and gun. In debug mode also shows trajectory and
+     * surface normal line.
+     * @param gc graphics context of window
+     */
+    @Override
     public void render(GraphicsContext gc) {
         if (DEBUG) {
             /*
@@ -80,18 +95,32 @@ public class Tank extends Entity {
         }
     }
 
+    /**
+     * Increases angle of gun in counter-clockwise direction.
+     */
     public void increaseAngle() {
         angleDelta += 0.01;
     }
 
+    /**
+     * Increases angle of gun in clockwise direction.
+     * Same as decreasing in counter-clockwise direction.
+     */
     public void decreaseAngle() {
         angleDelta -= 0.01;
     }
 
+    /**
+     * @return gun's angle
+     */
     public DoubleProperty getAngle() {
         return angle;
     }
 
+    /**
+     * Updates tank position and gun's angle.
+     * @param time world time
+     */
     @Override
     public void update(double time) {
         super.update(time);
@@ -108,6 +137,9 @@ public class Tank extends Entity {
         angleDelta = 0;
     }
 
+    /**
+     * Fixes tank position and angle of tank according to surface.
+     */
     private void fixPosition() {
         List<Point2D> res = earthRef.getIntersection(position, dir);
         position = res.get(0);

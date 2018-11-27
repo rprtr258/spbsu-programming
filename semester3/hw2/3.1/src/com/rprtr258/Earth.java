@@ -8,6 +8,9 @@ import java.util.*;
 
 import static java.lang.Math.*;
 
+/**
+ * Class representing hardcoded surface.
+ */
 public class Earth implements Renderable {
     private List<Point2D> points = new ArrayList<>();
 
@@ -28,12 +31,23 @@ public class Earth implements Renderable {
         points.add(new Point2D(21, 456));
     }
 
+    /**
+     * Renders map.
+     * @param gc graphics context of window
+     */
     @Override
     public void render(GraphicsContext gc) {
         gc.setFill(Color.rgb(0, 170, 0));
         gc.fillPolygon(points.stream().map(Point2D::getX).mapToDouble(i->i).toArray(), points.stream().map(Point2D::getY).mapToDouble(i->i).toArray(), points.size());
     }
 
+    /**
+     * Finds intersection of ray starting in <i>position</i> going in
+     * direction <i>dir</i> with surface.
+     * @param position start point of ray
+     * @param dir ray direction
+     * @return pair consisting of point of intersection and normal vector to surface at that point
+     */
     public List<Point2D> getIntersection(Point2D position, Point2D dir) {
         Point2D res = Point2D.ZERO;
         Point2D norm = Point2D.ZERO;

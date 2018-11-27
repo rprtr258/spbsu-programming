@@ -12,6 +12,9 @@ import java.util.*;
 
 import static java.lang.Math.*;
 
+/**
+ * Main class
+ */
 public class Main extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
@@ -25,6 +28,10 @@ public class Main extends Application {
         launch(args);
     }
 
+    /**
+     * Starts application
+     * @param theStage given stage
+     */
     @Override
     public void start(Stage theStage) {
         theStage.setTitle("Pooshka");
@@ -81,6 +88,10 @@ public class Main extends Application {
         theStage.show();
     }
 
+    /**
+     * Updates game state
+     * @param currentNanoTime time passed since beginning of time in milliseconds
+     */
     private void update(long currentNanoTime) {
         reload = max(reload - 1, 0);
         double elapsedTime = (currentNanoTime - lastNanoTime[0]) / 1e9;
@@ -97,6 +108,9 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Handles user input
+     */
     private void handleInput() {
         if (input.contains("LEFT"))
             tank.goLeft();
@@ -116,6 +130,10 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Renders game
+     * @param gc graphics context of window
+     */
     private void render(GraphicsContext gc) {
         for (Renderable e : renderList)
             e.render(gc);

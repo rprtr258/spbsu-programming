@@ -4,6 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 
+/**
+ * Game graphical user interface
+ */
 public class GUI implements Renderable {
     private Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
     private DoubleProperty angleProperty;
@@ -12,6 +15,10 @@ public class GUI implements Renderable {
         angleProperty = angle;
     }
 
+    /**
+     * Renders GUI
+     * @param gc graphics context of window
+     */
     @Override
     public void render(GraphicsContext gc) {
         gc.setFill(Color.rgb(56, 35, 40));
