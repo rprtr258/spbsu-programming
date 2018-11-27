@@ -19,6 +19,7 @@ public class Main extends Application {
     private List<Renderable> renderList = new ArrayList<>();
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
+    private int reload = 0;
 
     public static void main(String[] args) {
         launch(args);
@@ -81,11 +82,10 @@ public class Main extends Application {
     }
 
     private void update(long currentNanoTime) {
+        reload = max(reload - 1, 0);
         double elapsedTime = (currentNanoTime - lastNanoTime[0]) / 1e9;
         lastNanoTime[0] = currentNanoTime;
 
-        //if (tank.getBoundary().getMaxY() >= 380)
-        //    tank.addVelocity(new Point2D(0, -100));
         for (Entity e : updateList) {
             e.update(elapsedTime);
             if (e.isReadyToDie())
@@ -107,9 +107,12 @@ public class Main extends Application {
         if (input.contains("DOWN"))
             tank.decreaseAngle();
         if (input.contains("ENTER")) {
-            Bullet bullet = new Bullet(tank.getPosition(), new Point2D(cos(tank.getAngle().getValue()), -sin(tank.getAngle().getValue())));
-            renderList.add(bullet);
-            updateList.add(bullet);
+            if (reload == 0) {
+                reload = 100;
+                Bullet bullet = new Bullet(tank.getPosition(), new Point2D(cos(tank.getAngle().getValue()), -sin(tank.getAngle().getValue())));
+                renderList.add(bullet);
+                updateList.add(bullet);
+            }
         }
     }
 

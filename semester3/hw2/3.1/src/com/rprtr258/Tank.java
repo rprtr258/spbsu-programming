@@ -6,11 +6,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 
 import java.util.List;
-import java.util.function.Function;
 
 import static java.lang.Math.*;
 
 public class Tank extends Entity {
+    private boolean DEBUG = false;
     private DoubleProperty angle = new DoubleProperty();
     private Point2D dir = new Point2D(0, 1);
     private double angleDelta = 0;
@@ -37,38 +37,47 @@ public class Tank extends Entity {
     }
 
     public void render(GraphicsContext gc) {
-        gc.setLineWidth(1);
-        gc.setStroke(Color.AQUAMARINE);
-        double X0 = position.getX();
-        double Y0 = position.getY();
-        double alpha = angle.getValue();
-        double t0 = 10.0 / 3 * sin(alpha);
-        double x0 = 100 * cos(alpha) * t0;
-        double y0 = -100 * sin(alpha) * t0 + 15 * t0 * t0;
-        double A = -y0 / (x0 * x0);
-        double B = -2 * A * (X0 + x0);
-        double C = Y0 + A * X0 * (X0 + 2 * x0);
-        for (int i = -999; i < 1000; i++) {
-            gc.strokeLine(X0 - i, A * (X0 - i) * (X0 - i) + B * (X0 - i) + C, X0 - i + 1, A * (X0 - i + 1) * (X0 - i + 1) + B * (X0 - i + 1) + C);
+        if (DEBUG) {
+            /*
+                Drawing bullet trajectory.
+             */
+            gc.setLineWidth(1);
+            gc.setStroke(Color.AQUAMARINE);
+            double X0 = position.getX();
+            double Y0 = position.getY();
+            double alpha = angle.getValue();
+            double t0 = 10.0 / 3 * sin(alpha);
+            double x0 = 100 * cos(alpha) * t0;
+            double y0 = -100 * sin(alpha) * t0 + 15 * t0 * t0;
+            double A = -y0 / (x0 * x0);
+            double B = -2 * A * (X0 + x0);
+            double C = Y0 + A * X0 * (X0 + 2 * x0);
+            for (int i = -999; i < 1000; i++) {
+                gc.strokeLine(X0 - i, A * (X0 - i) * (X0 - i) + B * (X0 - i) + C, X0 - i + 1, A * (X0 - i + 1) * (X0 - i + 1) + B * (X0 - i + 1) + C);
+            }
         }
 
         double radius = 20.0;
         Point2D gunEndPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(radius + 2));
+        Point2D gunStartPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(2));
         gc.setStroke(Color.rgb(0, 255, 0));
         gc.setLineWidth(2);
-        gc.strokeLine(position.getX(), position.getY(), gunEndPoint.getX(), gunEndPoint.getY());
+        gc.strokeLine(gunStartPoint.getX(), gunStartPoint.getY(), gunEndPoint.getX(), gunEndPoint.getY());
 
-        gc.setFill(Color.rgb(0, 255, 0));
         double ang = atan2(-dir.getX(), dir.getY());
         Point2D center = position.subtract(radius / 2, radius / 2);
         gc.fillArc(center.getX(), center.getY(), radius, radius, -toDegrees(ang), 180, ArcType.ROUND);
 
-        gc.setFill(Color.rgb(255, 0, 0));
-        gc.fillOval(position.getX() - 3, position.getY() - 3, 6, 6);
+        if (DEBUG) {
+            /*
+                Drawing surface normal vector and tangent point.
+             */
+            gc.setFill(Color.rgb(255, 0, 0));
+            gc.fillOval(position.getX() - 3, position.getY() - 3, 6, 6);
 
-        gc.setStroke(Color.RED);
-        Point2D rstart = center.add(dir.multiply(10));
-        gc.strokeLine(position.getX(), position.getY(), rstart.getX(), rstart.getY());
+            Point2D rstart = center.add(dir.multiply(10));
+            gc.strokeLine(position.getX(), position.getY(), rstart.getX(), rstart.getY());
+        }
     }
 
     public void increaseAngle() {
