@@ -41,9 +41,55 @@ public class NetworkTest {
 
     @Test
     public void testEmulation() {
-        Network network = getSampleNetwork();
-        network.emulate();
-        // if emulation ends test passes
+        Network network = NetworkFactory.createNetwork("{\n" +
+                                  "    type: os\n" +
+                                  "    name: \"Windows\"\n" +
+                                  "    security: 0\n" +
+                                  "}\n" +
+                                  "{\n" +
+                                  "    type: user\n" +
+                                  "    name: \"Internet\"\n" +
+                                  "    neighbours: [\"C\"]\n" +
+                                  "    os: \"Windows\"\n" +
+                                  "    infected: true\n" +
+                                  "}\n" +
+                                  "{\n" +
+                                  "    type: user\n" +
+                                  "    name: \"A\"\n" +
+                                  "    neighbours: [\"Internet\", \"B\"]\n" +
+                                  "    os: \"Windows\"\n" +
+                                  "}\n" +
+                                  "{\n" +
+                                  "    type: user\n" +
+                                  "    name: \"B\"\n" +
+                                  "    neighbours: [\"A\", \"C\"]\n" +
+                                  "    os: \"Windows\"\n" +
+                                  "}\n" +
+                                  "{\n" +
+                                  "    type: user\n" +
+                                  "    name: \"C\"\n" +
+                                  "    neighbours: [\"B\"]\n" +
+                                  "    os: \"Windows\"\n" +
+                                  "}\n");
+        assertEquals("(A, Windows[1,00]) - healthy\n" +
+            "(B, Windows[1,00]) - healthy\n" +
+            "(C, Windows[1,00]) - healthy\n" +
+            "(Internet, Windows[1,00]) - !!! infected !!!\n", network.getState());
+        network.performWorldStep();
+        assertEquals("(A, Windows[1,00]) - healthy\n" +
+            "(B, Windows[1,00]) - healthy\n" +
+            "(C, Windows[1,00]) - !!! infected !!!\n" +
+            "(Internet, Windows[1,00]) - !!! infected !!!\n", network.getState());
+        network.performWorldStep();
+        assertEquals("(A, Windows[1,00]) - healthy\n" +
+            "(B, Windows[1,00]) - !!! infected !!!\n" +
+            "(C, Windows[1,00]) - !!! infected !!!\n" +
+            "(Internet, Windows[1,00]) - !!! infected !!!\n", network.getState());
+        network.performWorldStep();
+        assertEquals("(A, Windows[1,00]) - !!! infected !!!\n" +
+            "(B, Windows[1,00]) - !!! infected !!!\n" +
+            "(C, Windows[1,00]) - !!! infected !!!\n" +
+            "(Internet, Windows[1,00]) - !!! infected !!!\n", network.getState());
     }
 
     private Network getSampleNetwork() {

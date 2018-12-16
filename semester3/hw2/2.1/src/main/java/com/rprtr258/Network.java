@@ -9,18 +9,20 @@ public class Network {
     private Map<String, Double> osInfectionProbability = new TreeMap<>();
     private List<String> infected = new ArrayList<>();
 
-    public void emulate() {
-        printState();
+    public String emulate() {
+        StringBuilder report = new StringBuilder();
+        report.append(getState());
         while (infected.size() < userOS.size()) {
             performWorldStep();
-            printState();
+            report.append(getState());
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
-                System.out.println("Emulation was interrupted");
+                report.append("Emulation was interrupted\n");
             }
         }
-        System.out.println("ZE WARDO was conquered");
+        report.append("World was conquered\n");
+        return report.toString();
     }
 
     public void addOS(String name, double security) {
@@ -41,6 +43,27 @@ public class Network {
         infected.add(name);
     }
 
+    public void performWorldStep() {
+        List<String> toInfect = new ArrayList<>();
+        for (String infectedUser : infected) {
+            for (String target : graph.get(infectedUser)) {
+                if (infected.contains(target) && !toInfect.contains(target))
+                    continue;
+                boolean willBeInfected = diceRoll(osInfectionProbability.get(userOS.get(target)));
+                if (willBeInfected) {
+                    toInfect.add(target);
+                }
+            }
+        }
+        infected.addAll(toInfect);
+    }
+
+    public String getState() {
+        return userOS.entrySet().stream().map(x ->
+                String.format("(%s, %s[%.2f]) - %s\n", x.getKey(), x.getValue(), osInfectionProbability.get(x.getValue()), (infected.contains(x.getKey()) ? "!!! infected !!!" : "healthy"))
+        ).collect(Collectors.joining());
+    }
+
     @Override
     public String toString() {
         final String[] result = {""};
@@ -57,28 +80,6 @@ public class Network {
                                             "    infection prob.: " + entry.getValue() + "\n")
                               .collect(Collectors.joining("\n"));
         return result[0];
-    }
-
-    private void printState() {
-        userOS.forEach((user, os) ->
-            System.out.printf("(%s, %s[%.2f]) - %s\n", user, os, osInfectionProbability.get(os), (infected.contains(user) ? "!!! infected !!!" : "healthy"))
-        );
-        System.out.println();
-    }
-
-    private void performWorldStep() {
-        List<String> toInfect = new ArrayList<>();
-        for (String infectedUser : infected) {
-            for (String target : graph.get(infectedUser)) {
-                if (infected.contains(target) && !toInfect.contains(target))
-                    continue;
-                boolean willBeInfected = diceRoll(osInfectionProbability.get(userOS.get(target)));
-                if (willBeInfected) {
-                    toInfect.add(target);
-                }
-            }
-        }
-        infected.addAll(toInfect);
     }
 
     private boolean diceRoll(Double probability) {

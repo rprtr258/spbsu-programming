@@ -17,9 +17,9 @@ public class NetworkFactory {
             while (token.charAt(i) == ' ')
                 i++;
             token = token.substring(i);
-            if (token.equals("{")) {
+            if ("{".equals(token)) {
                 isUserInfected = false;
-            } else if (token.equals("}")) {
+            } else if ("}".equals(token)) {
                 switch (entryType) {
                     case OSEntry: {
                         result.addOS(name, security);
@@ -44,6 +44,9 @@ public class NetworkFactory {
                             case "user": {
                                 entryType = EntryType.UserEntry;
                                 break;
+                            }
+                            default: {
+                                System.out.printf("Wrong token type found: %s\n", param);
                             }
                         }
                         break;
@@ -74,6 +77,9 @@ public class NetworkFactory {
                     case "infected": {
                         isUserInfected = Boolean.parseBoolean(param);
                         break;
+                    }
+                    default: {
+                        System.out.printf("Wrong token type: %s\n", tokenType);
                     }
                 }
             }
