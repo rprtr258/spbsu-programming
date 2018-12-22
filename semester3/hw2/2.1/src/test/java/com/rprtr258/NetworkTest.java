@@ -131,8 +131,9 @@ public class NetworkTest {
     }
 
     private class TestDiceRoller implements DiceRoller {
-        List<Double> rolls = Arrays.asList(0.0, 0.1, 0.5, 1.0);
-        int index = 0;
+        private List<Double> rolls = Arrays.asList(0.0, 0.1, 0.5, 1.0);
+        private int index = 0;
+        
         @Override
         public boolean diceRoll(Double probability) {
             boolean result = (rolls.get(index) <= probability);
