@@ -9,17 +9,12 @@ public class Network {
     private Map<String, Double> osInfectionProbability = new TreeMap<>();
     private List<String> infected = new ArrayList<>();
 
-    public String emulate() {
+    public String emulate(DiceRoller diceRoller) {
         StringBuilder report = new StringBuilder();
         report.append(getState());
         while (infected.size() < userOS.size()) {
-            performWorldStep();
+            performWorldStep(diceRoller);
             report.append(getState());
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                report.append("Emulation was interrupted\n");
-            }
         }
         report.append("World was conquered\n");
         return report.toString();
@@ -43,13 +38,13 @@ public class Network {
         infected.add(name);
     }
 
-    public void performWorldStep() {
+    public void performWorldStep(DiceRoller diceRoller) {
         List<String> toInfect = new ArrayList<>();
         for (String infectedUser : infected) {
             for (String target : graph.get(infectedUser)) {
                 if (infected.contains(target) && !toInfect.contains(target))
                     continue;
-                boolean willBeInfected = diceRoll(osInfectionProbability.get(userOS.get(target)));
+                boolean willBeInfected = diceRoller.diceRoll(osInfectionProbability.get(userOS.get(target)));
                 if (willBeInfected) {
                     toInfect.add(target);
                 }
@@ -80,11 +75,5 @@ public class Network {
                                             "    infection prob.: " + entry.getValue() + "\n")
                               .collect(Collectors.joining("\n"));
         return result[0];
-    }
-
-    private boolean diceRoll(Double probability) {
-        Random random = new Random();
-        double roll = random.nextDouble();
-        return (roll <= probability);
     }
 }

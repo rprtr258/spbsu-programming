@@ -8,7 +8,7 @@ public class Main {
     public static void main(String args[]) {
         Network network = loadNetwork("config");
         System.out.println(network);
-        network.emulate();
+        System.out.println(network.emulate(new RandomDiceRoller()));
     }
 
     private static Network loadNetwork(String file) {
