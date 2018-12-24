@@ -1,4 +1,4 @@
-package com.rprtr258;
+package com.rprtr258.client;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;

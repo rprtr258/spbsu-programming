@@ -1,4 +1,4 @@
-package com.rprtr258;
+package com.rprtr258.client;
 
 import javafx.application.Application;
 import javafx.geometry.Point2D;
@@ -13,9 +13,9 @@ import java.util.*;
 import static java.lang.Math.*;
 
 /**
- * ClientClient class
+ * Main class
  */
-public class Client extends Application {
+public class Main extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
     private ArrayList<String> input = new ArrayList<>();

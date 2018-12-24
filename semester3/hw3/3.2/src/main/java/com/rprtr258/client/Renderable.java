@@ -1,4 +1,4 @@
-package com.rprtr258;
+package com.rprtr258.client;
 
 import javafx.scene.canvas.GraphicsContext;
 

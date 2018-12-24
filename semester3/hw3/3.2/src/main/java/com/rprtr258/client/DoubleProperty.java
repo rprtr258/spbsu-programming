@@ -1,4 +1,4 @@
-package com.rprtr258;
+package com.rprtr258.client;
 
 /**
  * Object to hold double value.
