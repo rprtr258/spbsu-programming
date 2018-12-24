@@ -1,5 +1,5 @@
 To run use:
 
 ```
-gradlew run
+gradle run
 ```
