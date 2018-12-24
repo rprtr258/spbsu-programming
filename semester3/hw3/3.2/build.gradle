@@ -11,6 +11,17 @@ repositories {
     mavenCentral()
 }
 
+task runClient(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.rprtr258.client.Main'
+    args '127.0.0.1', '1337'
+}
+
+task runServer(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.rprtr258.server.Main'
+}
+
 dependencies {
 }
 

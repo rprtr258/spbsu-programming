@@ -1,6 +1,7 @@
 package com.rprtr258.client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
@@ -8,6 +9,10 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.*;
 
 import static java.lang.Math.*;
@@ -23,8 +28,23 @@ public class Main extends Application {
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
     private int reload = 0;
+    private static String color = "#00FF00";
 
     public static void main(String[] args) {
+        Arrays.stream(args).forEach(System.out::println);
+        try {
+            SocketChannel channel = SocketChannel.open();
+            channel.connect(new InetSocketAddress("127.0.0.1", 1337));
+            ByteBuffer buffer = ByteBuffer.allocate(7);
+            channel.read(buffer);
+            buffer.flip();
+            color = new String(buffer.array());
+            for (byte b : color.getBytes())
+                System.out.println(b);
+        } catch (IOException e) {
+            System.err.println("Error occurred:");
+            e.printStackTrace();
+        }
         launch(args);
     }
 
@@ -56,7 +76,8 @@ public class Main extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         Earth earth = new Earth();
-        tank = new Tank(200, 100, earth);
+        System.out.println(color);
+        tank = new Tank(200, 100, color, earth);
         GUI gui = new GUI(tank.getAngle());
 
         renderList.add(gui);

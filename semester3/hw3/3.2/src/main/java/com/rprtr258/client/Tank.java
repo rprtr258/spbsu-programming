@@ -18,11 +18,13 @@ public class Tank extends Entity {
     private Point2D dir = new Point2D(0, 1);
     private double angleDelta = 0;
     private Earth earthRef;
+    private String color;
 
-    public Tank(double x, double y, Earth earth) {
+    public Tank(double x, double y, String color, Earth earth) {
         super(x, y);
         earthRef = earth;
         angle.setValue(toRadians(28));
+        this.color = color;
     }
 
     /**
@@ -81,6 +83,7 @@ public class Tank extends Entity {
 
         double ang = atan2(-dir.getX(), dir.getY());
         Point2D center = position.subtract(radius / 2, radius / 2);
+        gc.setFill(Color.web(color));
         gc.fillArc(center.getX(), center.getY(), radius, radius, -toDegrees(ang), 180, ArcType.ROUND);
 
         if (DEBUG) {
