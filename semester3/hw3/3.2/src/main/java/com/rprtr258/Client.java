@@ -13,9 +13,9 @@ import java.util.*;
 import static java.lang.Math.*;
 
 /**
- * Main class
+ * ClientClient class
  */
-public class Main extends Application {
+public class Client extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
     private ArrayList<String> input = new ArrayList<>();
