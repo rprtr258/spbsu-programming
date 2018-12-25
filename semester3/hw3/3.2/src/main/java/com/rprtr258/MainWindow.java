@@ -14,18 +14,20 @@ import java.util.*;
 
 // TODO: correct window resize
 // TODO: make help button
-// TODO: add game end
 public class MainWindow extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
     private Tank opponentTank;
     private List<String> input = new ArrayList<>();
     private List<String> opponentInput = new ArrayList<>();
+    private List<Bullet> bulletsList = new ArrayList<>();
     private List<Renderable> renderList = new ArrayList<>();
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
+    private boolean isKilled = false;
+    private boolean isWinner = false;
     private static SocketAdapter socketAdapter;
-    private final Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
+    private final static Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
     private static Point2D myStart = null;
     private static Point2D opponentStart = null;
 
@@ -54,16 +56,20 @@ public class MainWindow extends Application {
         root.getChildren().add(canvas);
 
         theScene.setOnKeyPressed(event -> {
-            String code = event.getCode().toString();
-            if (!input.contains(code)) {
-                input.add(code);
-                socketAdapter.write("go " + code + "\n");
+            if (!isKilled && !isWinner) {
+                String code = event.getCode().toString();
+                if (!input.contains(code)) {
+                    input.add(code);
+                    socketAdapter.write("go " + code + "\n");
+                }
             }
         });
         theScene.setOnKeyReleased(event -> {
-            String code = event.getCode().toString();
-            socketAdapter.write("stop " + code + "\n");
-            input.remove(code);
+            if (!isKilled && !isWinner) {
+                String code = event.getCode().toString();
+                socketAdapter.write("stop " + code + "\n");
+                input.remove(code);
+            }
         });
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -107,7 +113,21 @@ public class MainWindow extends Application {
                 gc.setFill(Color.rgb(255, 255, 83));
                 String powerValueText = String.format("%d", tank.getBulletSize());
                 gc.fillText(powerValueText, 85, 53);
+
+                if (isWinner) {
+                    gc.setFill(Color.rgb(0, 140, 0));
+                    String youKilledOpponentText = "You killed opponent!";
+                    gc.fillText(youKilledOpponentText, 250, 30);
+                }
+
+                if (isKilled) {
+                    gc.setFill(Color.rgb(140, 0, 0));
+                    String youWereKilledText = "You were killed :(";
+                    gc.fillText(youWereKilledText, 250, 53);
+                }
+
                 render(gc);
+
                 gc.setFill(Color.rgb(56, 35, 40));
                 gc.fillRect(0, 50, 21, 480);
                 gc.fillRect(621, 0, 20, 480);
@@ -155,8 +175,8 @@ public class MainWindow extends Application {
      * Handles user input
      */
     private void handleInput() {
-        tank.handleInput(input, renderList, updateList);
-        opponentTank.handleInput(opponentInput, renderList, updateList);
+        tank.handleInput(input, bulletsList);
+        opponentTank.handleInput(opponentInput, bulletsList);
     }
 
     /**
@@ -172,6 +192,19 @@ public class MainWindow extends Application {
             if (e.isReadyToDie())
                 deleteQueue.add(e);
         }
+        for (Bullet e : bulletsList) {
+            e.update(elapsedTime);
+            if (e.hits(tank))
+                isKilled = true;
+            if (e.hits(opponentTank))
+                isWinner = true;
+            if (isKilled || isWinner) {
+                input.clear();
+                opponentInput.clear();
+            }
+            if (e.isReadyToDie())
+                deleteQueue.add(e);
+        }
         while (!deleteQueue.isEmpty()) {
             renderList.remove(deleteQueue.peek());
             updateList.remove(deleteQueue.remove());
@@ -184,6 +217,8 @@ public class MainWindow extends Application {
      */
     private void render(GraphicsContext gc) {
         for (Renderable e : renderList)
+            e.render(gc);
+        for (Renderable e : bulletsList)
             e.render(gc);
     }
 }

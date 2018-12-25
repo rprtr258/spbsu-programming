@@ -22,6 +22,12 @@ public class Bullet extends Entity {
         addAcceleration(gravityAcc.multiply(size / 4));
     }
 
+    public boolean hits(Tank tank) {
+        if (!isExploded)
+            return false;
+        return tank.getPosition().distance(position) <= size * explosionTime / 20;
+    }
+
     /**
      * Renders bullet.
      * @param gc graphics context of window

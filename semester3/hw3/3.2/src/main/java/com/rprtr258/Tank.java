@@ -28,7 +28,7 @@ public class Tank extends Entity {
         this.color = color;
     }
 
-    public void handleInput(List<String> input, List<Renderable> renderList, List<Entity> updateList) {
+    public void handleInput(List<String> input, List<Bullet> bulletsList) {
         if (input.contains("LEFT"))
             goLeft();
         if (input.contains("RIGHT"))
@@ -40,8 +40,7 @@ public class Tank extends Entity {
         if (input.contains("ENTER") && reload == 0) {
             reload = 100;
             Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle()), -sin(getAngle())), earthRef, bulletSize);
-            renderList.add(bullet);
-            updateList.add(bullet);
+            bulletsList.add(bullet);
         }
         if (input.contains("C")) {
             input.remove("C");
