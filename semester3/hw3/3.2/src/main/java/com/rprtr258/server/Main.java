@@ -24,7 +24,7 @@ public class Main {
        } catch (IOException e) {
            System.err.println("Error occurred:");
            e.printStackTrace();
-        Platform.exit();
+           Platform.exit();
        }
        Application.launch(MainWindow.class, args);
     }

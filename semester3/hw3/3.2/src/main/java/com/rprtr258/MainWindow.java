@@ -80,9 +80,8 @@ public class MainWindow extends Application {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         Earth earth = new Earth();
-        String color = "#00FF00";
-        tank = new Tank(myStart, color, earth);
-        opponentTank = new Tank(opponentStart, color, earth);
+        tank = new Tank(myStart, "#00FF00", earth);
+        opponentTank = new Tank(opponentStart, "#FF0000", earth);
         GUI gui = new GUI(tank.getAngle());
 
         renderList.add(gui);
