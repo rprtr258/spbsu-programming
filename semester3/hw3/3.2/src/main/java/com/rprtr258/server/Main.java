@@ -1,17 +1,16 @@
 package com.rprtr258.server;
 
-import com.rprtr258.MainWindow;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
+
+import com.rprtr258.MainWindow;
 
 public class Main {
     public static void main(String[] args) {
-        Arrays.stream(args).forEach(System.out::println);
         int port = getPort();
         try {
             ServerSocket serverSocketChannel = new ServerSocket(port);

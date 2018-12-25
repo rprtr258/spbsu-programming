@@ -6,14 +6,14 @@ import javafx.geometry.Point2D;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 /**
  * Main class
  */
 public class Main {
     public static void main(String[] args) {
-        Arrays.stream(args).forEach(System.out::println);
+        System.out.println("Connecting to host: " + args[0]);
+        System.out.println("Connecting to port: " + args[1]);
         try {
             Socket socketChannel = new Socket();
             socketChannel.connect(new InetSocketAddress("127.0.0.1", 1337));

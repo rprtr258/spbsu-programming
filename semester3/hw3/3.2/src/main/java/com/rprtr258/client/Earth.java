@@ -61,13 +61,12 @@ public class Earth implements Renderable {
             double l = Dl / D;
             Point2D intersectionPoint = position.add(dir.multiply(l));
             if (min(A.getX(), B.getX()) <= intersectionPoint.getX() &&
-                min(A.getY(), B.getY()) <= intersectionPoint.getY() &&
-                max(A.getX(), B.getX()) >= intersectionPoint.getX() &&
-                max(A.getY(), B.getY()) >= intersectionPoint.getY()) {
-                if (res == Point2D.ZERO || position.distance(intersectionPoint) < position.distance(res)) {
-                    res = intersectionPoint;
-                    norm = new Point2D(A.getY() - B.getY(), B.getX() - A.getX());
-                }
+                    min(A.getY(), B.getY()) <= intersectionPoint.getY() &&
+                    max(A.getX(), B.getX()) >= intersectionPoint.getX() &&
+                    max(A.getY(), B.getY()) >= intersectionPoint.getY() &&
+                    res == Point2D.ZERO || position.distance(intersectionPoint) < position.distance(res)) {
+                res = intersectionPoint;
+                norm = new Point2D(A.getY() - B.getY(), B.getX() - A.getX());
             }
         }
         return Arrays.asList(res, norm);

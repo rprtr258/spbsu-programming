@@ -13,8 +13,6 @@ import static java.lang.Math.*;
  *  Tank entity that is controlled by the player.
  */
 public class Tank extends Entity {
-    @SuppressWarnings("FieldCanBeLocal")
-    private final boolean DEBUG = false;
     private final DoubleProperty angle = new DoubleProperty();
     private Point2D dir = new Point2D(0, 1);
     private double angleDelta = 0;
@@ -38,34 +36,12 @@ public class Tank extends Entity {
             increaseAngle();
         if (input.contains("DOWN"))
             decreaseAngle();
-        if (input.contains("ENTER")) {
-            if (reload == 0) {
-                reload = 100;
-                Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())));
-                renderList.add(bullet);
-                updateList.add(bullet);
-            }
+        if (input.contains("ENTER") && reload == 0) {
+            reload = 100;
+            Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())));
+            renderList.add(bullet);
+            updateList.add(bullet);
         }
-    }
-
-    /**
-     * Makes tank going left.
-     */
-    public void goLeft() {
-        double a = atan2(dir.getX(), dir.getY());
-        Point2D deltaVelocity = new Point2D(-50, 0);
-        deltaVelocity = new Point2D(cos(a) * deltaVelocity.getX() + sin(a) * deltaVelocity.getY(), -sin(a) * deltaVelocity.getX() + cos(a) * deltaVelocity.getY());
-        addVelocity(deltaVelocity);
-    }
-
-    /**
-     * Makes tank going right.
-     */
-    public void goRight() {
-        double a = atan2(dir.getX(), dir.getY());
-        Point2D deltaVelocity = new Point2D(50, 0);
-        deltaVelocity = new Point2D(cos(a) * deltaVelocity.getX() + sin(a) * deltaVelocity.getY(), -sin(a) * deltaVelocity.getX() + cos(a) * deltaVelocity.getY());
-        addVelocity(deltaVelocity);
     }
 
     /**
@@ -75,26 +51,6 @@ public class Tank extends Entity {
      */
     @Override
     public void render(GraphicsContext gc) {
-        if (DEBUG) {
-            /*
-                Drawing bullet trajectory.
-             */
-            gc.setLineWidth(1);
-            gc.setStroke(Color.AQUAMARINE);
-            double X0 = position.getX();
-            double Y0 = position.getY();
-            double alpha = angle.getValue();
-            double t0 = 10.0 / 3 * sin(alpha);
-            double x0 = 100 * cos(alpha) * t0;
-            double y0 = -100 * sin(alpha) * t0 + 15 * t0 * t0;
-            double A = -y0 / (x0 * x0);
-            double B = -2 * A * (X0 + x0);
-            double C = Y0 + A * X0 * (X0 + 2 * x0);
-            for (int i = -999; i < 1000; i++) {
-                gc.strokeLine(X0 - i, A * (X0 - i) * (X0 - i) + B * (X0 - i) + C, X0 - i + 1, A * (X0 - i + 1) * (X0 - i + 1) + B * (X0 - i + 1) + C);
-            }
-        }
-
         double radius = 20.0;
         Point2D gunEndPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(radius + 2));
         Point2D gunStartPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(2));
@@ -106,32 +62,6 @@ public class Tank extends Entity {
         Point2D center = position.subtract(radius / 2, radius / 2);
         gc.setFill(Color.web(color));
         gc.fillArc(center.getX(), center.getY(), radius, radius, -toDegrees(ang), 180, ArcType.ROUND);
-
-        if (DEBUG) {
-            /*
-                Drawing surface normal vector and tangent point.
-             */
-            gc.setFill(Color.rgb(255, 0, 0));
-            gc.fillOval(position.getX() - 3, position.getY() - 3, 6, 6);
-
-            Point2D rstart = center.add(dir.multiply(10));
-            gc.strokeLine(position.getX(), position.getY(), rstart.getX(), rstart.getY());
-        }
-    }
-
-    /**
-     * Increases angle of gun in counter-clockwise direction.
-     */
-    public void increaseAngle() {
-        angleDelta += 0.01;
-    }
-
-    /**
-     * Increases angle of gun in clockwise direction.
-     * Same as decreasing in counter-clockwise direction.
-     */
-    public void decreaseAngle() {
-        angleDelta -= 0.01;
     }
 
     /**
@@ -160,6 +90,41 @@ public class Tank extends Entity {
         while (angle.getValue() < 0)
             angle.setValue(angle.getValue() + 2 * PI);
         angleDelta = 0;
+    }
+
+    /**
+     * Makes tank going left.
+     */
+    private void goLeft() {
+        double a = atan2(dir.getX(), dir.getY());
+        Point2D deltaVelocity = new Point2D(-50, 0);
+        deltaVelocity = new Point2D(cos(a) * deltaVelocity.getX() + sin(a) * deltaVelocity.getY(), -sin(a) * deltaVelocity.getX() + cos(a) * deltaVelocity.getY());
+        addVelocity(deltaVelocity);
+    }
+
+    /**
+     * Makes tank going right.
+     */
+    private void goRight() {
+        double a = atan2(dir.getX(), dir.getY());
+        Point2D deltaVelocity = new Point2D(50, 0);
+        deltaVelocity = new Point2D(cos(a) * deltaVelocity.getX() + sin(a) * deltaVelocity.getY(), -sin(a) * deltaVelocity.getX() + cos(a) * deltaVelocity.getY());
+        addVelocity(deltaVelocity);
+    }
+
+    /**
+     * Increases angle of gun in counter-clockwise direction.
+     */
+    private void increaseAngle() {
+        angleDelta += 0.01;
+    }
+
+    /**
+     * Increases angle of gun in clockwise direction.
+     * Same as decreasing in counter-clockwise direction.
+     */
+    private void decreaseAngle() {
+        angleDelta -= 0.01;
     }
 
     /**
