@@ -18,6 +18,7 @@ public class Tank extends Entity {
     private double angleDelta = 0;
     private final Earth earthRef;
     private final String color;
+    private int bulletSize = 2;
     private int reload = 0;
 
     public Tank(Point2D pos, String color, Earth earth) {
@@ -38,10 +39,18 @@ public class Tank extends Entity {
             decreaseAngle();
         if (input.contains("ENTER") && reload == 0) {
             reload = 100;
-            Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())), earthRef, 4);
+            Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())), earthRef, bulletSize);
             renderList.add(bullet);
             updateList.add(bullet);
         }
+        if (input.contains("C")) {
+            input.remove("C");
+            bulletSize = bulletSize % 15 + 1;
+        }
+    }
+    
+    public int getBulletSize() {
+        return bulletSize;
     }
 
     /**

@@ -14,6 +14,7 @@ import java.util.*;
 
 import com.rprtr258.client.*;
 
+// TODO: correct window resize
 public class MainWindow extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
@@ -109,7 +110,7 @@ public class MainWindow extends Application {
                 gc.strokeRect(16, 87, 610, 374);
                 gc.strokeRect(20, 91, 602, 366);
                 
-                int curBulletSize = 2;
+                int curBulletSize = tank.getBulletSize();
                 gc.setFill(Color.rgb(255, 255, 255));
                 for (int i = 1; i <= 15; i++) {
                     if (i == curBulletSize)
