@@ -16,7 +16,6 @@ import com.rprtr258.client.*;
 
 // TODO: correct window resize
 // TODO: make help button
-// TODO: add explosion
 // TODO: add game end
 public class MainWindow extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};

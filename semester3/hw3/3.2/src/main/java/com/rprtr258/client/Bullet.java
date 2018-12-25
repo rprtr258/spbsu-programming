@@ -11,6 +11,8 @@ public class Bullet extends Entity {
     private Point2D direction;
     private double size;
     private final Earth earthRef;
+    private boolean isExploded = false;
+    private int explosionTime = -1;
 
     public Bullet(Point2D pos, Point2D dir, Earth earth, double size) {
         super(pos.add(0, -1));
@@ -26,8 +28,14 @@ public class Bullet extends Entity {
      */
     @Override
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
-        gc.fillOval(position.getX() - size, position.getY() - size, size * 2, size * 2);
+        if (isExploded) {
+            gc.setFill(Color.YELLOW);
+            double radius = size * explosionTime / 20;
+            gc.fillOval(position.getX() - radius, position.getY() - radius, 2 * radius,  2 * radius);
+        } else {
+            gc.setFill(Color.BLACK);
+            gc.fillOval(position.getX() - size, position.getY() - size, size * 2, size * 2);
+        }
     }
 
     /**
@@ -36,11 +44,19 @@ public class Bullet extends Entity {
      */
     @Override
     public void update(double time) {
-        super.update(time);
-        addVelocity(direction.multiply(100));
-        if (position.getX() < 10 || position.getY() < 90 ||
-            position.getX() > 650 || position.getY() > 500 ||
-            earthRef.checkCollision(position))
-            readyToDie = true;
+        if (isExploded) {
+            explosionTime--;
+            if (explosionTime == 0)
+                readyToDie = true;
+        } else {
+            super.update(time);
+            addVelocity(direction.multiply(100));
+            if (earthRef.checkCollision(position)) {
+                isExploded = true;
+                explosionTime = 100;
+            } else if (position.getX() < 10 || position.getY() < 90 ||
+                     position.getX() > 650 || position.getY() > 500)
+                readyToDie = true;
+        }
     }
 }
