@@ -1,4 +1,4 @@
-package com.rprtr258.client;
+package com.rprtr258;
 
 import javafx.geometry.Point2D;
 

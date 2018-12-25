@@ -13,14 +13,14 @@ repositories {
 
 task runClient(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.rprtr258.client.Main'
+    main = 'com.rprtr258.Client'
     //noinspection GroovyAssignabilityCheck,GroovyAssignabilityCheck
     args '192.168.1.139', '1337'
 }
 
 task runServer(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.rprtr258.server.Main'
+    main = 'com.rprtr258.Server'
 }
 
 dependencies {

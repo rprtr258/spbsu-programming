@@ -1,4 +1,4 @@
-package com.rprtr258.server;
+package com.rprtr258;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -7,9 +7,7 @@ import javafx.geometry.Point2D;
 import java.io.*;
 import java.net.*;
 
-import com.rprtr258.MainWindow;
-
-public class Main {
+public class Server {
     public static void main(String[] args) {
         int port = getPort();
         try {

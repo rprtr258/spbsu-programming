@@ -1,6 +1,5 @@
-package com.rprtr258.client;
+package com.rprtr258;
 
-import com.rprtr258.MainWindow;
 import javafx.application.*;
 import javafx.geometry.Point2D;
 
@@ -8,9 +7,9 @@ import java.io.*;
 import java.net.*;
 
 /**
- * Main class
+ * Client class
  */
-public class Main {
+public class Client {
     public static void main(String[] args) {
         System.out.println("Connecting to host: " + args[0]);
         System.out.println("Connecting to port: " + args[1]);

@@ -9,11 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
-import java.io.*;
 import java.net.*;
 import java.util.*;
-
-import com.rprtr258.client.*;
 
 // TODO: correct window resize
 // TODO: make help button
@@ -27,21 +24,13 @@ public class MainWindow extends Application {
     private List<Renderable> renderList = new ArrayList<>();
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
+    private static SocketAdapter socketAdapter;
     private final Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
-    private static Scanner in = null;
-    private static PrintWriter out = null;
-    private static InputStream is = null;
     private static Point2D myStart = null;
     private static Point2D opponentStart = null;
 
     public static void setSocket(Socket socket) {
-        try {
-            is = socket.getInputStream();
-            in = new Scanner(is);
-            out = new PrintWriter(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        socketAdapter = new SocketAdapter(socket);
     }
 
     public static void setCoords(Point2D myCoord, Point2D opponentCoord) {
@@ -68,14 +57,12 @@ public class MainWindow extends Application {
             String code = event.getCode().toString();
             if (!input.contains(code)) {
                 input.add(code);
-                out.write("go " + code + "\n");
-                out.flush();
+                socketAdapter.write("go " + code + "\n");
             }
         });
         theScene.setOnKeyReleased(event -> {
             String code = event.getCode().toString();
-            out.write("stop " + code + "\n");
-            out.flush();
+            socketAdapter.write("stop " + code + "\n");
             input.remove(code);
         });
 
@@ -151,20 +138,16 @@ public class MainWindow extends Application {
     }
 
     private void processOpponentActions() {
-        try {
-            while (is.available() > 0) {
-                String event = in.nextLine();
-                String[] tokens = event.split(" ");
-                String pressing = tokens[0];
-                String key = tokens[1];
-                if ("go".equals(pressing)) {
-                    opponentInput.add(key);
-                } else if ("stop".equals(pressing)) {
-                    opponentInput.remove(key);
-                }
+        while (socketAdapter.hasNext()) {
+            String event = socketAdapter.nextLine();
+            String[] tokens = event.split(" ");
+            String pressing = tokens[0];
+            String key = tokens[1];
+            if ("go".equals(pressing)) {
+                opponentInput.add(key);
+            } else if ("stop".equals(pressing)) {
+                opponentInput.remove(key);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
