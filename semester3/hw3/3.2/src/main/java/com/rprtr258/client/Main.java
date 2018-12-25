@@ -29,21 +29,26 @@ public class Main extends Application {
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
     private int reload = 0;
     private static String color = "#00FF00";
+    private static String id = "";
+    private static SocketChannel socketChannel = null;
 
     public static void main(String[] args) {
         Arrays.stream(args).forEach(System.out::println);
         try {
-            SocketChannel channel = SocketChannel.open();
-            channel.connect(new InetSocketAddress("127.0.0.1", 1337));
-            ByteBuffer buffer = ByteBuffer.allocate(7);
-            channel.read(buffer);
-            buffer.flip();
-            color = new String(buffer.array());
-            for (byte b : color.getBytes())
-                System.out.println(b);
+            socketChannel = SocketChannel.open();
+            socketChannel.connect(new InetSocketAddress("127.0.0.1", 1337));
+            ByteBuffer buf = ByteBuffer.allocate(256);
+            while (socketChannel.read(buf) == -1);
+            color = new String(buf.array()).trim().substring(0, buf.position());
+            System.out.println(color);
+            buf.clear();
+            while (socketChannel.read(buf) == -1);
+            id = new String(buf.array()).trim().substring(0, buf.position());
+            System.out.println(id);
         } catch (IOException e) {
-            System.err.println("Error occurred:");
+            System.err.println("Error occurred during connection:");
             e.printStackTrace();
+            Platform.exit();
         }
         launch(args);
     }
@@ -67,16 +72,39 @@ public class Main extends Application {
             String code = event.getCode().toString();
             if (!input.contains(code))
                 input.add(code);
+            try {
+                if ("LEFT".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + "goes left").getBytes()));
+                if ("RIGHT".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + "goes right").getBytes()));
+                if ("UP".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + "goes up").getBytes()));
+                if ("DOWN".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + "goes down").getBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         theScene.setOnKeyReleased(event -> {
             String code = event.getCode().toString();
             input.remove(code);
+            try {
+                if ("LEFT".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
+                if ("RIGHT".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
+                if ("UP".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
+                if ("DOWN".equals(code))
+                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         Earth earth = new Earth();
-        System.out.println(color);
         tank = new Tank(200, 100, color, earth);
         GUI gui = new GUI(tank.getAngle());
 
