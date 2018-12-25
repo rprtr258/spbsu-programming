@@ -8,8 +8,8 @@ import javafx.scene.text.*;
  * Game graphical user interface
  */
 public class GUI implements Renderable {
-    private Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
-    private DoubleProperty angleProperty;
+    private final Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
+    private final DoubleProperty angleProperty;
 
     public GUI(DoubleProperty angle) {
         angleProperty = angle;

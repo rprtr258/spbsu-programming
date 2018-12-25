@@ -12,7 +12,7 @@ import static java.lang.Math.*;
  * Class representing hardcoded surface.
  */
 public class Earth implements Renderable {
-    private List<Point2D> points = new ArrayList<>();
+    private List<Point2D> points;
 
     public Earth() {
         points = Arrays.asList(

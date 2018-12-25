@@ -14,6 +14,7 @@ repositories {
 task runClient(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.rprtr258.client.Main'
+    //noinspection GroovyAssignabilityCheck,GroovyAssignabilityCheck
     args '127.0.0.1', '1337'
 }
 

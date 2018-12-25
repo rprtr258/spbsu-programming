@@ -13,18 +13,39 @@ import static java.lang.Math.*;
  *  Tank entity that is controlled by the player.
  */
 public class Tank extends Entity {
-    private boolean DEBUG = false;
-    private DoubleProperty angle = new DoubleProperty();
+    @SuppressWarnings("FieldCanBeLocal")
+    private final boolean DEBUG = false;
+    private final DoubleProperty angle = new DoubleProperty();
     private Point2D dir = new Point2D(0, 1);
     private double angleDelta = 0;
-    private Earth earthRef;
-    private String color;
+    private final Earth earthRef;
+    private final String color;
+    private int reload = 0;
 
     public Tank(Point2D pos, String color, Earth earth) {
         super(pos);
         earthRef = earth;
         angle.setValue(toRadians(28));
         this.color = color;
+    }
+
+    public void handleInput(List<String> input, List<Renderable> renderList, List<Entity> updateList) {
+        if (input.contains("LEFT"))
+            goLeft();
+        if (input.contains("RIGHT"))
+            goRight();
+        if (input.contains("UP"))
+            increaseAngle();
+        if (input.contains("DOWN"))
+            decreaseAngle();
+        if (input.contains("ENTER")) {
+            if (reload == 0) {
+                reload = 100;
+                Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())));
+                renderList.add(bullet);
+                updateList.add(bullet);
+            }
+        }
     }
 
     /**
@@ -127,6 +148,7 @@ public class Tank extends Entity {
     @Override
     public void update(double time) {
         super.update(time);
+        reload = max(reload - 1, 0);
         if (position.getX() < 22)
             position = position.add(22 - position.getX(), 0);
         if (position.getX() > 620)

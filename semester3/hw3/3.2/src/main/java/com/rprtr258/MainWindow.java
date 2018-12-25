@@ -12,7 +12,6 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import static java.lang.Math.*;
 import com.rprtr258.client.*;
 
 public class MainWindow extends Application {
@@ -24,8 +23,6 @@ public class MainWindow extends Application {
     private List<Renderable> renderList = new ArrayList<>();
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
-    private int reload = 0;
-    private int opponentReload = 0;
     private static Scanner in = null;
     private static PrintWriter out = null;
     private static InputStream is = null;
@@ -138,38 +135,8 @@ public class MainWindow extends Application {
      * Handles user input
      */
     private void handleInput() {
-        if (input.contains("LEFT"))
-            tank.goLeft();
-        if (input.contains("RIGHT"))
-            tank.goRight();
-        if (input.contains("UP"))
-            tank.increaseAngle();
-        if (input.contains("DOWN"))
-            tank.decreaseAngle();
-        if (input.contains("ENTER")) {
-            if (reload == 0) {
-                reload = 100;
-                Bullet bullet = new Bullet(tank.getPosition(), new Point2D(cos(tank.getAngle().getValue()), -sin(tank.getAngle().getValue())));
-                renderList.add(bullet);
-                updateList.add(bullet);
-            }
-        }
-        if (opponentInput.contains("LEFT"))
-            opponentTank.goLeft();
-        if (opponentInput.contains("RIGHT"))
-            opponentTank.goRight();
-        if (opponentInput.contains("UP"))
-            opponentTank.increaseAngle();
-        if (opponentInput.contains("DOWN"))
-            opponentTank.decreaseAngle();
-        if (opponentInput.contains("ENTER")) {
-            if (opponentReload == 0) {
-                opponentReload = 100;
-                Bullet bullet = new Bullet(opponentTank.getPosition(), new Point2D(cos(opponentTank.getAngle().getValue()), -sin(opponentTank.getAngle().getValue())));
-                renderList.add(bullet);
-                updateList.add(bullet);
-            }
-        }
+        tank.handleInput(input, renderList, updateList);
+        opponentTank.handleInput(opponentInput, renderList, updateList);
     }
 
     /**
@@ -177,8 +144,6 @@ public class MainWindow extends Application {
      * @param currentNanoTime time passed since beginning of time in milliseconds
      */
     private void update(long currentNanoTime) {
-        reload = max(reload - 1, 0);
-        opponentReload = max(opponentReload - 1, 0);
         double elapsedTime = (currentNanoTime - lastNanoTime[0]) / 1e9;
         lastNanoTime[0] = currentNanoTime;
 
