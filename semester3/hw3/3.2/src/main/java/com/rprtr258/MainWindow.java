@@ -108,6 +108,18 @@ public class MainWindow extends Application {
                 gc.setLineWidth(2);
                 gc.strokeRect(16, 87, 610, 374);
                 gc.strokeRect(20, 91, 602, 366);
+                
+                gc.setStroke(Color.rgb(255, 255, 255));
+                gc.strokeLine(20, 67, 20, 85);
+                gc.strokeLine(20, 67, 50, 67);
+                gc.strokeLine(50, 67, 50, 85);
+                gc.setFill(Color.rgb(255, 255, 255));
+                gc.fillOval(35 - 1, 76 - 1, 2, 2);
+                gc.setStroke(Color.rgb(255, 0, 0));
+                gc.strokeLine(52, 67, 52, 85);
+                gc.strokeLine(52, 67, 82, 67);
+                gc.strokeLine(82, 67, 82, 85);
+                gc.fillOval(67 - 2, 76 - 2, 4, 4);
             }
         }.start();
         theStage.show();

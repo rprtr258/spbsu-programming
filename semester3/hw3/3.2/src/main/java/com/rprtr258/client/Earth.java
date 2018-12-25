@@ -57,7 +57,6 @@ public class Earth implements Renderable {
             if (py < position.getY())
                 return true;
         }
-        System.out.print("\n");
         return false;
     }
 
