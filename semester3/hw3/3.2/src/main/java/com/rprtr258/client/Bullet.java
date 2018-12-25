@@ -17,7 +17,7 @@ public class Bullet extends Entity {
         this.size = size;
         earthRef = earth;
         direction = dir.normalize();
-        addAcceleration(gravityAcc);
+        addAcceleration(gravityAcc.multiply(size / 4));
     }
 
     /**
