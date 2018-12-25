@@ -19,12 +19,14 @@ import com.rprtr258.client.*;
 public class Main extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
+    private Tank opponentTank;
     private List<String> input = new ArrayList<>();
+    private List<String> opponentInput = new ArrayList<>();
     private List<Renderable> renderList = new ArrayList<>();
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
     private int reload = 0;
-    private static String id = "";
+    private int opponentReload = 0;
     private static Scanner in = null;
     private static PrintWriter out = null;
     private static InputStream is = null;
@@ -98,18 +100,21 @@ public class Main extends Application {
         Earth earth = new Earth();
         String color = "#00FF00";
         tank = new Tank(200, 100, color, earth);
+        opponentTank = new Tank(600, 100, color, earth);
         GUI gui = new GUI(tank.getAngle());
 
         renderList.add(gui);
         renderList.add(earth);
         renderList.add(tank);
+        renderList.add(opponentTank);
 
         updateList.add(tank);
+        updateList.add(opponentTank);
 
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
-                handleInput();
                 processOpponentActions();
+                handleInput();
 
                 update(currentNanoTime);
 
@@ -133,30 +138,18 @@ public class Main extends Application {
     private void processOpponentActions() {
         try {
             while (is.available() > 0) {
-                System.out.println(in.nextLine());
+                String event = in.nextLine();
+                String[] tokens = event.split(" ");
+                String pressing = tokens[0];
+                String key = tokens[1];
+                if ("go".equals(pressing)) {
+                    opponentInput.add(key);
+                } else if ("stop".equals(pressing)) {
+                    opponentInput.remove(key);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Updates game state
-     * @param currentNanoTime time passed since beginning of time in milliseconds
-     */
-    private void update(long currentNanoTime) {
-        reload = max(reload - 1, 0);
-        double elapsedTime = (currentNanoTime - lastNanoTime[0]) / 1e9;
-        lastNanoTime[0] = currentNanoTime;
-
-        for (Entity e : updateList) {
-            e.update(elapsedTime);
-            if (e.isReadyToDie())
-                deleteQueue.add(e);
-        }
-        while (!deleteQueue.isEmpty()) {
-            renderList.remove(deleteQueue.peek());
-            updateList.remove(deleteQueue.remove());
         }
     }
 
@@ -180,7 +173,44 @@ public class Main extends Application {
                 updateList.add(bullet);
             }
         }
+        if (opponentInput.contains("LEFT"))
+            opponentTank.goLeft();
+        if (opponentInput.contains("RIGHT"))
+            opponentTank.goRight();
+        if (opponentInput.contains("UP"))
+            opponentTank.increaseAngle();
+        if (opponentInput.contains("DOWN"))
+            opponentTank.decreaseAngle();
+        if (opponentInput.contains("ENTER")) {
+            if (opponentReload == 0) {
+                opponentReload = 100;
+                Bullet bullet = new Bullet(opponentTank.getPosition(), new Point2D(cos(opponentTank.getAngle().getValue()), -sin(opponentTank.getAngle().getValue())));
+                renderList.add(bullet);
+                updateList.add(bullet);
+            }
+        }
     }
+
+    /**
+     * Updates game state
+     * @param currentNanoTime time passed since beginning of time in milliseconds
+     */
+    private void update(long currentNanoTime) {
+        reload = max(reload - 1, 0);
+        double elapsedTime = (currentNanoTime - lastNanoTime[0]) / 1e9;
+        lastNanoTime[0] = currentNanoTime;
+
+        for (Entity e : updateList) {
+            e.update(elapsedTime);
+            if (e.isReadyToDie())
+                deleteQueue.add(e);
+        }
+        while (!deleteQueue.isEmpty()) {
+            renderList.remove(deleteQueue.peek());
+            updateList.remove(deleteQueue.remove());
+        }
+    }
+
     /**
      * Renders game
      * @param gc graphics context of window
