@@ -38,7 +38,7 @@ public class Tank extends Entity {
             decreaseAngle();
         if (input.contains("ENTER") && reload == 0) {
             reload = 100;
-            Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())), earthRef);
+            Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())), earthRef, 4);
             renderList.add(bullet);
             updateList.add(bullet);
         }

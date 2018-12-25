@@ -9,10 +9,12 @@ import javafx.scene.paint.Color;
  */
 public class Bullet extends Entity {
     private Point2D direction;
+    private double size;
     private final Earth earthRef;
 
-    public Bullet(Point2D pos, Point2D dir, Earth earth) {
+    public Bullet(Point2D pos, Point2D dir, Earth earth, double size) {
         super(pos.add(0, -1));
+        this.size = size;
         earthRef = earth;
         direction = dir.normalize();
         addAcceleration(gravityAcc);
@@ -25,7 +27,7 @@ public class Bullet extends Entity {
     @Override
     public void render(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
-        gc.fillOval(position.getX() - 2, position.getY() - 2, 4, 4);
+        gc.fillOval(position.getX() - size, position.getY() - size, size * 2, size * 2);
     }
 
     /**
