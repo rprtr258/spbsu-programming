@@ -55,6 +55,10 @@ public abstract class Entity implements Renderable {
         return position;
     }
 
+    public void setPosition(Point2D p) {
+        position = p;
+    }
+
     /**
      * @return true if entity is ready to be deleted
      */

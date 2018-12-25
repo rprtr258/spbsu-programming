@@ -14,8 +14,23 @@ import static java.lang.Math.*;
 public class Earth implements Renderable {
     private List<Point2D> points = new ArrayList<>();
 
-    public Earth(List<Point2D> pointsList) {
-        points.addAll(pointsList);
+    public Earth() {
+        points = Arrays.asList(
+            new Point2D(21, 217),
+            new Point2D(151, 217),
+            new Point2D(293, 315),
+            new Point2D(317, 386),
+            new Point2D(389, 444),
+            new Point2D(408, 444),
+            new Point2D(456, 402),
+            new Point2D(464, 382),
+            new Point2D(476, 370),
+            new Point2D(489, 312),
+            new Point2D(500, 303),
+            new Point2D(621, 303),
+            new Point2D(621, 456),
+            new Point2D(21, 456)
+        );
     }
 
     /**

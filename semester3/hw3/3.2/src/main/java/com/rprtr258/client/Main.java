@@ -1,7 +1,6 @@
 package com.rprtr258.client;
 
-import javafx.application.Application;
-import javafx.application.Platform;
+import javafx.application.*;
 import javafx.geometry.Point2D;
 import javafx.scene.*;
 import javafx.scene.canvas.*;
@@ -9,10 +8,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
+import java.io.*;
+import java.net.*;
 import java.util.*;
 
 import static java.lang.Math.*;
@@ -23,36 +20,23 @@ import static java.lang.Math.*;
 public class Main extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
-    private ArrayList<String> input = new ArrayList<>();
+    private List<String> input = new ArrayList<>();
     private List<Renderable> renderList = new ArrayList<>();
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
     private int reload = 0;
-    private static String color = "#00FF00";
-    private static String id = "";
-    private static SocketChannel socketChannel = null;
-    private static List<Point2D> pointsList = new ArrayList<>();
+    private static Scanner in = null;
+    private static PrintWriter out = null;
+    private static InputStream is = null;
 
     public static void main(String[] args) {
         Arrays.stream(args).forEach(System.out::println);
         try {
-            socketChannel = SocketChannel.open();
+            Socket socketChannel = new Socket();
             socketChannel.connect(new InetSocketAddress("127.0.0.1", 1337));
-            ByteBuffer buf = ByteBuffer.allocate(256);
-            while (socketChannel.read(buf) == -1);
-            String initPacket = new String(buf.array()).substring(0, buf.position());
-            String[] tokens = initPacket.split("\n");
-            color = tokens[0];
-            System.out.println("Color: " + color);
-            id = tokens[1];
-            System.out.println("Id: " + id);
-            int pointsInMap = Integer.valueOf(tokens[2]);
-            System.out.println("Points in map: " + pointsInMap);
-            for (int i = 0; i < pointsInMap; i++) {
-                String coords[] = tokens[3 + i].split(" ");
-                System.out.println("Point[" + i + "]: " + coords[0] + ", " + coords[1]);
-                pointsList.add(new Point2D(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
-            }
+            in = new Scanner(socketChannel.getInputStream());
+            is = socketChannel.getInputStream();
+            out = new PrintWriter(socketChannel.getOutputStream());
         } catch (IOException e) {
             System.err.println("Error occurred during connection:");
             e.printStackTrace();
@@ -78,42 +62,24 @@ public class Main extends Application {
 
         theScene.setOnKeyPressed(event -> {
             String code = event.getCode().toString();
-            if (!input.contains(code))
+            if (!input.contains(code)) {
+                out.write("go " + code + "\n");
+                out.flush();
                 input.add(code);
-            try {
-                if ("LEFT".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + "goes left").getBytes()));
-                if ("RIGHT".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + "goes right").getBytes()));
-                if ("UP".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + "goes up").getBytes()));
-                if ("DOWN".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + "goes down").getBytes()));
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
         theScene.setOnKeyReleased(event -> {
             String code = event.getCode().toString();
+            out.write("stop " + code + "\n");
+            out.flush();
             input.remove(code);
-            try {
-                if ("LEFT".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
-                if ("RIGHT".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
-                if ("UP".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
-                if ("DOWN".equals(code))
-                    socketChannel.write(ByteBuffer.wrap((id + " stop going left").getBytes()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         });
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Earth earth = new Earth(pointsList);
-        tank = new Tank(200, 100, color, earth);
+        Earth earth = new Earth();
+        String color = "#00FF00";
+        tank = new Tank(600, 100, color, earth);
         GUI gui = new GUI(tank.getAngle());
 
         renderList.add(gui);
@@ -125,6 +91,7 @@ public class Main extends Application {
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 handleInput();
+                processOpponentActions();
 
                 update(currentNanoTime);
 
@@ -143,6 +110,16 @@ public class Main extends Application {
             }
         }.start();
         theStage.show();
+    }
+
+    private void processOpponentActions() {
+        try {
+            while (is.available() > 0) {
+                System.out.println(in.nextLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -186,7 +163,6 @@ public class Main extends Application {
             }
         }
     }
-
     /**
      * Renders game
      * @param gc graphics context of window
