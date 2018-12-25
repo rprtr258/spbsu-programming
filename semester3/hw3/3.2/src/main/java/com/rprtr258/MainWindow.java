@@ -109,17 +109,19 @@ public class MainWindow extends Application {
                 gc.strokeRect(16, 87, 610, 374);
                 gc.strokeRect(20, 91, 602, 366);
                 
-                gc.setStroke(Color.rgb(255, 255, 255));
-                gc.strokeLine(20, 67, 20, 85);
-                gc.strokeLine(20, 67, 50, 67);
-                gc.strokeLine(50, 67, 50, 85);
+                int curBulletSize = 2;
                 gc.setFill(Color.rgb(255, 255, 255));
-                gc.fillOval(35 - 1, 76 - 1, 2, 2);
-                gc.setStroke(Color.rgb(255, 0, 0));
-                gc.strokeLine(52, 67, 52, 85);
-                gc.strokeLine(52, 67, 82, 67);
-                gc.strokeLine(82, 67, 82, 85);
-                gc.fillOval(67 - 2, 76 - 2, 4, 4);
+                for (int i = 1; i <= 15; i++) {
+                    if (i == curBulletSize)
+                        gc.setStroke(Color.rgb(255, 0, 0));
+                    else
+                        gc.setStroke(Color.rgb(255, 255, 255));
+                    int offset = 32 * i - 12;
+                    gc.strokeLine(offset, 67, offset, 85);
+                    gc.strokeLine(offset, 67, offset + 30, 67);
+                    gc.strokeLine(offset + 30, 67, offset + 30, 85);
+                    gc.fillOval(offset + 15 - i / 2, 76 - i / 2, i, i);
+                }
             }
         }.start();
         theStage.show();
