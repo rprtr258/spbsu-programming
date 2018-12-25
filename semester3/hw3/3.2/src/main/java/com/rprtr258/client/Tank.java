@@ -13,7 +13,7 @@ import static java.lang.Math.*;
  *  Tank entity that is controlled by the player.
  */
 public class Tank extends Entity {
-    private final DoubleProperty angle = new DoubleProperty();
+    private double angle;
     private Point2D dir = new Point2D(0, 1);
     private double angleDelta = 0;
     private final Earth earthRef;
@@ -24,7 +24,7 @@ public class Tank extends Entity {
     public Tank(Point2D pos, String color, Earth earth) {
         super(pos);
         earthRef = earth;
-        angle.setValue(toRadians(28));
+        angle = toRadians(28);
         this.color = color;
     }
 
@@ -39,7 +39,7 @@ public class Tank extends Entity {
             decreaseAngle();
         if (input.contains("ENTER") && reload == 0) {
             reload = 100;
-            Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle().getValue()), -sin(getAngle().getValue())), earthRef, bulletSize);
+            Bullet bullet = new Bullet(getPosition(), new Point2D(cos(getAngle()), -sin(getAngle())), earthRef, bulletSize);
             renderList.add(bullet);
             updateList.add(bullet);
         }
@@ -61,8 +61,8 @@ public class Tank extends Entity {
     @Override
     public void render(GraphicsContext gc) {
         double radius = 20.0;
-        Point2D gunEndPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(radius + 2));
-        Point2D gunStartPoint = position.add(new Point2D(cos(angle.getValue()), -sin(angle.getValue())).multiply(2));
+        Point2D gunEndPoint = position.add(new Point2D(cos(angle), -sin(angle)).multiply(radius + 2));
+        Point2D gunStartPoint = position.add(new Point2D(cos(angle), -sin(angle)).multiply(2));
         gc.setStroke(Color.rgb(0, 255, 0));
         gc.setLineWidth(2);
         gc.strokeLine(gunStartPoint.getX(), gunStartPoint.getY(), gunEndPoint.getX(), gunEndPoint.getY());
@@ -76,7 +76,7 @@ public class Tank extends Entity {
     /**
      * @return gun's angle
      */
-    public DoubleProperty getAngle() {
+    public double getAngle() {
         return angle;
     }
 
@@ -93,11 +93,11 @@ public class Tank extends Entity {
         if (position.getX() > 620)
             position = position.add(620 - position.getX(), 0);
         fixPosition();
-        angle.setValue(angle.getValue() + angleDelta);
-        while (angle.getValue() >= 2 * PI)
-            angle.setValue(angle.getValue() - 2 * PI);
-        while (angle.getValue() < 0)
-            angle.setValue(angle.getValue() + 2 * PI);
+        angle += angleDelta;
+        while (angle >= 2 * PI)
+            angle -= 2 * PI;
+        while (angle < 0)
+            angle += 2 * PI;
         angleDelta = 0;
     }
 

@@ -6,6 +6,7 @@ import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -26,6 +27,7 @@ public class MainWindow extends Application {
     private List<Renderable> renderList = new ArrayList<>();
     private List<Entity> updateList = new ArrayList<>();
     private Queue<Entity> deleteQueue = new ArrayDeque<>();
+    private final Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
     private static Scanner in = null;
     private static PrintWriter out = null;
     private static InputStream is = null;
@@ -82,9 +84,7 @@ public class MainWindow extends Application {
         Earth earth = new Earth();
         tank = new Tank(myStart, "#00FF00", earth);
         opponentTank = new Tank(opponentStart, "#FF0000", earth);
-        GUI gui = new GUI(tank.getAngle());
 
-        renderList.add(gui);
         renderList.add(earth);
         renderList.add(tank);
         renderList.add(opponentTank);
@@ -100,6 +100,26 @@ public class MainWindow extends Application {
                 update(currentNanoTime);
 
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                gc.setFill(Color.rgb(56, 35, 40));
+                gc.fillRect(0, 0, 640, 480);
+
+                gc.setFont(theFont);
+
+                gc.setFill(Color.rgb(170, 0, 170));
+                String angleText = "Angle: ";
+                gc.fillText(angleText, 20, 30);
+
+                gc.setFill(Color.rgb(255, 255, 83));
+                String angleValueText = String.format("%.0f", (180 * tank.getAngle() / Math.PI));
+                gc.fillText(angleValueText, 85, 30);
+
+                gc.setFill(Color.rgb(170, 0, 170));
+                String powerText = "Power: ";
+                gc.fillText(powerText, 20, 53);
+
+                gc.setFill(Color.rgb(255, 255, 83));
+                String powerValueText = String.format("%d", tank.getBulletSize());
+                gc.fillText(powerValueText, 85, 53);
                 render(gc);
                 gc.setFill(Color.rgb(56, 35, 40));
                 gc.fillRect(0, 50, 21, 480);
