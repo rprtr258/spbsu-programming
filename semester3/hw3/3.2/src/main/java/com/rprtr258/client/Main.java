@@ -31,6 +31,7 @@ public class Main extends Application {
     private static String color = "#00FF00";
     private static String id = "";
     private static SocketChannel socketChannel = null;
+    private static List<Point2D> pointsList = new ArrayList<>();
 
     public static void main(String[] args) {
         Arrays.stream(args).forEach(System.out::println);
@@ -39,12 +40,19 @@ public class Main extends Application {
             socketChannel.connect(new InetSocketAddress("127.0.0.1", 1337));
             ByteBuffer buf = ByteBuffer.allocate(256);
             while (socketChannel.read(buf) == -1);
-            color = new String(buf.array()).trim().substring(0, buf.position());
-            System.out.println(color);
-            buf.clear();
-            while (socketChannel.read(buf) == -1);
-            id = new String(buf.array()).trim().substring(0, buf.position());
-            System.out.println(id);
+            String initPacket = new String(buf.array()).substring(0, buf.position());
+            String[] tokens = initPacket.split("\n");
+            color = tokens[0];
+            System.out.println("Color: " + color);
+            id = tokens[1];
+            System.out.println("Id: " + id);
+            int pointsInMap = Integer.valueOf(tokens[2]);
+            System.out.println("Points in map: " + pointsInMap);
+            for (int i = 0; i < pointsInMap; i++) {
+                String coords[] = tokens[3 + i].split(" ");
+                System.out.println("Point[" + i + "]: " + coords[0] + ", " + coords[1]);
+                pointsList.add(new Point2D(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
+            }
         } catch (IOException e) {
             System.err.println("Error occurred during connection:");
             e.printStackTrace();
@@ -104,7 +112,7 @@ public class Main extends Application {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Earth earth = new Earth();
+        Earth earth = new Earth(pointsList);
         tank = new Tank(200, 100, color, earth);
         GUI gui = new GUI(tank.getAngle());
 
