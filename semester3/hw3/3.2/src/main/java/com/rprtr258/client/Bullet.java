@@ -9,9 +9,11 @@ import javafx.scene.paint.Color;
  */
 public class Bullet extends Entity {
     private Point2D direction;
+    private final Earth earthRef;
 
-    public Bullet(Point2D pos, Point2D dir) {
-        super(pos);
+    public Bullet(Point2D pos, Point2D dir, Earth earth) {
+        super(pos.add(0, -1));
+        earthRef = earth;
         direction = dir.normalize();
         addAcceleration(gravityAcc);
     }
@@ -35,7 +37,8 @@ public class Bullet extends Entity {
         super.update(time);
         addVelocity(direction.multiply(100));
         if (position.getX() < 10 || position.getY() < 90 ||
-            position.getX() > 650 || position.getY() > 500)
+            position.getX() > 650 || position.getY() > 500 ||
+            earthRef.checkCollision(position))
             readyToDie = true;
     }
 }

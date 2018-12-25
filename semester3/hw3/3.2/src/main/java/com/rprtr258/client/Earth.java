@@ -43,6 +43,24 @@ public class Earth implements Renderable {
         gc.fillPolygon(points.stream().map(Point2D::getX).mapToDouble(i->i).toArray(), points.stream().map(Point2D::getY).mapToDouble(i->i).toArray(), points.size());
     }
 
+    public boolean checkCollision(Point2D position) {
+        for (int i = 0; i < points.size(); i++) {
+            Point2D A = points.get(i);
+            Point2D B = points.get((i + 1) % points.size());
+            if (abs(B.getX() - A.getX()) < 0.0001)
+                continue;
+            double lambda = (position.getX() - A.getX()) / (B.getX() - A.getX());
+            double px = A.getX() + lambda * (B.getX() - A.getX());
+            if (!(min(A.getX(), B.getX()) <= px && px <= max(A.getX(), B.getX())))
+                continue;
+            double py = A.getY() + lambda * (B.getY() - A.getY());
+            if (py < position.getY())
+                return true;
+        }
+        System.out.print("\n");
+        return false;
+    }
+
     /**
      * Finds intersection of ray starting in <i>position</i> going in
      * direction <i>dir</i> with surface.
