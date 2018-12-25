@@ -20,8 +20,8 @@ public class Tank extends Entity {
     private Earth earthRef;
     private String color;
 
-    public Tank(double x, double y, String color, Earth earth) {
-        super(x, y);
+    public Tank(Point2D pos, String color, Earth earth) {
+        super(pos);
         earthRef = earth;
         angle.setValue(toRadians(28));
         this.color = color;

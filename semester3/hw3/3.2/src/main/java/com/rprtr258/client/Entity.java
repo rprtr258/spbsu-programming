@@ -17,10 +17,6 @@ public abstract class Entity implements Renderable {
         position = pos;
     }
 
-    public Entity(double x, double y) {
-        this(new Point2D(x, y));
-    }
-
     /**
      * Adds velocity allowing to move entity.
      * @param delta vector to add
