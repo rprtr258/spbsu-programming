@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 import java.net.*;
 import java.util.*;
 
-// TODO: correct window resize
-// TODO: make help button
 public class MainWindow extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
@@ -45,12 +43,14 @@ public class MainWindow extends Application {
     @Override
     public void start(Stage theStage) {
         theStage.setTitle("Pooshka++");
+        theStage.setMinWidth(640);
+        theStage.setMinHeight(480);
 
         Group root = new Group();
         Scene theScene = new Scene(root);
         theStage.setScene(theScene);
 
-        Canvas canvas = new Canvas(640, 480);
+        Canvas canvas = new ResizableCanvas(640, 480);
         root.getChildren().add(canvas);
 
         theScene.setOnKeyPressed(event -> {
@@ -70,7 +70,9 @@ public class MainWindow extends Application {
             }
         });
 
-        Earth earth = new Earth();
+        GraphicsAdapter gc = new GraphicsAdapter(canvas.getGraphicsContext2D());
+
+        Earth earth = new Earth(gc);
         tank = new Tank(myStart, "#00FF00", earth);
         opponentTank = new Tank(opponentStart, "#FF0000", earth);
 
@@ -81,10 +83,9 @@ public class MainWindow extends Application {
         updateList.add(tank);
         updateList.add(opponentTank);
 
-        GraphicsAdapter gc = new GraphicsAdapter(canvas.getGraphicsContext2D());
-
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
+                canvas.resize(theScene.getWidth(), theScene.getHeight());
                 processOpponentActions();
                 handleInput();
 

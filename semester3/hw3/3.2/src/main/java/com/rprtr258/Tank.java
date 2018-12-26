@@ -66,9 +66,8 @@ public class Tank extends Entity {
         gc.strokeLine(gunStartPoint.getX(), gunStartPoint.getY(), gunEndPoint.getX(), gunEndPoint.getY());
 
         double ang = atan2(-dir.getX(), dir.getY());
-        Point2D center = position.subtract(radius / 2, radius / 2);
         gc.setFill(Color.web(color));
-        gc.fillArc(center.getX(), center.getY(), radius, radius, -toDegrees(ang), 180, ArcType.ROUND);
+        gc.fillArc(position.getX(), position.getY(), radius, -toDegrees(ang), 180, ArcType.ROUND);
     }
 
     /**

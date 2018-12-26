@@ -12,8 +12,10 @@ import static java.lang.Math.*;
  */
 public class Earth implements Renderable {
     private List<Point2D> points;
+    private final GraphicsAdapter gc;
 
-    public Earth() {
+    public Earth(GraphicsAdapter gc) {
+        this.gc = gc;
         points = Arrays.asList(
             new Point2D(21, 217),
             new Point2D(151, 217),
@@ -67,11 +69,15 @@ public class Earth implements Renderable {
      * @return pair consisting of point of intersection and normal vector to surface at that point
      */
     public List<Point2D> getIntersection(Point2D position, Point2D dir) {
+        position = new Point2D(gc.fixX(position.getX()), gc.fixY(position.getY()));
+        dir = new Point2D(gc.fixX(dir.getX()), gc.fixY(dir.getY())).normalize();
         Point2D res = Point2D.ZERO;
         Point2D norm = Point2D.ZERO;
         for (int i = 0; i < points.size(); i++) {
             Point2D A = points.get(i);
             Point2D B = points.get((i + 1) % points.size());
+            A = new Point2D(gc.fixX(A.getX()), gc.fixY(A.getY()));
+            B = new Point2D(gc.fixX(B.getX()), gc.fixY(B.getY()));
             double D = dir.getX() * (A.getY() - B.getY()) - dir.getY() * (A.getX() - B.getX());
             double Dl = (A.getX() - position.getX()) * (A.getY() - B.getY()) - (A.getY() - position.getY()) * (A.getX() - B.getX());
             double l = Dl / D;
@@ -85,6 +91,8 @@ public class Earth implements Renderable {
                 norm = new Point2D(A.getY() - B.getY(), B.getX() - A.getX());
             }
         }
+        res = new Point2D(gc.unfixX(res.getX()), gc.unfixY(res.getY()));
+        //norm = new Point2D(gc.unfixX(norm.getX()), gc.unfixY(dir.getY()));
         return Arrays.asList(res, norm);
     }
 }
