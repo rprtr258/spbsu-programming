@@ -38,7 +38,7 @@ public class Earth implements Renderable {
      * @param gc graphics context of window
      */
     @Override
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsAdapter gc) {
         gc.setFill(Color.rgb(0, 170, 0));
         gc.fillPolygon(points.stream().map(Point2D::getX).mapToDouble(i->i).toArray(), points.stream().map(Point2D::getY).mapToDouble(i->i).toArray(), points.size());
     }

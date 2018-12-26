@@ -6,7 +6,6 @@ import javafx.scene.*;
 import javafx.scene.canvas.*;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
-import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import java.net.*;
@@ -27,7 +26,6 @@ public class MainWindow extends Application {
     private boolean isKilled = false;
     private boolean isWinner = false;
     private static SocketAdapter socketAdapter;
-    private final static Font theFont = Font.font("Helvetica", FontWeight.BOLD, 20);
     private static Point2D myStart = null;
     private static Point2D opponentStart = null;
 
@@ -72,8 +70,6 @@ public class MainWindow extends Application {
             }
         });
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
         Earth earth = new Earth();
         tank = new Tank(myStart, "#00FF00", earth);
         opponentTank = new Tank(opponentStart, "#FF0000", earth);
@@ -85,6 +81,8 @@ public class MainWindow extends Application {
         updateList.add(tank);
         updateList.add(opponentTank);
 
+        GraphicsAdapter gc = new GraphicsAdapter(canvas.getGraphicsContext2D());
+
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
                 processOpponentActions();
@@ -92,39 +90,22 @@ public class MainWindow extends Application {
 
                 update(currentNanoTime);
 
-                gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                gc.setFill(Color.rgb(56, 35, 40));
-                gc.fillRect(0, 0, 640, 480);
+                gc.clear();
+                gc.fillRect(0, 0, 640, 480, Color.rgb(56, 35, 40));
 
-                gc.setFont(theFont);
-
-                gc.setFill(Color.rgb(170, 0, 170));
-                String angleText = "Angle: ";
-                gc.fillText(angleText, 20, 30);
-
-                gc.setFill(Color.rgb(255, 255, 83));
+                gc.fillText("Angle: ", 20, 30, Color.rgb(170, 0, 170));
                 String angleValueText = String.format("%.0f", (180 * tank.getAngle() / Math.PI));
-                gc.fillText(angleValueText, 85, 30);
+                gc.fillText(angleValueText, 85, 30, Color.rgb(255, 255, 83));
 
-                gc.setFill(Color.rgb(170, 0, 170));
-                String powerText = "Power: ";
-                gc.fillText(powerText, 20, 53);
-
-                gc.setFill(Color.rgb(255, 255, 83));
+                gc.fillText("Power: ", 20, 53, Color.rgb(170, 0, 170));
                 String powerValueText = String.format("%d", tank.getBulletSize());
-                gc.fillText(powerValueText, 85, 53);
+                gc.fillText(powerValueText, 85, 53, Color.rgb(255, 255, 83));
 
-                if (isWinner) {
-                    gc.setFill(Color.rgb(0, 140, 0));
-                    String youKilledOpponentText = "You killed opponent!";
-                    gc.fillText(youKilledOpponentText, 250, 30);
-                }
+                if (isWinner)
+                    gc.fillText("You killed opponent!", 250, 30, Color.rgb(0, 140, 0));
 
-                if (isKilled) {
-                    gc.setFill(Color.rgb(140, 0, 0));
-                    String youWereKilledText = "You were killed :(";
-                    gc.fillText(youWereKilledText, 250, 53);
-                }
+                if (isKilled)
+                    gc.fillText("You were killed :(", 250, 53, Color.rgb(230, 0, 0));
 
                 render(gc);
 
@@ -150,7 +131,7 @@ public class MainWindow extends Application {
                     gc.strokeLine(offset, 67, offset, 85);
                     gc.strokeLine(offset, 67, offset + 30, 67);
                     gc.strokeLine(offset + 30, 67, offset + 30, 85);
-                    gc.fillOval(offset + 15 - i / 2, 76 - i / 2, i, i);
+                    gc.fillCircle(offset + 15, 76, i / 2.0);
                 }
             }
         }.start();
@@ -215,7 +196,7 @@ public class MainWindow extends Application {
      * Renders game
      * @param gc graphics context of window
      */
-    private void render(GraphicsContext gc) {
+    private void render(GraphicsAdapter gc) {
         for (Renderable e : renderList)
             e.render(gc);
         for (Renderable e : bulletsList)

@@ -33,14 +33,14 @@ public class Bullet extends Entity {
      * @param gc graphics context of window
      */
     @Override
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsAdapter gc) {
         if (isExploded) {
             gc.setFill(Color.YELLOW);
             double radius = size * explosionTime / 20;
-            gc.fillOval(position.getX() - radius, position.getY() - radius, 2 * radius,  2 * radius);
+            gc.fillCircle(position.getX(), position.getY(), radius);
         } else {
             gc.setFill(Color.BLACK);
-            gc.fillOval(position.getX() - size, position.getY() - size, size * 2, size * 2);
+            gc.fillCircle(position.getX(), position.getY(), size);
         }
     }
 

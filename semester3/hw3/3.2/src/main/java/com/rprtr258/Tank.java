@@ -58,7 +58,7 @@ public class Tank extends Entity {
      * @param gc graphics context of window
      */
     @Override
-    public void render(GraphicsContext gc) {
+    public void render(GraphicsAdapter gc) {
         double radius = 20.0;
         Point2D gunEndPoint = position.add(new Point2D(cos(angle), -sin(angle)).multiply(radius + 2));
         Point2D gunStartPoint = position.add(new Point2D(cos(angle), -sin(angle)).multiply(2));
