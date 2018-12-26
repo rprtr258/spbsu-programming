@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 import java.net.*;
 import java.util.*;
 
+/**
+ * Main window of the game
+ */
 public class MainWindow extends Application {
     private final long[] lastNanoTime = {System.nanoTime()};
     private Tank tank;
@@ -27,10 +30,19 @@ public class MainWindow extends Application {
     private static Point2D myStart = null;
     private static Point2D opponentStart = null;
 
+    /**
+     * Sets socket to use
+     * @param socket socket to set
+     */
     public static void setSocket(Socket socket) {
         socketAdapter = new SocketAdapter(socket);
     }
 
+    /**
+     * Sets player and opponent coordinates
+     * @param myCoord player coordinates
+     * @param opponentCoord opponent coordinates
+     */
     public static void setCoords(Point2D myCoord, Point2D opponentCoord) {
         myStart = myCoord;
         opponentStart = opponentCoord;
@@ -97,6 +109,9 @@ public class MainWindow extends Application {
         theStage.show();
     }
 
+    /**
+     * Gets opponent actions from socket and emulates them
+     */
     private void processOpponentActions() {
         while (socketAdapter.hasNext()) {
             String event = socketAdapter.nextLine();
@@ -152,7 +167,7 @@ public class MainWindow extends Application {
     }
 
     /**
-     * Renders game
+     * Renders game and draws gui
      * @param gc graphics context of window
      */
     private void render(GraphicsAdapter gc) {

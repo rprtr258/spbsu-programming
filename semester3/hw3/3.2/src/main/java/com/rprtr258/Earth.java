@@ -14,6 +14,10 @@ public class Earth implements Renderable {
     private List<Point2D> points;
     private final GraphicsAdapter gc;
 
+    /**
+     * Earth class constructor
+     * @param gc graphics context used to render
+     */
     public Earth(GraphicsAdapter gc) {
         this.gc = gc;
         points = Arrays.asList(
@@ -44,6 +48,11 @@ public class Earth implements Renderable {
         gc.fillPolygon(points.stream().map(Point2D::getX).mapToDouble(i->i).toArray(), points.stream().map(Point2D::getY).mapToDouble(i->i).toArray(), points.size());
     }
 
+    /**
+     * Checks if point collides with ground
+     * @param position point to check
+     * @return true if point is in the ground
+     */
     public boolean checkCollision(Point2D position) {
         for (int i = 0; i < points.size(); i++) {
             Point2D A = points.get(i);
@@ -92,7 +101,6 @@ public class Earth implements Renderable {
             }
         }
         res = new Point2D(gc.unfixX(res.getX()), gc.unfixY(res.getY()));
-        //norm = new Point2D(gc.unfixX(norm.getX()), gc.unfixY(dir.getY()));
         return Arrays.asList(res, norm);
     }
 }

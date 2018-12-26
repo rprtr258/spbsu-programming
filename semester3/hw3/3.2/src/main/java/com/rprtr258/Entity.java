@@ -13,6 +13,10 @@ public abstract class Entity implements Renderable {
     protected Point2D permanentVelocity = Point2D.ZERO;
     protected boolean readyToDie = false;
 
+    /**
+     * Entity class constructor
+     * @param pos position of entity
+     */
     public Entity(Point2D pos) {
         position = pos;
     }

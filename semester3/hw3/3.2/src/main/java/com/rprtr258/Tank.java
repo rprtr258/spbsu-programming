@@ -20,6 +20,12 @@ public class Tank extends Entity {
     private int bulletSize = 2;
     private int reload = 0;
 
+    /**
+     * Tank class constructor
+     * @param pos tank position
+     * @param color color of tank
+     * @param earth earth reference
+     */
     public Tank(Point2D pos, String color, Earth earth) {
         super(pos);
         earthRef = earth;
@@ -27,6 +33,11 @@ public class Tank extends Entity {
         this.color = color;
     }
 
+    /**
+     * Handles input
+     * @param input list of pressed keys
+     * @param bulletsList list of bullets
+     */
     public void handleInput(List<String> input, List<Bullet> bulletsList) {
         if (input.contains("LEFT"))
             goLeft();
@@ -47,6 +58,9 @@ public class Tank extends Entity {
         }
     }
     
+    /**
+     * @return bullet size
+     */
     public int getBulletSize() {
         return bulletSize;
     }

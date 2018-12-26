@@ -7,6 +7,9 @@ import javafx.geometry.Point2D;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Server class
+ */
 public class Server {
     public static void main(String[] args) {
         int port = getPort();
@@ -26,6 +29,9 @@ public class Server {
        Application.launch(MainWindow.class, args);
     }
 
+    /**
+     * @return ip address of server
+     */
     private static String getIpAddress() throws IOException {
         Socket socket = new Socket();
         socket.connect(new InetSocketAddress("google.com", 80));
@@ -34,6 +40,9 @@ public class Server {
         return result;
     }
 
+    /**
+     * @return port to use for server
+     */
     private static int getPort() {
         return 1337;
     }

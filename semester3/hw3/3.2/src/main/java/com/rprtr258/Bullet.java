@@ -13,6 +13,13 @@ public class Bullet extends Entity {
     private boolean isExploded = false;
     private int explosionTime = -1;
 
+    /**
+     * Bullet class constructor
+     * @param pos bullet position on screen
+     * @param dir bullet movement direction
+     * @param earth earth reference
+     * @param size bullet size
+     */
     public Bullet(Point2D pos, Point2D dir, Earth earth, double size) {
         super(pos.add(0, -1));
         this.size = size;
@@ -21,6 +28,11 @@ public class Bullet extends Entity {
         addAcceleration(gravityAcc.multiply(size / 4));
     }
 
+    /**
+     * Checks if bullet hits tank
+     * @param tank tank to check
+     * @return true if hits
+     */
     public boolean hits(Tank tank) {
         if (!isExploded)
             return false;
