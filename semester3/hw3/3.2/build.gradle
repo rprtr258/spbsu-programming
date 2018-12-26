@@ -15,7 +15,9 @@ task runClient(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.rprtr258.Client'
     //noinspection GroovyAssignabilityCheck,GroovyAssignabilityCheck
-    args '192.168.1.139', '1337'
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
 }
 
 task runServer(type: JavaExec) {

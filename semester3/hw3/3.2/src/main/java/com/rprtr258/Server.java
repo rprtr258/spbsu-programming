@@ -36,7 +36,5 @@ public class Server {
 
     private static int getPort() {
         return 1337;
-        // TODO: random port generating
-        //return generator.nextInt(30000) + 10000;
     }
 }
