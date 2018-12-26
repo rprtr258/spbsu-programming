@@ -1,7 +1,6 @@
 package com.rprtr258;
 
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 /**
@@ -25,7 +24,7 @@ public class Bullet extends Entity {
     public boolean hits(Tank tank) {
         if (!isExploded)
             return false;
-        return tank.getPosition().distance(position) <= size * explosionTime / 20;
+        return tank.getPosition().distance(position) <= size * 100 / 20;
     }
 
     /**

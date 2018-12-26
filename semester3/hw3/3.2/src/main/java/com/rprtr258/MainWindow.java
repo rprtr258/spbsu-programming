@@ -90,49 +90,7 @@ public class MainWindow extends Application {
 
                 update(currentNanoTime);
 
-                gc.clear();
-                gc.fillRect(0, 0, 640, 480, Color.rgb(56, 35, 40));
-
-                gc.fillText("Angle: ", 20, 30, Color.rgb(170, 0, 170));
-                String angleValueText = String.format("%.0f", (180 * tank.getAngle() / Math.PI));
-                gc.fillText(angleValueText, 85, 30, Color.rgb(255, 255, 83));
-
-                gc.fillText("Power: ", 20, 53, Color.rgb(170, 0, 170));
-                String powerValueText = String.format("%d", tank.getBulletSize());
-                gc.fillText(powerValueText, 85, 53, Color.rgb(255, 255, 83));
-
-                if (isWinner)
-                    gc.fillText("You killed opponent!", 250, 30, Color.rgb(0, 140, 0));
-
-                if (isKilled)
-                    gc.fillText("You were killed :(", 250, 53, Color.rgb(230, 0, 0));
-
                 render(gc);
-
-                gc.setFill(Color.rgb(56, 35, 40));
-                gc.fillRect(0, 50, 21, 480);
-                gc.fillRect(621, 0, 20, 480);
-                gc.fillRect(0, 456, 640, 25);
-                gc.fillRect(0, 87, 640, 5);
-
-                gc.setStroke(Color.rgb(249, 89, 247));
-                gc.setLineWidth(2);
-                gc.strokeRect(16, 87, 610, 374);
-                gc.strokeRect(20, 91, 602, 366);
-                
-                int curBulletSize = tank.getBulletSize();
-                gc.setFill(Color.rgb(255, 255, 255));
-                for (int i = 1; i <= 15; i++) {
-                    if (i == curBulletSize)
-                        gc.setStroke(Color.rgb(255, 0, 0));
-                    else
-                        gc.setStroke(Color.rgb(255, 255, 255));
-                    int offset = 32 * i - 12;
-                    gc.strokeLine(offset, 67, offset, 85);
-                    gc.strokeLine(offset, 67, offset + 30, 67);
-                    gc.strokeLine(offset + 30, 67, offset + 30, 85);
-                    gc.fillCircle(offset + 15, 76, i / 2.0);
-                }
             }
         }.start();
         theStage.show();
@@ -197,10 +155,52 @@ public class MainWindow extends Application {
      * @param gc graphics context of window
      */
     private void render(GraphicsAdapter gc) {
+        gc.clear();
+        gc.fillRect(0, 0, 640, 480, Color.rgb(56, 35, 40));
+
+        gc.fillText("Angle: ", 20, 30, Color.rgb(170, 0, 170));
+        String angleValueText = String.format("%.0f", (180 * tank.getAngle() / Math.PI));
+        gc.fillText(angleValueText, 85, 30, Color.rgb(255, 255, 83));
+
+        gc.fillText("Power: ", 20, 53, Color.rgb(170, 0, 170));
+        String powerValueText = String.format("%d", tank.getBulletSize());
+        gc.fillText(powerValueText, 85, 53, Color.rgb(255, 255, 83));
+
+        if (isWinner)
+            gc.fillText("You killed opponent!", 250, 30, Color.rgb(0, 140, 0));
+
+        if (isKilled)
+            gc.fillText("You were killed :(", 250, 53, Color.rgb(230, 0, 0));
+
         for (Renderable e : renderList)
             e.render(gc);
         for (Renderable e : bulletsList)
             e.render(gc);
+
+        gc.setFill(Color.rgb(56, 35, 40));
+        gc.fillRect(0, 50, 21, 480);
+        gc.fillRect(621, 0, 20, 480);
+        gc.fillRect(0, 456, 640, 25);
+        gc.fillRect(0, 87, 640, 5);
+
+        gc.setStroke(Color.rgb(249, 89, 247));
+        gc.setLineWidth(2);
+        gc.strokeRect(16, 87, 610, 374);
+        gc.strokeRect(20, 91, 602, 366);
+
+        int curBulletSize = tank.getBulletSize();
+        gc.setFill(Color.rgb(255, 255, 255));
+        for (int i = 1; i <= 15; i++) {
+            if (i == curBulletSize)
+                gc.setStroke(Color.rgb(255, 0, 0));
+            else
+                gc.setStroke(Color.rgb(255, 255, 255));
+            int offset = 32 * i - 12;
+            gc.strokeLine(offset, 67, offset, 85);
+            gc.strokeLine(offset, 67, offset + 30, 67);
+            gc.strokeLine(offset + 30, 67, offset + 30, 85);
+            gc.fillCircle(offset + 15, 76, i / 2.0);
+        }
     }
 }
 
