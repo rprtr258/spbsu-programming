@@ -1,11 +1,9 @@
-To run client use:
-
-```bash
-gradle runClient <host> <port>
-```
-
-To run server use:
+Run:
 
 ```bash
 gradle runServer
+#when server shows host and port
+gradle runClient <host> <port>
 ```
+
+`<host>` and `<port>` that are given by server
