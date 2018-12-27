@@ -1,0 +1,30 @@
+group 'com.rprtr258'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+mainClassName = 'com.rprtr258.client.Main'
+
+repositories {
+    mavenCentral()
+}
+
+task runClient(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.rprtr258.Client'
+    //noinspection GroovyAssignabilityCheck,GroovyAssignabilityCheck
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+
+task runServer(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.rprtr258.Server'
+}
+
+dependencies {
+}
+
