@@ -15,7 +15,7 @@ public class Client {
         System.out.println("Connecting to port: " + args[1]);
         try {
             Socket socketChannel = new Socket();
-            socketChannel.connect(new InetSocketAddress("127.0.0.1", 1337));
+            socketChannel.connect(new InetSocketAddress(agrs[0], Integer.valueOf(args[1])));
             MainWindow.setSocket(socketChannel);
             MainWindow.setCoords(new Point2D(200, 100), new Point2D(600, 100));
         } catch (IOException e) {
