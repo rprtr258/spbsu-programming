@@ -1,7 +1,7 @@
 module Reverse where
 
 rev :: [a] -> [a]
-rev s = foldl (\a -> \b -> [b] ++ a) [] s
+rev s = foldl (\a -> \b -> b : a) [] s
 
 rev' :: [a] -> [a]
 rev' s = [s!!(m - n) | n <- [0..m]]
