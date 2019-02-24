@@ -4,7 +4,8 @@ find :: Eq a => a -> [a] -> Integer
 find x [] = -1
 find x (y:ys)
     | x == y    = 0
-    | otherwise = if idx /= -1 then 1 + idx else -1
+    | idx == -1 = -1
+    | otherwise = 1 + idx
     where
     idx = find x ys
 
