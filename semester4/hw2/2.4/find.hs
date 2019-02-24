@@ -10,7 +10,9 @@ find x (y:ys)
     idx = find x ys
 
 find' :: Eq a => a -> [a] -> Integer
-find' x lst = if count > 0 then snd $ head $ occurences else -1
+find' x lst =
+    | count > 0 = snd $ head $ occurences
+    | otherwise = -1
     where
     occurences = filter (\y -> fst y == x) $ zip lst [0..]
     count = length occurences
