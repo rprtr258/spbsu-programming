@@ -3,4 +3,5 @@
 -- func x = map (x*)
 -- func x = map $ (*) x
 -- func = map . (*)
+func :: Num a => a -> [a] -> [a]
 func = map . (*)
