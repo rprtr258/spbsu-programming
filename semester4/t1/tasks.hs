@@ -16,7 +16,7 @@ sizes = -1:map (2+) sizes
 draw_diamond :: Int -> [[Char]]
 draw_diamond n = [row k | k <- [1..n]] ++ [row (n - k) | k <- [1..n-1]] where
   row :: Int -> [Char]
-  row k = take (n - k) (repeat ' ') ++ (take (sizes!!k) (repeat '*'))
+  row k = take (n - k) (repeat ' ') ++ (take (sizes!!k) (repeat 'x'))
 main :: IO ()
 main = do
   putStrLn "Enter side size: "
