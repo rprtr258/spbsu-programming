@@ -13,9 +13,10 @@ angle_matrix n = [row k | k <- [1..n]] where
 
 --t1.3
 draw_diamond :: Int -> [[Char]]
-draw_diamond n = [row k | k <- [1..n]] ++ [row (n - k) | k <- [1..n-1]] where
+draw_diamond n = hat ++ [row n] ++ (reverse hat) where
   row :: Int -> [Char]
   row k = (replicate (n - k) ' ') ++ (replicate (2 * k - 1) 'x')
+  hat = map row [1..n-1]
 
 print_diamond :: Int -> IO()
 print_diamond n = putStrLn $ intercalate "\n" $ draw_diamond n
