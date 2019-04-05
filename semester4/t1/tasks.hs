@@ -8,7 +8,7 @@ lst' = zipWith (*) [1..] lst
 
 --t1.2
 angle_matrix :: (Num a, Enum a, Ord a) => a -> [[a]]
-angle_matrix n = [row k | k <- [1..n]] where
+angle_matrix n = map row [1..n] where
   row k = map (max k) [1..n]
 
 --t1.3
