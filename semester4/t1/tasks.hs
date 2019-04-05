@@ -9,7 +9,7 @@ lst' = zipWith (*) [1..] lst
 --t1.2
 angle_matrix :: (Num a, Enum a, Ord a) => a -> [[a]]
 angle_matrix n = [row k | k <- [1..n]] where
-  row k = [max i k | i <- [1..n]]
+  row k = map (max k) [1..n]
 
 --t1.3
 draw_diamond :: Int -> [[Char]]
