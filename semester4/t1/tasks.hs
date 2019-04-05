@@ -15,7 +15,7 @@ angle_matrix n = [row k | k <- [1..n]] where
 draw_diamond :: Int -> [[Char]]
 draw_diamond n = [row k | k <- [1..n]] ++ [row (n - k) | k <- [1..n-1]] where
   row :: Int -> [Char]
-  row k = (take (n - k) $ repeat ' ') ++ (take (2 * k - 1) $ repeat 'x')
+  row k = (replicate (n - k) ' ') ++ (replicate (2 * k - 1) 'x')
 
 print_diamond :: Int -> IO()
 print_diamond n = putStrLn $ intercalate "\n" $ draw_diamond n
