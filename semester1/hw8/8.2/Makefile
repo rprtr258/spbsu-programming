@@ -1,2 +1,2 @@
 all:
-	g++ -std=c++11 main.cpp string/string.h string/string.cpp
+	g++ -std=c++11 main.cpp ../../utils/string.cpp ../../utils/list.cpp

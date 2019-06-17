@@ -1,2 +1,2 @@
 all:
-	g++ -std=c++11 main.cpp tree.h tree.cpp
+	g++ -std=c++11 ../run.cpp tree.cpp main.cpp

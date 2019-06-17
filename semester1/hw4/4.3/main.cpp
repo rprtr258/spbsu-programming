@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "parse.h"
+#include "../parse.h"
 #include "tests.h"
 
 int main() {
@@ -19,5 +19,6 @@ int main() {
     for (int i = 0; i < resultLength; i++) {
         printf("%c", result[i]);
     }
+    printf("\n");
     return 0;
 }

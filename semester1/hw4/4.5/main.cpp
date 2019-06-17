@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-#include "parse.h"
+#include "../parse.h"
 #include "tests.h"
-#include "eval.h"
+#include "../eval.h"
 
 int main() {
 //    if (!test())
@@ -17,7 +17,7 @@ int main() {
     int postfixLength = strlen(postfix);
     int result = eval(postfix, postfixLength);
     
-    printf("Result: %d", result);
+    printf("Result: %d\n", result);
     
     return 0;
 }
